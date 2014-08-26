@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- second border line -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#ffffff"/>
+        </shape>
+    </item>
+    <!-- first border line -->
+    <item android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#e8e8e8"/>
+        </shape>
+    </item>
+    <item android:bottom="3dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/background_drawer"/>
+        </shape>
+    </item>
+</layer-list>

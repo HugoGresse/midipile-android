@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:midipile="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="@drawable/navigation_drawer_list_button"
+    android:paddingBottom="10dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="10dp"
+    android:clickable="false"
+    android:animateLayoutChanges="true">
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="6dip"
+        android:contentDescription="TODO"
+        android:src="@drawable/ic_launcher" />
+    <fr.creads.midipile.layoutselements.FontTextView
+        android:id="@+id/text_item"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/icon"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:text="menu"
+        android:textColor="@color/midipile_black"
+        android:textSize="15sp"
+        midipile:fontName="latoregular.ttf"/>
+</RelativeLayout>
