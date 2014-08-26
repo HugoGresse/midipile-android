@@ -4,6 +4,7 @@ package fr.creads.midipile;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -59,6 +60,7 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+    private View footerView;
 
     private ArrayList<NavDrawerItem> mDrawerItems;
     private String[] mNavMenuTitles;
@@ -118,6 +120,13 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerListView.setAdapter(new NavigationDrawerAdapter(getActionBar().getThemedContext(), mDrawerItems));
+
+        footerView =  ((LayoutInflater)getActionBar().getThemedContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.navigation_drawer_footer, null, false);
+
+        // Adding button to listview at footer
+        mDrawerListView.addFooterView(footerView);
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
