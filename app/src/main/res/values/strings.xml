@@ -32,4 +32,11 @@
     <string name="nav_footer_cgu">- CGU -</string>
     <string name="nav_footer_about">A propos</string>
 
+
+    <array name="home_fragment_tabs">
+        <item>Offres du jour</item>
+        <item>Whish List</item>
+    </array>
+
+
 </resources>
