@@ -3,6 +3,7 @@ package fr.creads.midipile.fragments;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,11 +71,17 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
         tabHost=(TabHost)rootView.findViewById(R.id.home_tab_host);
         tabHost.setup();
 
-
         for (String tab_name : mTabsTitles) {
+
+            View tabview = createTabView(tabHost.getContext(), tab_name);
+
             TabHost.TabSpec spec=tabHost.newTabSpec(tab_name);
-            spec.setContent(R.id.fakeTabContent);
-            spec.setIndicator(tab_name);
+            spec.setContent(new TabHost.TabContentFactory() {
+                public View createTabContent(String tag) {
+                    return new TextView(myContext);
+                }
+            });
+            spec.setIndicator(tabview);
             tabHost.addTab(spec);
         }
 
@@ -104,6 +112,15 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
 
         return list;
     }
+
+
+    private static View createTabView(final Context context, final String text) {
+        View view = LayoutInflater.from(context).inflate(R.layout.tabs_bg, null);
+        TextView tv = (TextView) view.findViewById(R.id.tabsText);
+        tv.setText(text);
+        return view;
+    }
+
 
     @Override
     public void onTabChanged(String tab) {
