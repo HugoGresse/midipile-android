@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
 
         tabHost.setOnTabChangedListener(this);
 
-        mAdapter = new HomeFragmentPagerAdapter(myContext, createFragments());
+        mAdapter = new HomeFragmentPagerAdapter(getChildFragmentManager(), createFragments());
 
         mPager = (ViewPager)rootView.findViewById(R.id.homepager);
         mPager.setAdapter(mAdapter);
