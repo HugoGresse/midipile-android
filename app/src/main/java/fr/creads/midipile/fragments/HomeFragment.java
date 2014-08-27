@@ -15,11 +15,20 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.loopj.android.http.BaseJsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.adapters.HomeFragmentPagerAdapter;
+import fr.creads.midipile.api.MidipileRestClient;
+import fr.creads.midipile.objects.Deal;
 
 /**
  * Author : Hugo Gresse
@@ -41,20 +50,22 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
         super.onCreate(savedInstanceState);
 
         actionBar = myContext.getActionBar();
-        Log.d("fr.creads.midipile", "homefragment create ======");
 
         mTabsTitles = getResources().getStringArray(R.array.home_fragment_tabs);
-
+        try {
+            loadDeals();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.d("fr.creads.midipile", "homefragment create view  ======");
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         setupAdapter(rootView);
-
+        Log.d("fr.creads.midipile", "CREATE HomeFRAGMENT");
         return rootView;
     }
 
@@ -62,7 +73,6 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         myContext=(FragmentActivity) activity;
-        //((HomeActivity) activity).onSectionAttached(getArguments().getInt("1"));
     }
 
     private void setupAdapter(View rootView){
@@ -113,7 +123,6 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
         return list;
     }
 
-
     private static View createTabView(final Context context, final String text) {
         View view = LayoutInflater.from(context).inflate(R.layout.tabs_bg, null);
         TextView tv = (TextView) view.findViewById(R.id.tabsText);
@@ -132,5 +141,51 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
         } else {
             mPager.setCurrentItem(1);
         }
+    }
+
+    public void loadDeals() throws JSONException {
+
+        Log.d("fr.creads.midipile", "load deals  ======");
+
+        MidipileRestClient.get("/deals/500", null, new  BaseJsonHttpResponseHandler() {
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, Object response) {
+                Log.d("fr.creads.midipile", "===== LOAD DONE");
+
+                Gson gson = new GsonBuilder().create();
+                Deal deal = gson.fromJson(rawJsonResponse, Deal.class);
+
+                actionBar.setTitle(deal.toString());
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, Object errorResponse) {
+
+            }
+
+            @Override
+            protected Object parseResponse(String rawJsonData, boolean isFailure) throws Throwable {
+                return null;
+            }
+
+            /*@Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                Log.d("fr.creads.midipile", String.valueOf(responseBody));
+
+                Gson gson = new Gson();
+                Deal deal = gson.fromJson(String.valueOf(responseBody), Deal.class);
+
+                actionBar.setTitle(deal.getName());
+            }*/
+
+        });
     }
 }
