@@ -3,7 +3,6 @@ package fr.creads.midipile.fragments;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +23,11 @@ import fr.creads.midipile.adapters.HomeFragmentPagerAdapter;
  * Author : Hugo Gresse
  * Date : 27/08/14
  */
-public class HomeFragment extends Fragment implements ActionBar.TabListener  {
+public class HomeFragment extends Fragment implements TabHost.OnTabChangeListener  {
 
     private FragmentActivity myContext;
     private ActionBar actionBar;
+    private TabHost tabHost;
 
     private HomeFragmentPagerAdapter mAdapter;
     private ViewPager mPager;
@@ -63,15 +64,22 @@ public class HomeFragment extends Fragment implements ActionBar.TabListener  {
     }
 
     private void setupAdapter(View rootView){
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        mAdapter = new HomeFragmentPagerAdapter(myContext, createFragments());
+        // Initialization
+        tabHost=(TabHost)rootView.findViewById(R.id.home_tab_host);
+        tabHost.setup();
+
 
         for (String tab_name : mTabsTitles) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this));
+            TabHost.TabSpec spec=tabHost.newTabSpec(tab_name);
+            spec.setContent(R.id.fakeTabContent);
+            spec.setIndicator(tab_name);
+            tabHost.addTab(spec);
         }
+
+        tabHost.setOnTabChangedListener(this);
+
+        mAdapter = new HomeFragmentPagerAdapter(myContext, createFragments());
 
         mPager = (ViewPager)rootView.findViewById(R.id.homepager);
         mPager.setAdapter(mAdapter);
@@ -82,7 +90,8 @@ public class HomeFragment extends Fragment implements ActionBar.TabListener  {
                     @Override
                     public void onPageSelected(int position) {
                         // When swiping between pages, select the corresponding tab.
-                        actionBar.setSelectedNavigationItem(position);
+                        mPager.setCurrentItem(position);
+                        tabHost.setCurrentTab(position);
                     }
                 }
         );
@@ -97,24 +106,14 @@ public class HomeFragment extends Fragment implements ActionBar.TabListener  {
     }
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    public void onTabChanged(String tab) {
+        Log.d("fr.creads.midipile", "homefragment onTabChanged  ======" + tab);
 
-        Log.d("fr.creads.midipile", "homefragment ontabSelected  ======" + tab.getPosition());
-        if(mPager != null){
-
-            mPager.setCurrentItem(tab.getPosition());
-
+        if(tab.equals(mTabsTitles[0])){
+            mPager.setCurrentItem(0);
             Log.d("fr.creads.midipile", "homefragment setCurrentItem  ======");
+        } else {
+            mPager.setCurrentItem(1);
         }
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
     }
 }
