@@ -14,8 +14,6 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments;
 
-    static final int NUM_ITEMS = 2;
-
     public HomeFragmentPagerAdapter(FragmentActivity activity, List<Fragment> fragments) {
         super(activity.getSupportFragmentManager());
         this.fragments = fragments;
