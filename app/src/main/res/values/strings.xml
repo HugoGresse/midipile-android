@@ -38,5 +38,8 @@
         <item>Whish List</item>
     </array>
 
+    <string name="deal_blank_title">Titre de l\'offre</string>
+    <string name="deal_open_button">Découvrir</string>
+
 
 </resources>

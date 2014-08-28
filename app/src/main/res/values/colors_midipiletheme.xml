@@ -10,4 +10,6 @@
     <color name="tabs_bg">#e8e8e8</color>
     <color name="tabs_bg_selected">#29d3b6</color>
     <color name="tabs_bg_focused">#dadada</color>
+
+    <color name="deal_title_background">#e8e8e8</color>
 </resources>

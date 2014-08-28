@@ -29,6 +29,7 @@ import fr.creads.midipile.R;
 import fr.creads.midipile.adapters.HomeFragmentPagerAdapter;
 import fr.creads.midipile.api.MidipileRestClient;
 import fr.creads.midipile.objects.Deal;
+import fr.creads.midipile.objects.Deals;
 
 /**
  * Author : Hugo Gresse
@@ -44,6 +45,8 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
     private ViewPager mPager;
 
     private String[] mTabsTitles;
+
+    private ArrayList<Deal> mDealsItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -147,7 +150,7 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
 
         Log.d("fr.creads.midipile", "load deals  ======");
 
-        MidipileRestClient.get("/deals/500", null, new  BaseJsonHttpResponseHandler() {
+        MidipileRestClient.get("/deals", null, new  BaseJsonHttpResponseHandler() {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
@@ -159,10 +162,10 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
                 Log.d("fr.creads.midipile", "===== LOAD DONE");
 
                 Gson gson = new GsonBuilder().create();
-                Deal deal = gson.fromJson(rawJsonResponse, Deal.class);
+                Deals deals = gson.fromJson(rawJsonResponse, Deals.class);
 
-                actionBar.setTitle(deal.toString());
-
+                mDealsItems = (ArrayList<Deal>) deals.getDeals();
+                setDealsAdapter();
             }
 
             @Override
@@ -175,17 +178,11 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
                 return null;
             }
 
-            /*@Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                Log.d("fr.creads.midipile", String.valueOf(responseBody));
-
-                Gson gson = new Gson();
-                Deal deal = gson.fromJson(String.valueOf(responseBody), Deal.class);
-
-                actionBar.setTitle(deal.getName());
-            }*/
-
         });
+    }
+
+    private void setDealsAdapter(){
+        DealsDayFragment dealsDayFragment = (DealsDayFragment) mAdapter.getItem(0);
+        dealsDayFragment.setDealsAdapters(mDealsItems);
     }
 }

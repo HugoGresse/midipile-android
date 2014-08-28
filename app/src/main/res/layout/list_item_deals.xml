@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dealImageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/deal_blank"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dealProgressBar"
+        android:layout_below="@+id/dealImageView"
+        android:layout_alignLeft="@+id/dealImageView" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="26dp"
+        android:layout_below="@+id/dealProgressBar"
+        android:layout_alignLeft="@+id/dealImageView"
+        android:background="@color/deal_title_background"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/deal_blank_title"
+            android:id="@+id/dealTitle"
+            android:layout_below="@+id/dealProgressBar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="@dimen/deals_text_size"
+            android:textColor="@color/midipile_black"
+            android:layout_alignBaseline="@+id/dealButtonOpen"
+            android:paddingLeft="8dp"
+            android:textStyle="italic" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/deal_open_button"
+            android:id="@+id/dealButtonOpen"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:background="@color/midipiletheme_color"
+            android:textSize="@dimen/deals_text_size"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="center" />
+    </RelativeLayout>
+
+</RelativeLayout>
