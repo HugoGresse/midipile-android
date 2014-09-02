@@ -7,6 +7,7 @@ import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.io.File;
 
@@ -23,7 +24,11 @@ public class MidipileApplication extends Application {
 
 
         File cacheDir = new File(Environment.getExternalStorageDirectory(), "Midipile/Cache");
-        DisplayImageOptions defaultOptions;
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(android.R.color.white)
+                .showImageForEmptyUri(android.R.color.white)
+                .displayer(new FadeInBitmapDisplayer(500))
+                .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .diskCache(new UnlimitedDiscCache(cacheDir))
                 .build();
