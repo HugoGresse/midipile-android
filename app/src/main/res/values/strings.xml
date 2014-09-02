@@ -10,6 +10,10 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Paramètres</string>
 
+    <string name="dialog_network_error">Impossible de charger les données. Vérifiez votre connexion au réseau.</string>
+    <string name="dialog_network_error_ok">Réessayer</string>
+    <string name="dialog_network_error_no">Annuler</string>
+
     !-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item >Offres du jour</item>
@@ -31,5 +35,15 @@
     <string name="nav_footer_contact">Contact</string>
     <string name="nav_footer_cgu">- CGU -</string>
     <string name="nav_footer_about">A propos</string>
+
+
+    <array name="home_fragment_tabs">
+        <item>Offres du jour</item>
+        <item>Whish List</item>
+    </array>
+
+    <string name="deal_blank_title">Titre de l\'offre</string>
+    <string name="deal_open_button">Découvrir</string>
+
 
 </resources>

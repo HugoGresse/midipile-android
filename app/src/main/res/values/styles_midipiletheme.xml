@@ -3,12 +3,13 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="ActionBarSolidMidipileTheme" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
-        <item name="android:background">@drawable/ab_solid_midipile</item>
+    <style name="ActionBarMidipileTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/background_actionBar</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_midipile</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_midipile</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Midipile</item>
     </style>
+
 
     <style name="ProgressBar.Midipile" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_midipile</item>

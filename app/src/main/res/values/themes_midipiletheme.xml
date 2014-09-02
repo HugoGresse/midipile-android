@@ -7,7 +7,7 @@
 
     <style name="_MidipileTheme" parent="android:Theme.Holo.Light">
 
-        <item name="android:actionBarStyle">@style/ActionBarSolidMidipileTheme</item>
+        <item name="android:actionBarStyle">@style/ActionBarMidipileTheme</item>
         <item name="android:windowContentOverlay">@null</item>
 
         <item name="android:editTextBackground">@drawable/midipiletheme_edit_text_holo_light</item>

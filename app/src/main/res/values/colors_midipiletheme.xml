@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="midipiletheme_color">#29d3b6</color>
+    <color name="background_actionBar">#ffffff</color>
     <color name="background_drawer">#ffffff</color>
     <color name="background_drawer_focus">#eeeff1</color>
     <color name="background_drawer_pressed">#f7f8fa</color>
     <color name="drawer_separator">#e8e8e8</color>
     <color name="drawer_leftborder">#29d3b6</color>
     <color name="midipile_black">#1b1a20</color>
+    <color name="tabs_bg">#e8e8e8</color>
+    <color name="tabs_bg_selected">#29d3b6</color>
+    <color name="tabs_bg_focused">#dadada</color>
+
+    <color name="deal_title_background">#e8e8e8</color>
 </resources>
