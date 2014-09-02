@@ -13,11 +13,11 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-import fr.creads.midipile.OnDataLoadedListener;
+import fr.creads.midipile.dialogs.DealNetworkDialogFragment;
+import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
-import fr.creads.midipile.dialogs.NetworkDialogFragment;
 import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
@@ -178,21 +178,18 @@ public class HomeActivity extends FragmentActivity
 
             @Override
             public void failure(RetrofitError error) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                // Create and show the dialog.
+                DealNetworkDialogFragment dealNetworkDialogFragment = new DealNetworkDialogFragment();
+                dealNetworkDialogFragment.show(ft, "dialog");
                 Log.i("fr.creads.midipile", error.toString());
             }
         });
     }
 
     public ArrayList<Deal> getLastDeals(){
-
-        Log.i("fr.creads.midipile", "getLastDeals loaded");
-
         if(deals.isEmpty()){
             Log.i("fr.creads.midipile", "getDealsEmpty");
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            // Create and show the dialog.
-            NetworkDialogFragment networkDialogFragment = new NetworkDialogFragment();
-            networkDialogFragment.show(ft, "dialog");
             return new ArrayList<Deal>();
         } else {
             Log.i("fr.creads.midipile", "gettingDeals");

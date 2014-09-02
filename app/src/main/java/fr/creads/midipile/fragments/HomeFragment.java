@@ -18,7 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.creads.midipile.OnDataLoadedListener;
+import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.HomeFragmentPagerAdapter;

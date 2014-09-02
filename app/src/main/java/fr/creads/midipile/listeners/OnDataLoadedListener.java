@@ -1,4 +1,4 @@
-package fr.creads.midipile;
+package fr.creads.midipile.listeners;
 
 /**
  * Author : Hugo Gresse
