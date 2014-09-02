@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+import fr.creads.midipile.OnDataLoadedListener;
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
@@ -28,7 +29,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class HomeActivity extends FragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, HomeFragment.onHomeFragmentSelectedListener {
 
     private MidipileAPI midipileService;
 
@@ -44,11 +45,14 @@ public class HomeActivity extends FragmentActivity
      */
     private CharSequence mTitle;
 
+    private OnDataLoadedListener mLoadedCallbacks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        deals = new ArrayList<Deal>();
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.URL_API)
@@ -114,6 +118,13 @@ public class HomeActivity extends FragmentActivity
         Log.d("fr.creads.midipile", "Change fragment ======");
         // animation : .setCustomAnimations(animIn, animOut, animIn, animOut)
 
+        // Fragment must implement the callback.
+        if (!(frag instanceof OnDataLoadedListener)) {
+            throw new IllegalStateException(
+                    "Fragment must implement the onDataLoadedListener.");
+        }
+        mLoadedCallbacks = (OnDataLoadedListener) frag;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
 
@@ -161,7 +172,8 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(Deals d, Response response) {
                 deals = (ArrayList<Deal>) d.getDeals();
-                Log.i("fr.creads.midipile", d.toString());
+                Log.i("fr.creads.midipile", "Deals loaded");
+                mLoadedCallbacks.onDealsLoaded();
             }
 
             @Override
@@ -172,17 +184,25 @@ public class HomeActivity extends FragmentActivity
     }
 
     public ArrayList<Deal> getLastDeals(){
+
+        Log.i("fr.creads.midipile", "getLastDeals loaded");
+
         if(deals.isEmpty()){
+            Log.i("fr.creads.midipile", "getDealsEmpty");
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             // Create and show the dialog.
             NetworkDialogFragment networkDialogFragment = new NetworkDialogFragment();
             networkDialogFragment.show(ft, "dialog");
             return new ArrayList<Deal>();
         } else {
+            Log.i("fr.creads.midipile", "gettingDeals");
             return deals;
         }
     }
 
 
+    @Override
+    public void onDealsSelected(int dealId) {
 
+    }
 }

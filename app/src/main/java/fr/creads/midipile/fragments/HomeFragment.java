@@ -18,19 +18,23 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.creads.midipile.OnDataLoadedListener;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.HomeFragmentPagerAdapter;
+import fr.creads.midipile.objects.Deal;
 
 /**
  * Author : Hugo Gresse
  * Date : 27/08/14
  */
-public class HomeFragment extends Fragment implements TabHost.OnTabChangeListener  {
+public class HomeFragment extends Fragment
+        implements TabHost.OnTabChangeListener, OnDataLoadedListener {
 
     private HomeActivity homeActivity;
     private FragmentActivity myContext;
     private ActionBar actionBar;
+    private onHomeFragmentSelectedListener mCallback;
     private TabHost tabHost;
 
     private HomeFragmentPagerAdapter mAdapter;
@@ -38,9 +42,16 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
 
     private String[] mTabsTitles;
 
+    @Override
+    public void onDealsLoaded() {
+        setDealsAdapter();
+    }
+
     public interface onHomeFragmentSelectedListener {
         public void onDealsSelected(int dealId);
     }
+
+
 
 
     @Override
@@ -67,6 +78,16 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
         super.onAttach(activity);
         myContext=(FragmentActivity) activity;
         homeActivity = (HomeActivity) activity;
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (onHomeFragmentSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+
     }
 
 
@@ -138,8 +159,15 @@ public class HomeFragment extends Fragment implements TabHost.OnTabChangeListene
         }
     }
 
-    private void setDealsAdapter(){
+    public void setDealsAdapter(){
         DealsDayFragment dealsDayFragment = (DealsDayFragment) mAdapter.getItem(0);
-        dealsDayFragment.setDealsAdapters(homeActivity.getLastDeals());
+
+        ArrayList<Deal> deals =  homeActivity.getLastDeals();
+        Log.i("midipile ", "setDealsAdapter");
+
+        if( !deals.isEmpty()) {
+            dealsDayFragment.setDealsAdapters(homeActivity.getLastDeals());
+        }
+
     }
 }
