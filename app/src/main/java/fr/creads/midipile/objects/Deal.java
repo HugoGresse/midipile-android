@@ -31,9 +31,9 @@ public class Deal {
     private Integer fbAppId;
     private String fb;
 
-    private String dateCreation;
-    private String dateLancement;
-    private String dateFin;
+    private String date_creation;
+    private String date_lancement;
+    private String date_fin;
 
     public Integer getId() {
         return id;
@@ -100,11 +100,11 @@ public class Deal {
     }
 
     public String getDateFin() {
-        return dateFin;
+        return date_fin;
     }
 
     public String getDateLancement() {
-        return dateLancement;
+        return date_lancement;
     }
 
     @Override
