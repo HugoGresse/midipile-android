@@ -10,7 +10,7 @@ import com.loopj.android.http.RequestParams;
  */
 public class MidipileRestClient {
 
-    private static final String BASE_URL = "http://gullible-sloth-7323.vagrantshare.com/1";
+    private static final String BASE_URL = "http://endless-lemur-6024.vagrantshare.com/1";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 

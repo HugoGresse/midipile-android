@@ -5,19 +5,34 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 import fr.creads.midipile.R;
+import fr.creads.midipile.api.Constants;
+import fr.creads.midipile.api.MidipileAPI;
+import fr.creads.midipile.dialogs.NetworkDialogFragment;
 import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
-
+import fr.creads.midipile.objects.Deal;
+import fr.creads.midipile.objects.Deals;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class HomeActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    private MidipileAPI midipileService;
+
+    private ArrayList<Deal> deals;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -34,6 +49,14 @@ public class HomeActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(Constants.URL_API)
+                .build();
+
+        midipileService = restAdapter.create(MidipileAPI.class);
+
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -42,6 +65,8 @@ public class HomeActivity extends FragmentActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        loadLastDeals();
     }
 
     @Override
@@ -129,5 +154,35 @@ public class HomeActivity extends FragmentActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void loadLastDeals(){
+
+        midipileService.getLastDeals(new Callback<Deals>() {
+            @Override
+            public void success(Deals d, Response response) {
+                deals = (ArrayList<Deal>) d.getDeals();
+                Log.i("fr.creads.midipile", d.toString());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
+    }
+
+    public ArrayList<Deal> getLastDeals(){
+        if(deals.isEmpty()){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            // Create and show the dialog.
+            NetworkDialogFragment networkDialogFragment = new NetworkDialogFragment();
+            networkDialogFragment.show(ft, "dialog");
+            return new ArrayList<Deal>();
+        } else {
+            return deals;
+        }
+    }
+
+
 
 }

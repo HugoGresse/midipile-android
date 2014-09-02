@@ -16,19 +16,17 @@ import java.io.File;
  */
 public class MidipileApplication extends Application {
 
+
     @Override
     public void onCreate() {
         super.onCreate();
 
 
         File cacheDir = new File(Environment.getExternalStorageDirectory(), "Midipile/Cache");
-
-
         DisplayImageOptions defaultOptions;
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .diskCache(new UnlimitedDiscCache(cacheDir))
                 .build();
-
         ImageLoader.getInstance().init(config);
     }
 }
