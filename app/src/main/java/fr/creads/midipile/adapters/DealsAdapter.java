@@ -2,7 +2,6 @@ package fr.creads.midipile.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +35,8 @@ public class DealsAdapter extends BaseAdapter {
     private Deal mCurrentDeal;
 
     ImageLoader imageLoader;
+    DisplayImageOptions imageLoaderDisplayOptions;
+
     SimpleDateFormat mySQLDateFormatter;
 
     Date curDate;
@@ -43,6 +46,13 @@ public class DealsAdapter extends BaseAdapter {
         this.dealItems = dealItems;
 
         imageLoader = ImageLoader.getInstance();
+        imageLoaderDisplayOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(android.R.color.white)
+                .showImageForEmptyUri(android.R.color.white)
+                .displayer(new FadeInBitmapDisplayer(500))
+                .cacheInMemory(true)
+                .build();
+
         mySQLDateFormatter = new SimpleDateFormat( "yyyy-MM-dd", java.util.Locale.getDefault());
         Calendar cal = Calendar.getInstance();
         curDate = (Date) cal.getTime();
@@ -74,7 +84,7 @@ public class DealsAdapter extends BaseAdapter {
         ImageView image = (ImageView) convertView.findViewById(R.id.dealImageView);
         if(!mCurrentDeal.getImages().isEmpty()){
             String url = mCurrentDeal.getImages().get(0);
-            imageLoader.displayImage(url, image);
+            imageLoader.displayImage(url, image, imageLoaderDisplayOptions);
         }
 
         // set loader position
@@ -83,9 +93,7 @@ public class DealsAdapter extends BaseAdapter {
         Date startDate = null;
         Date endDate = null;
         int progress = 0;
-        Log.i("midipile", mCurrentDeal.getDateLancement());
         try {
-
             startDate = mySQLDateFormatter.parse(mCurrentDeal.getDateLancement());
             endDate = mySQLDateFormatter.parse(mCurrentDeal.getDateFin());
 
