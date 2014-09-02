@@ -15,9 +15,9 @@
         android:scaleType="fitCenter" />
 
     <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+        style="@style/ProgressBarMidipileTheme"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="4dp"
         android:id="@+id/dealProgressBar"
         android:layout_below="@+id/dealImageView"
         android:layout_alignLeft="@+id/dealImageView" />

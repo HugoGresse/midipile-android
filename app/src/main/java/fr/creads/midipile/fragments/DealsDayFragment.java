@@ -39,10 +39,10 @@ public class DealsDayFragment extends Fragment {
 
         Log.d("fr.creads.midipile", "dealsDay create view  ======");
         View rootView = inflater.inflate(R.layout.fragment_dealsday, container, false);
-        listDealsContainer = (LinearLayout)rootView.findViewById(R.id.listDealsContainer);
+//        listDealsContainer = (LinearLayout)rootView.findViewById(R.id.listDealsContainer);
         dealsListView = (ListView) rootView.findViewById(R.id.listDealsDayView);
 
-        setInsets(getActivity(), listDealsContainer);
+//        setInsets(getActivity(), listDealsContainer);
 
         return rootView;
     }

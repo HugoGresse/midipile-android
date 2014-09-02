@@ -1,6 +1,7 @@
 package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,15 +12,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+
 import java.util.ArrayList;
 
-import fr.creads.midipile.dialogs.DealNetworkDialogFragment;
-import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
+import fr.creads.midipile.dialogs.DealNetworkDialogFragment;
 import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
+import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
 import fr.creads.midipile.objects.Deal;
 import fr.creads.midipile.objects.Deals;
@@ -71,6 +74,7 @@ public class HomeActivity extends FragmentActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         loadLastDeals();
+        //eneableSystemBarTint();
     }
 
     @Override
@@ -140,6 +144,14 @@ public class HomeActivity extends FragmentActivity
         //actionBar.setTitle(mTitle);
     }
 
+    public void eneableSystemBarTint(){
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setNavigationBarTintEnabled(true);
+        tintManager.setTintColor(Color.parseColor(getResources().getString(R.color.background_actionBar)));
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -202,4 +214,5 @@ public class HomeActivity extends FragmentActivity
     public void onDealsSelected(int dealId) {
 
     }
+
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="midipiletheme_color">#29d3b6</color>
+    <color name="background_actionBar">#ffffff</color>
     <color name="background_drawer">#ffffff</color>
     <color name="background_drawer_focus">#eeeff1</color>
     <color name="background_drawer_pressed">#f7f8fa</color>
