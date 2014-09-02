@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -20,6 +21,7 @@ import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
 import fr.creads.midipile.dialogs.DealNetworkDialogFragment;
+import fr.creads.midipile.fragments.DealsDayFragment;
 import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
@@ -32,7 +34,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class HomeActivity extends FragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, HomeFragment.onHomeFragmentSelectedListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, DealsDayFragment.onDealsSelectedListener  {
 
     private MidipileAPI midipileService;
 
@@ -209,10 +211,9 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
-
     @Override
     public void onDealsSelected(int dealId) {
-
+        Toast.makeText(getApplicationContext(), "Clicked",
+                Toast.LENGTH_LONG).show();
     }
-
 }

@@ -33,12 +33,11 @@ import fr.creads.midipile.objects.Deal;
  * Date : 27/08/14
  */
 public class HomeFragment extends Fragment
-        implements TabHost.OnTabChangeListener, OnDataLoadedListener {
+        implements TabHost.OnTabChangeListener, OnDataLoadedListener{
 
     private HomeActivity homeActivity;
     private FragmentActivity myContext;
     private ActionBar actionBar;
-    private onHomeFragmentSelectedListener mCallback;
     private TabHost tabHost;
 
     private HomeFragmentPagerAdapter mAdapter;
@@ -50,11 +49,6 @@ public class HomeFragment extends Fragment
     public void onDealsLoaded() {
         setDealsAdapter();
     }
-
-    public interface onHomeFragmentSelectedListener {
-        public void onDealsSelected(int dealId);
-    }
-
 
 
 
@@ -93,16 +87,6 @@ public class HomeFragment extends Fragment
         super.onAttach(activity);
         myContext=(FragmentActivity) activity;
         homeActivity = (HomeActivity) activity;
-
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            mCallback = (onHomeFragmentSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-
     }
 
 
@@ -193,5 +177,4 @@ public class HomeFragment extends Fragment
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
     }
-
 }
