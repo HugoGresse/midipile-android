@@ -74,7 +74,7 @@ public class HomeActivity extends FragmentActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         loadLastDeals();
-        //eneableSystemBarTint();
+        eneableSystemBarTint();
     }
 
     @Override
@@ -148,7 +148,7 @@ public class HomeActivity extends FragmentActivity
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
+//        tintManager.setNavigationBarTintEnabled(true);
         tintManager.setTintColor(Color.parseColor(getResources().getString(R.color.background_actionBar)));
     }
 

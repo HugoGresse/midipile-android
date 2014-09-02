@@ -4,6 +4,7 @@ package fr.creads.midipile.fragments;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,16 +13,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.HomeFragmentPagerAdapter;
+import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.objects.Deal;
 
 /**
@@ -69,8 +73,19 @@ public class HomeFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         setupAdapter(rootView);
+
+
         Log.d("fr.creads.midipile", "CREATE HomeFRAGMENT");
         return rootView;
+    }
+
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.fragmentHomeLayout);
+
+        setInsets(this.getActivity(), layout);
     }
 
     @Override
@@ -170,4 +185,13 @@ public class HomeFragment extends Fragment
         }
 
     }
+
+
+    public static void setInsets(Activity context, View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
+        SystemBarTintManager tintManager = new SystemBarTintManager(context);
+        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+        view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
+    }
+
 }

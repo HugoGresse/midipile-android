@@ -39,10 +39,10 @@ public class DealsDayFragment extends Fragment {
 
         Log.d("fr.creads.midipile", "dealsDay create view  ======");
         View rootView = inflater.inflate(R.layout.fragment_dealsday, container, false);
-//        listDealsContainer = (LinearLayout)rootView.findViewById(R.id.listDealsContainer);
+        listDealsContainer = (LinearLayout)rootView.findViewById(R.id.listDealsContainer);
         dealsListView = (ListView) rootView.findViewById(R.id.listDealsDayView);
 
-//        setInsets(getActivity(), listDealsContainer);
+        setInsets(getActivity(), dealsListView);
 
         return rootView;
     }
@@ -66,6 +66,6 @@ public class DealsDayFragment extends Fragment {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-        view.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+        view.setPadding(0, 0, 0, config.getPixelInsetBottom());
     }
 }
