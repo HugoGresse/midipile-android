@@ -45,5 +45,10 @@
     <string name="deal_blank_title">Titre de l\'offre</string>
     <string name="deal_open_button">Découvrir</string>
 
+    <array name="deal_fragment_tabs">
+        <item>La marque</item>
+        <item>Le produit</item>
+        <item>Le trouver</item>
+    </array>
 
 </resources>

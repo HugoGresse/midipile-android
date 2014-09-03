@@ -1,6 +1,5 @@
 package fr.creads.midipile.fragments;
 
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -29,27 +28,26 @@ import fr.creads.midipile.objects.Deal;
 
 /**
  * Author : Hugo Gresse
- * Date : 27/08/14
+ * Date : 03/09/14
  */
-public class HomeFragment extends Fragment
-        implements TabHost.OnTabChangeListener, OnDataLoadedListener{
+public class DealFragment extends Fragment
+        implements TabHost.OnTabChangeListener, OnDataLoadedListener {
 
-    private HomeActivity homeActivity;
-    private FragmentActivity myContext;
-    private ActionBar actionBar;
+    ActionBar actionBar;
+    FragmentActivity myContext;
+    HomeActivity homeActivity;
+
     private TabHost tabHost;
-
     private TabFragmentPagerAdapter mAdapter;
     private ViewPager mPager;
-
     private String[] mTabsTitles;
+
+    private Deal deal;
 
     @Override
     public void onDealsLoaded() {
-        setDealsAdapter();
+
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -57,14 +55,14 @@ public class HomeFragment extends Fragment
 
         actionBar = myContext.getActionBar();
 
-        mTabsTitles = getResources().getStringArray(R.array.home_fragment_tabs);
+        mTabsTitles = getResources().getStringArray(R.array.deal_fragment_tabs);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_deal, container, false);
         setupAdapter(rootView);
 
         return rootView;
@@ -73,8 +71,11 @@ public class HomeFragment extends Fragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.fragmentHomeLayout);
+        RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.fragmentDealLayout);
         setInsets(this.getActivity(), layout);
+
+        deal = getArguments().getParcelable("deal");
+
     }
 
     @Override
@@ -84,11 +85,10 @@ public class HomeFragment extends Fragment
         homeActivity = (HomeActivity) activity;
     }
 
-
     private void setupAdapter(View rootView){
 
         // Initialization
-        tabHost=(TabHost)rootView.findViewById(R.id.home_tab_host);
+        tabHost=(TabHost)rootView.findViewById(R.id.deal_tab_host);
         tabHost.setup();
 
         for (String tab_name : mTabsTitles) {
@@ -109,9 +109,12 @@ public class HomeFragment extends Fragment
 
         mAdapter = new TabFragmentPagerAdapter(getChildFragmentManager(), createFragments());
 
-        mPager = (ViewPager)rootView.findViewById(R.id.homepager);
+        mPager = (ViewPager)rootView.findViewById(R.id.dealpager);
         mPager.setAdapter(mAdapter);
 
+        // set currentItem to product
+        mPager.setCurrentItem(1);
+        tabHost.setCurrentTab(1);
 
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -128,8 +131,9 @@ public class HomeFragment extends Fragment
 
     private List<Fragment> createFragments() {
         List<Fragment> list = new ArrayList<Fragment>();
-        list.add(Fragment.instantiate(myContext, DealsDayFragment.class.getName()));
-        list.add(Fragment.instantiate(myContext, WhishlistFragment.class.getName()));
+        list.add(Fragment.instantiate(myContext, DealBrandFragment.class.getName()));
+        list.add(Fragment.instantiate(myContext, DealProductFragment.class.getName()));
+        list.add(Fragment.instantiate(myContext, DealPlaceFragment.class.getName()));
 
         return list;
     }
@@ -141,25 +145,15 @@ public class HomeFragment extends Fragment
         return view;
     }
 
-
     @Override
     public void onTabChanged(String tab) {
         if(tab.equals(mTabsTitles[0])){
             mPager.setCurrentItem(0);
-        } else {
+        } else if(tab.equals(mTabsTitles[1])){
             mPager.setCurrentItem(1);
+        } else {
+            mPager.setCurrentItem(2);
         }
-    }
-
-    public void setDealsAdapter(){
-        if(null != mAdapter) {
-            DealsDayFragment dealsDayFragment = (DealsDayFragment) mAdapter.getItem(0);
-            ArrayList<Deal> deals =  homeActivity.getLastDeals();
-            if( !deals.isEmpty()) {
-                dealsDayFragment.setDealsAdapters(homeActivity.getLastDeals());
-            }
-        }
-
     }
 
 
@@ -169,4 +163,5 @@ public class HomeFragment extends Fragment
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
     }
+
 }

@@ -9,6 +9,11 @@
 
 
     <dimen name="list_deal_padding_top">10dp</dimen>
+    <dimen name="progress_bar_duration_height">4dp</dimen>
+
+
+    <dimen name="deal_detail_padding_horizontal">20dp</dimen>
+    <dimen name="deal_detail_padding_vertical">20dp</dimen>
 
 
 </resources>

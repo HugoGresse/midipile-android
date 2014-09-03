@@ -24,6 +24,7 @@ import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
 import fr.creads.midipile.dialogs.DealNetworkDialogFragment;
+import fr.creads.midipile.fragments.DealFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
 import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
@@ -241,7 +242,17 @@ public class HomeActivity extends FragmentActivity
 
     @Override
     public void onDealsSelected(int dealId) {
-        Toast.makeText(getApplicationContext(), "Clicked",
-                Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), deals.get(dealId).getNom(),
+                Toast.LENGTH_SHORT).show();
+
+        Bundle args=new Bundle();
+        args.putParcelable("deal", deals.get(dealId));
+
+
+        Fragment dealFragment = new DealFragment();
+        dealFragment.setArguments(args);
+
+        changeFragment( dealFragment, 1,  R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+
     }
 }

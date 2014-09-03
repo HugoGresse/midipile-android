@@ -24,7 +24,7 @@
     <ProgressBar
         style="@style/ProgressBarMidipileTheme"
         android:layout_width="fill_parent"
-        android:layout_height="4dp"
+        android:layout_height="@dimen/progress_bar_duration_height"
         android:id="@+id/dealProgressBar"
         android:layout_below="@+id/dealImageView"
         android:layout_alignLeft="@+id/dealImageView" />
