@@ -44,6 +44,7 @@
 
     <string name="deal_blank_title">Titre de l\'offre</string>
     <string name="deal_open_button">Découvrir</string>
+    <string name="deal_participate_button">Je participe</string>
 
     <array name="deal_fragment_tabs">
         <item>La marque</item>

@@ -43,6 +43,7 @@ public class HomeActivity extends FragmentActivity
     private MidipileAPI midipileService;
 
     private ArrayList<Deal> deals;
+    private int dealPosition;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -240,19 +241,36 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    public Deal getDeal(int position){
+        if(deals.isEmpty()){
+            return new Deal();
+        } else {
+            return deals.get(position);
+        }
+    }
+
+
+    public Deal getSelectedDeal(){
+        if(deals.isEmpty()){
+            return new Deal();
+        } else {
+            return deals.get(dealPosition);
+        }
+    }
+
     @Override
-    public void onDealsSelected(int dealId) {
-        Toast.makeText(getApplicationContext(), deals.get(dealId).getNom(),
+    public void onDealsSelected(int position) {
+        Toast.makeText(getApplicationContext(), deals.get(position).getNom(),
                 Toast.LENGTH_SHORT).show();
 
-        Bundle args=new Bundle();
-        args.putParcelable("deal", deals.get(dealId));
+        dealPosition = position;
 
+        Bundle args=new Bundle();
+        args.putParcelable("deal", deals.get(position));
 
         Fragment dealFragment = new DealFragment();
         dealFragment.setArguments(args);
 
         changeFragment( dealFragment, 1,  R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-
     }
 }

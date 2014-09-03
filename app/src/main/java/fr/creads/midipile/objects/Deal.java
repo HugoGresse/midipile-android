@@ -16,7 +16,7 @@ public class Deal implements Parcelable {
     private float valeur;
 
     private String nom;
-    private String desription;
+    private String description;
     private String descriptionBreve;
     private String societe;
     private String descriptionSociete;
@@ -49,7 +49,7 @@ public class Deal implements Parcelable {
         fbAppId = in.readInt();
 
         nom = in.readString();
-        desription = in.readString();
+        description = in.readString();
         descriptionBreve = in.readString();
         societe = in.readString();
         descriptionSociete = in.readString();
@@ -72,7 +72,7 @@ public class Deal implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(nom);
-        parcel.writeString(desription);
+        parcel.writeString(description);
         parcel.writeString(descriptionBreve);
         parcel.writeString(societe);
         parcel.writeString(descriptionSociete);
@@ -113,8 +113,8 @@ public class Deal implements Parcelable {
         return nom;
     }
 
-    public String getDesription() {
-        return desription;
+    public String getDescription() {
+        return description;
     }
 
     public String getDescriptionBreve() {

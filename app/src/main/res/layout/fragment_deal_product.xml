@@ -3,34 +3,65 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/dealPictureView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/deal_blank"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter" />
-
-    <ProgressBar
-        style="@style/ProgressBarMidipileTheme"
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/progress_bar_duration_height"
-        android:id="@+id/dealProgressBar"
-        android:layout_below="@+id/dealPictureView"
-        android:layout_alignLeft="@+id/dealPictureView"
-        android:layout_alignRight="@+id/dealPictureView" />
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true"
+        android:clipToPadding="false"
+        android:id="@+id/scrollView">
 
-    <WebView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dealDetail"
-        android:layout_below="@+id/dealProgressBar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/dealProgressBar"
-        android:paddingLeft="@dimen/deal_detail_padding_horizontal"
-        android:paddingRight="@dimen/deal_detail_padding_horizontal"
-        android:paddingTop="@dimen/deal_detail_padding_vertical"
-        android:paddingBottom="@dimen/deal_detail_padding_vertical" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/dealProgressBar">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dealPictureView"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/deal_blank"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
+
+            <ProgressBar
+                style="@style/ProgressBarMidipileTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/progress_bar_duration_height"
+                android:id="@+id/dealProgressBar"
+                android:layout_below="@+id/dealPictureView"
+                android:layout_alignLeft="@+id/dealPictureView"
+                android:layout_alignRight="@+id/dealPictureView" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/dealProgressBar"
+                android:layout_alignLeft="@+id/dealProgressBar"
+                android:layout_alignRight="@+id/dealProgressBar"
+                android:paddingLeft="@dimen/deal_detail_padding_horizontal"
+                android:paddingRight="@dimen/deal_detail_padding_horizontal"
+                android:paddingTop="@dimen/deal_detail_padding_vertical">
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deal_participate_button"
+                    android:id="@+id/participateButton"
+                    android:background="@color/midipiletheme_color"
+                    android:textColor="@android:color/white"
+                    android:textAllCaps="true" />
+
+                <WebView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dealDetail"
+                    android:layout_below="@+id/participateButton"
+                    android:layout_marginTop="@dimen/deal_detail_padding_vertical" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>

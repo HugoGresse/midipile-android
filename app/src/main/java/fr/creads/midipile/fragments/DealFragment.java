@@ -56,6 +56,7 @@ public class DealFragment extends Fragment
         actionBar = myContext.getActionBar();
 
         mTabsTitles = getResources().getStringArray(R.array.deal_fragment_tabs);
+
     }
 
     @Override
@@ -76,6 +77,7 @@ public class DealFragment extends Fragment
 
         deal = getArguments().getParcelable("deal");
 
+        actionBar.setTitle(deal.getNom());
     }
 
     @Override
