@@ -2,6 +2,7 @@ package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +12,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -56,16 +59,20 @@ public class HomeActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        // init rest api
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.URL_API)
                 .build();
-
-
         midipileService = restAdapter.create(MidipileAPI.class);
 
 
+        // hide ActionBar on start
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getActionBar().hide();
+
         setContentView(R.layout.fragment_splashscren);
+
+        eneableSystemBarTint();
 
         loadLastDeals();
 
@@ -75,6 +82,8 @@ public class HomeActivity extends FragmentActivity
      * Init the acvitity and navigatio ndrawer after spalsh screen
      */
     public void afterOnCreate(){
+        getActionBar().show();
+
         setContentView(R.layout.activity_home);
 
         deals = new ArrayList<Deal>();
@@ -132,8 +141,6 @@ public class HomeActivity extends FragmentActivity
      * @param position
      */
     private void changeFragment(Fragment frag, int position, int animIn, int animOut){
-
-        Log.d("fr.creads.midipile", "Change fragment ======");
         // animation : .setCustomAnimations(animIn, animOut, animIn, animOut)
 
         // Fragment must implement the callback.
@@ -196,11 +203,14 @@ public class HomeActivity extends FragmentActivity
         midipileService.getLastDeals(new Callback<Deals>() {
             @Override
             public void success(Deals d, Response response) {
-                afterOnCreate();
+
+                if(null == mNavigationDrawerFragment){
+                    afterOnCreate();
+                }
+
                 deals = (ArrayList<Deal>) d.getDeals();
                 Log.i("fr.creads.midipile", "Deals loaded");
                 mLoadedCallbacks.onDealsLoaded();
-
             }
 
             @Override
