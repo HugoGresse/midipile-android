@@ -72,7 +72,7 @@ public class HomeActivity extends FragmentActivity
 
         setContentView(R.layout.fragment_splashscren);
 
-        eneableSystemBarTint();
+        enableSystemBarTint();
 
         loadLastDeals();
 
@@ -97,7 +97,7 @@ public class HomeActivity extends FragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        eneableSystemBarTint();
+        enableSystemBarTint();
     }
 
     @Override
@@ -165,7 +165,7 @@ public class HomeActivity extends FragmentActivity
         //actionBar.setTitle(mTitle);
     }
 
-    public void eneableSystemBarTint(){
+    public void enableSystemBarTint(){
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
