@@ -1,12 +1,15 @@
 package fr.creads.midipile.objects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Author : Hugo Gresse
  * Date : 27/08/14
  */
-public class Deal {
+public class Deal implements Parcelable {
 
     private Integer id;
     private Integer quantite;
@@ -34,6 +37,73 @@ public class Deal {
     private String date_creation;
     private String date_lancement;
     private String date_fin;
+
+    public Deal(){
+
+    }
+
+    public Deal(Parcel in) {
+        id = in.readInt();
+        quantite = in.readInt();
+        valeur = in.readFloat();
+        fbAppId = in.readInt();
+
+        nom = in.readString();
+        desription = in.readString();
+        descriptionBreve = in.readString();
+        societe = in.readString();
+        descriptionSociete = in.readString();
+        website = in.readString();
+        eshop = in.readString();
+        facebook = in.readString();
+        twitter = in.readString();
+        pinterest = in.readString();
+        appStore = in.readString();
+        playStore = in.readString();
+        logo = in.readString();
+
+        in.readStringList(images);
+
+        date_creation = in.readString();
+        date_lancement = in.readString();
+        date_fin = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(nom);
+        parcel.writeString(desription);
+        parcel.writeString(descriptionBreve);
+        parcel.writeString(societe);
+        parcel.writeString(descriptionSociete);
+        parcel.writeString(website);
+        parcel.writeString(eshop);
+        parcel.writeString(facebook);
+        parcel.writeString(twitter);
+        parcel.writeString(pinterest);
+        parcel.writeString(appStore);
+        parcel.writeString(appStore);
+        parcel.writeString(appStore);
+        parcel.writeString(playStore);
+        parcel.writeString(logo);
+
+        parcel.writeString(date_creation);
+        parcel.writeString(date_lancement);
+        parcel.writeString(date_fin);
+
+        parcel.writeInt(id);
+        parcel.writeInt(quantite);
+        parcel.writeInt(fbAppId);
+        parcel.writeFloat(valeur);
+
+        parcel.writeStringList(images);
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     public Integer getId() {
         return id;
