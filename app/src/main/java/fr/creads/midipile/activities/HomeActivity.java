@@ -55,16 +55,29 @@ public class HomeActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
 
-        deals = new ArrayList<Deal>();
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.URL_API)
                 .build();
 
+
         midipileService = restAdapter.create(MidipileAPI.class);
 
+
+        setContentView(R.layout.fragment_splashscren);
+
+        loadLastDeals();
+
+    }
+
+    /**
+     * Init the acvitity and navigatio ndrawer after spalsh screen
+     */
+    public void afterOnCreate(){
+        setContentView(R.layout.activity_home);
+
+        deals = new ArrayList<Deal>();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -75,7 +88,6 @@ public class HomeActivity extends FragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        loadLastDeals();
         eneableSystemBarTint();
     }
 
@@ -150,14 +162,13 @@ public class HomeActivity extends FragmentActivity
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
-//        tintManager.setNavigationBarTintEnabled(true);
         tintManager.setTintColor(Color.parseColor(getResources().getString(R.color.background_actionBar)));
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (null != mNavigationDrawerFragment && !mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
@@ -185,13 +196,16 @@ public class HomeActivity extends FragmentActivity
         midipileService.getLastDeals(new Callback<Deals>() {
             @Override
             public void success(Deals d, Response response) {
+                afterOnCreate();
                 deals = (ArrayList<Deal>) d.getDeals();
                 Log.i("fr.creads.midipile", "Deals loaded");
                 mLoadedCallbacks.onDealsLoaded();
+
             }
 
             @Override
             public void failure(RetrofitError error) {
+                afterOnCreate();
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 // Create and show the dialog.
                 DealNetworkDialogFragment dealNetworkDialogFragment = new DealNetworkDialogFragment();

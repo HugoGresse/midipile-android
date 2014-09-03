@@ -16,6 +16,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.DealsAdapter;
 import fr.creads.midipile.objects.Deal;
 
@@ -54,6 +55,8 @@ public class DealsDayFragment extends Fragment  {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setDealsAdapters( ((HomeActivity)getActivity()).getLastDeals() );
 
         dealsListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {

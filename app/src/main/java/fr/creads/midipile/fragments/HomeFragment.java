@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,17 +67,13 @@ public class HomeFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         setupAdapter(rootView);
 
-
-        Log.d("fr.creads.midipile", "CREATE HomeFRAGMENT");
         return rootView;
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.fragmentHomeLayout);
-
         setInsets(this.getActivity(), layout);
     }
 
@@ -128,6 +123,7 @@ public class HomeFragment extends Fragment
                     }
                 }
         );
+
     }
 
     private List<Fragment> createFragments() {
@@ -148,24 +144,20 @@ public class HomeFragment extends Fragment
 
     @Override
     public void onTabChanged(String tab) {
-        Log.d("fr.creads.midipile", "homefragment onTabChanged  ======" + tab);
-
         if(tab.equals(mTabsTitles[0])){
             mPager.setCurrentItem(0);
-            Log.d("fr.creads.midipile", "homefragment setCurrentItem  ======");
         } else {
             mPager.setCurrentItem(1);
         }
     }
 
     public void setDealsAdapter(){
-        DealsDayFragment dealsDayFragment = (DealsDayFragment) mAdapter.getItem(0);
-
-        ArrayList<Deal> deals =  homeActivity.getLastDeals();
-        Log.i("midipile ", "setDealsAdapter");
-
-        if( !deals.isEmpty()) {
-            dealsDayFragment.setDealsAdapters(homeActivity.getLastDeals());
+        if(null != mAdapter) {
+            DealsDayFragment dealsDayFragment = (DealsDayFragment) mAdapter.getItem(0);
+            ArrayList<Deal> deals =  homeActivity.getLastDeals();
+            if( !deals.isEmpty()) {
+                dealsDayFragment.setDealsAdapters(homeActivity.getLastDeals());
+            }
         }
 
     }
