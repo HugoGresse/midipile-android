@@ -106,13 +106,13 @@ public class HomeActivity extends FragmentActivity
         Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
         switch (position) {
             case 0:
-                changeFragment( new HomeFragment(), position,  R.anim.fade_in, R.anim.fade_out);
+                changeFragment( new HomeFragment(), position);
                 break;
             case 1:
-                changeFragment( new LastWinnerFragment(), position,  R.anim.fade_in, R.anim.fade_out);
+                changeFragment( new LastWinnerFragment(), position);
                 break;
             case 2:
-                changeFragment( new LastWinnerFragment(), position,  R.anim.fade_in, R.anim.fade_out);
+                changeFragment( new LastWinnerFragment(), position);
                 mTitle = getString(R.string.title_section2);
                 break;
             case 3:
@@ -124,7 +124,7 @@ public class HomeActivity extends FragmentActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                changeFragment( new HomeFragment(), number,  R.anim.fade_in, R.anim.fade_out);
+                changeFragment( new HomeFragment(), number);
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
@@ -135,14 +135,17 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+
+    private void changeFragment(Fragment frag, int position){
+        changeFragment(frag, position, R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+    }
+
     /**
      * Change content fragment
      * @param frag
      * @param position
      */
-    private void changeFragment(Fragment frag, int position, int animIn, int animOut){
-        // animation : .setCustomAnimations(animIn, animOut, animIn, animOut)
-
+    private void changeFragment(Fragment frag, int position, int enter, int exit, int pop_enter, int pop_exit){
         // Fragment must implement the callback.
         if (!(frag instanceof OnDataLoadedListener)) {
             throw new IllegalStateException(
@@ -150,13 +153,14 @@ public class HomeActivity extends FragmentActivity
         }
         mLoadedCallbacks = (OnDataLoadedListener) frag;
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(enter, exit, pop_enter, pop_exit);
 
-            .replace(R.id.container, frag, Integer.toString(position))
-            .addToBackStack(frag.getClass().toString())
-            .commit();
+        transaction.replace(R.id.container, frag, Integer.toString(position));
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
+
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
