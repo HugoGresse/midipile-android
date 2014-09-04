@@ -13,7 +13,8 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/dealProgressBar">
+            android:layout_alignRight="@+id/dealProgressBar"
+            android:clipToPadding="true">
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -42,7 +43,8 @@
                 android:layout_alignRight="@+id/dealProgressBar"
                 android:paddingLeft="@dimen/deal_detail_padding_horizontal"
                 android:paddingRight="@dimen/deal_detail_padding_horizontal"
-                android:paddingTop="@dimen/deal_detail_padding_vertical">
+                android:paddingTop="@dimen/deal_detail_padding_vertical"
+                android:scrollbars="none">
 
                 <Button
                     android:layout_width="fill_parent"
@@ -53,12 +55,44 @@
                     android:textColor="@android:color/white"
                     android:textAllCaps="true" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deal_discover_title"
+                    android:id="@+id/presTextView"
+                    android:layout_below="@+id/participateButton"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/midipile_black"
+                    android:layout_marginTop="@dimen/deal_detail_padding_vertical"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dealValue"
+                    android:layout_below="@+id/presTextView"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@color/background_drawer_focus"
+                    android:textSize="16sp"
+                    android:layout_marginTop="@dimen/deal_detail_padding_vertical"
+                    android:text="@string/deal_value_prefix"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textColor="@color/midipiletheme_color"
+                    android:textAllCaps="true" />
+
                 <WebView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/dealDetail"
-                    android:layout_below="@+id/participateButton"
-                    android:layout_marginTop="@dimen/deal_detail_padding_vertical" />
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="@dimen/deal_detail_padding_vertical"
+                    android:scrollbars="vertical"
+                    android:layout_below="@+id/dealValue" />
+
             </RelativeLayout>
 
         </RelativeLayout>

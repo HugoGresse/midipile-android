@@ -1,6 +1,8 @@
 package fr.creads.midipile.fragments;
 
+import android.app.Activity;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,10 +12,12 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,9 +42,12 @@ public class DealProductFragment extends Fragment {
     private Typeface typefaceLoto;
 
     private ImageView imageView;
+    private TextView dealValueTextView;
     private ProgressBar progressBar;
     private Button participateButton;
     private WebView detailWebView;
+
+    private String valueText = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -60,10 +67,13 @@ public class DealProductFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_deal_product, container, false);
 
+        dealValueTextView = (TextView) rootView.findViewById(R.id.dealValue);
         imageView = (ImageView) rootView.findViewById(R.id.dealPictureView);
         progressBar = (ProgressBar) rootView.findViewById(R.id.dealProgressBar);
         participateButton = (Button) rootView.findViewById(R.id.participateButton);
         detailWebView = (WebView) rootView.findViewById(R.id.dealDetail);
+
+        //setInsets(getActivity(), rootView);
 
         typefaceLoto = Typeface.createFromAsset( getActivity().getApplicationContext().getAssets(),
                 "fonts/latoregular.ttf");
@@ -77,6 +87,12 @@ public class DealProductFragment extends Fragment {
 
         progressBar.setProgress(getProgress(deal.getDateLancement(), deal.getDateFin()));
         detailWebView.loadData(deal.getDescription(), "text/html", "utf-8");
+
+        valueText = getActivity().getResources().getString(R.string.deal_value_prefix);
+        valueText += " " + Float.toString(deal.getValeur()) + "€ (";
+        valueText += Integer.toString(deal.getQuantite()) + " " + getActivity().getResources().getString(R.string.deal_value_suffix) + " )";
+
+        dealValueTextView.setText(valueText);
 
         if(!deal.getImages().isEmpty()){
             String url = deal.getImages().get(0);
@@ -107,6 +123,14 @@ public class DealProductFragment extends Fragment {
             e.printStackTrace();
         }
         return progress;
+    }
+
+
+    public static void setInsets(Activity context, View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
+        SystemBarTintManager tintManager = new SystemBarTintManager(context);
+        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+        view.setPadding(0, 0, 0, config.getNavigationBarHeight());
     }
 
 }
