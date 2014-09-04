@@ -8,6 +8,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Last winner "
-        android:id="@+id/textView"
+        android:id="@+id/dealValue"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

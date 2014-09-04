@@ -93,7 +93,10 @@ public class Deal implements Parcelable {
 
         parcel.writeInt(id);
         parcel.writeInt(quantite);
-        parcel.writeInt(fbAppId);
+        if(null != fbAppId) {
+            parcel.writeInt(fbAppId);
+
+        }
         parcel.writeFloat(valeur);
 
         parcel.writeStringList(images);
@@ -175,6 +178,14 @@ public class Deal implements Parcelable {
 
     public String getDateLancement() {
         return date_lancement;
+    }
+
+    public Integer getQuantite(){
+        return quantite;
+    }
+
+    public float getValeur(){
+        return valeur;
     }
 
     @Override
