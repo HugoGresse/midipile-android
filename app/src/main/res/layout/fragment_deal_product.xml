@@ -10,7 +10,7 @@
         android:layout_height="fill_parent"
         android:fitsSystemWindows="true"
         android:clipToPadding="false"
-        android:id="@+id/scrollView">
+        android:id="@+id/productScrollView">
 
         <RelativeLayout
             android:layout_width="fill_parent"

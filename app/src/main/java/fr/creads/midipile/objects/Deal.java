@@ -31,7 +31,7 @@ public class Deal implements Parcelable {
     private String logo;
     private List<String> images;
 
-    private Integer fbAppId;
+    private String fb_app_id;
     private String fb;
 
     private String date_creation;
@@ -46,7 +46,6 @@ public class Deal implements Parcelable {
         id = in.readInt();
         quantite = in.readInt();
         valeur = in.readFloat();
-        fbAppId = in.readInt();
 
         nom = in.readString();
         description = in.readString();
@@ -61,6 +60,8 @@ public class Deal implements Parcelable {
         appStore = in.readString();
         playStore = in.readString();
         logo = in.readString();
+        fb_app_id = in.readString();
+        fb = in.readString();
 
         in.readStringList(images);
 
@@ -93,10 +94,11 @@ public class Deal implements Parcelable {
 
         parcel.writeInt(id);
         parcel.writeInt(quantite);
-        if(null != fbAppId) {
-            parcel.writeInt(fbAppId);
 
-        }
+
+        parcel.writeString(fb_app_id);
+        parcel.writeString(fb);
+
         parcel.writeFloat(valeur);
 
         parcel.writeStringList(images);
@@ -168,8 +170,11 @@ public class Deal implements Parcelable {
         return images;
     }
 
-    public Integer getFbAppId() {
-        return fbAppId;
+    public String getFbAppId() {
+        if(null == fb_app_id && null != fb) {
+            return fb;
+        }
+        return fb_app_id;
     }
 
     public String getDateFin() {

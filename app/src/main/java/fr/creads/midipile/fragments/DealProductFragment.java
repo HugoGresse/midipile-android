@@ -12,6 +12,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -46,6 +47,7 @@ public class DealProductFragment extends Fragment {
     private ProgressBar progressBar;
     private Button participateButton;
     private WebView detailWebView;
+    private ScrollView productScrollView;
 
     private String valueText = "";
 
@@ -72,8 +74,9 @@ public class DealProductFragment extends Fragment {
         progressBar = (ProgressBar) rootView.findViewById(R.id.dealProgressBar);
         participateButton = (Button) rootView.findViewById(R.id.participateButton);
         detailWebView = (WebView) rootView.findViewById(R.id.dealDetail);
+        productScrollView = (ScrollView) rootView.findViewById(R.id.productScrollView);
 
-        //setInsets(getActivity(), rootView);
+        setInsets(getActivity(), productScrollView);
 
         typefaceLoto = Typeface.createFromAsset( getActivity().getApplicationContext().getAssets(),
                 "fonts/latoregular.ttf");

@@ -16,41 +16,72 @@
         android:src="@drawable/deal_blank"
         android:scaleType="fitStart" />
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <ScrollView
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:fitsSystemWindows="true"
+        android:clipToPadding="false"
         android:layout_below="@+id/brandImageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingLeft="@dimen/deal_detail_padding_horizontal"
-        android:paddingRight="@dimen/deal_detail_padding_horizontal"
-        android:paddingTop="@dimen/deal_detail_padding_vertical">
+        android:id="@+id/brandScrollView" >
 
-        <fr.creads.midipile.layoutselements.FontTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/deal_blank_title"
-            android:id="@+id/dealSocieteTitleTextView"
-            android:textSize="18sp"
-            midipile:fontName="latoregular.ttf"
-            android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
-
-        <WebView
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/productWebView"
-            android:layout_below="@+id/dealSocieteTitleTextView"
-            android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
+            android:paddingLeft="@dimen/deal_detail_padding_horizontal"
+            android:paddingRight="@dimen/deal_detail_padding_horizontal"
+            android:paddingTop="@dimen/deal_detail_padding_vertical">
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button"
-            android:layout_below="@+id/productWebView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
+            <fr.creads.midipile.layoutselements.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deal_blank_title"
+                android:id="@+id/dealSocieteTitleTextView"
+                android:textSize="20sp"
+                midipile:fontName="latoregular.ttf"
+                android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
+
+            <WebView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/productWebView"
+                android:layout_below="@+id/dealSocieteTitleTextView"
+                android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fbButton"
+                android:layout_below="@+id/productWebView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_fb"
+                android:background="@android:color/transparent"
+                android:layout_marginRight="10dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/twButton"
+                android:layout_below="@+id/productWebView"
+                android:layout_toRightOf="@+id/fbButton"
+                android:layout_toEndOf="@+id/fbButton"
+                android:src="@drawable/ic_tw"
+                android:background="@android:color/transparent"
+                android:layout_marginRight="10dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/webButton"
+                android:layout_below="@+id/productWebView"
+                android:layout_toRightOf="@+id/twButton"
+                android:layout_toEndOf="@+id/twButton"
+                android:src="@drawable/ic_web"
+                android:background="@android:color/transparent" />
+
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
