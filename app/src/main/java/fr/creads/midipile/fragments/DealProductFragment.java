@@ -86,7 +86,13 @@ public class DealProductFragment extends Fragment {
         deal = ((HomeActivity)getActivity()).getSelectedDeal();
 
         progressBar.setProgress(getProgress(deal.getDateLancement(), deal.getDateFin()));
-        detailWebView.loadData(deal.getDescription(), "text/html", "utf-8");
+
+        String color = String.format("#%06X", (0xFFFFFF & getActivity().getResources().getColor(R.color.midipiletheme_color)));
+        String webviewData = "<html><head><style type=\"text/css\"> img { max-width : 100% !important; height : auto !important; } " +
+                "a { color : " + color + " ; }" +
+                "</style>" + deal.getDescription() ;
+
+        detailWebView.loadData(webviewData, "text/html", "utf-8");
 
         valueText = getActivity().getResources().getString(R.string.deal_value_prefix);
         valueText += " " + Float.toString(deal.getValeur()) + "€ (";

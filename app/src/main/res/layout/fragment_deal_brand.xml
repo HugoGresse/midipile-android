@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:midipile="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
@@ -11,7 +13,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:adjustViewBounds="true"
-        android:src="@drawable/deal_blank"/>
+        android:src="@drawable/deal_blank"
+        android:scaleType="fitStart" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -23,10 +26,21 @@
         android:paddingRight="@dimen/deal_detail_padding_horizontal"
         android:paddingTop="@dimen/deal_detail_padding_vertical">
 
+        <fr.creads.midipile.layoutselements.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_blank_title"
+            android:id="@+id/dealSocieteTitleTextView"
+            android:textSize="18sp"
+            midipile:fontName="latoregular.ttf"
+            android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
+
         <WebView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/productWebView"/>
+            android:id="@+id/productWebView"
+            android:layout_below="@+id/dealSocieteTitleTextView"
+            android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
