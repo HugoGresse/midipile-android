@@ -2,6 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
+        config {
+            keyAlias 'MidipileKeu'
+            keyPassword '12heurepile'
+            storeFile file('/Users/developpeur/Documents/Midipile/midipileReleaseKey.jks')
+            storePassword '12heurepile'
+        }
     }
     compileSdkVersion 20
     buildToolsVersion '20.0.0'
@@ -18,7 +24,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            debuggable false
+            debuggable true
         }
     }
     productFlavors {
@@ -34,4 +40,5 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    compile 'com.google.android.gms:play-services:4.+'
 }

@@ -3,11 +3,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
+    <Space
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:id="@+id/centerSpace" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/map">
+
+        </FrameLayout>
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Le trouver"
-        android:id="@+id/dealValue"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:text="@string/deal_map_website"
+        android:id="@+id/mapWebsite"
+        android:layout_below="@+id/centerSpace"
+        android:layout_toLeftOf="@+id/centerSpace"
+        android:layout_toStartOf="@+id/centerSpace"
+        android:background="@drawable/border_button"
+        android:paddingLeft="@dimen/deal_detail_padding_mapbutton_horizontal"
+        android:paddingRight="@dimen/deal_detail_padding_mapbutton_horizontal"
+        android:textAllCaps="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/deal_map_eshop"
+        android:id="@+id/mapEshop"
+        android:layout_below="@+id/centerSpace"
+        android:layout_toRightOf="@+id/centerSpace"
+        android:background="@drawable/border_button"
+        android:paddingLeft="@dimen/deal_detail_padding_mapbutton_horizontal"
+        android:paddingRight="@dimen/deal_detail_padding_mapbutton_horizontal"
+        android:textAllCaps="true" />
+
 </RelativeLayout>

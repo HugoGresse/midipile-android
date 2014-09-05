@@ -98,8 +98,8 @@ public class DealBrandFragment extends Fragment {
                 "</style>" + deal.getDescriptionSociete() ;
         productWebView.loadData(webviewData, "text/html", "utf-8");
 
-        if(!deal.getImages().isEmpty()){
-            String url = deal.getImages().get(0);
+        if(!deal.getLogo().isEmpty()){
+            String url = deal.getLogo();
             imageLoader.displayImage(url, imageView, imageLoaderDisplayOptions);
         }
         setShareButton();

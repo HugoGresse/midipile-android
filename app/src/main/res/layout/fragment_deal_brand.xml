@@ -27,7 +27,9 @@
                 android:layout_alignParentStart="true"
                 android:adjustViewBounds="true"
                 android:src="@drawable/deal_blank"
-                android:scaleType="fitStart" />
+                android:scaleType="fitCenter"
+                android:maxHeight="100dp"
+                android:layout_marginTop="@dimen/deal_detail_padding_vertical" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"

@@ -5,15 +5,18 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -42,7 +45,8 @@ public class DealProductFragment extends Fragment {
 
     private Typeface typefaceLoto;
 
-    private ImageView imageView;
+    private View rootView;
+    private ViewFlipper productViewFlipper;
     private TextView dealValueTextView;
     private ProgressBar progressBar;
     private Button participateButton;
@@ -66,20 +70,27 @@ public class DealProductFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null)
+                parent.removeView(rootView);
+        }
+        try {
+            rootView = inflater.inflate(R.layout.fragment_deal_product, container, false);
+            dealValueTextView = (TextView) rootView.findViewById(R.id.dealValue);
+            productViewFlipper = (ViewFlipper) rootView.findViewById(R.id.productViewFlipper);
+            progressBar = (ProgressBar) rootView.findViewById(R.id.dealProgressBar);
+            participateButton = (Button) rootView.findViewById(R.id.participateButton);
+            detailWebView = (WebView) rootView.findViewById(R.id.dealDetail);
+            productScrollView = (ScrollView) rootView.findViewById(R.id.productScrollView);
 
-        View rootView = inflater.inflate(R.layout.fragment_deal_product, container, false);
+            setInsets(getActivity(), productScrollView);
 
-        dealValueTextView = (TextView) rootView.findViewById(R.id.dealValue);
-        imageView = (ImageView) rootView.findViewById(R.id.dealPictureView);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.dealProgressBar);
-        participateButton = (Button) rootView.findViewById(R.id.participateButton);
-        detailWebView = (WebView) rootView.findViewById(R.id.dealDetail);
-        productScrollView = (ScrollView) rootView.findViewById(R.id.productScrollView);
+            typefaceLoto = Typeface.createFromAsset( getActivity().getApplicationContext().getAssets(),
+                    "fonts/latoregular.ttf");
+        } catch (InflateException e) {
 
-        setInsets(getActivity(), productScrollView);
-
-        typefaceLoto = Typeface.createFromAsset( getActivity().getApplicationContext().getAssets(),
-                "fonts/latoregular.ttf");
+        }
 
         return rootView;
     }
@@ -88,10 +99,13 @@ public class DealProductFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         deal = ((HomeActivity)getActivity()).getSelectedDeal();
 
+        participateButton.setTypeface(typefaceLoto);
         progressBar.setProgress(getProgress(deal.getDateLancement(), deal.getDateFin()));
 
-        String color = String.format("#%06X", (0xFFFFFF & getActivity().getResources().getColor(R.color.midipiletheme_color)));
-        String webviewData = "<html><head><style type=\"text/css\"> img { max-width : 100% !important; height : auto !important; } " +
+        String color = String.format("#%06X",
+                (0xFFFFFF & getActivity().getResources().getColor(R.color.midipiletheme_color)));
+        String webviewData = "<html><head><style type=\"text/css\"> " +
+                "img { max-width : 100% !important; height : auto !important; } " +
                 "a { color : " + color + " ; }" +
                 "</style>" + deal.getDescription() ;
 
@@ -103,12 +117,26 @@ public class DealProductFragment extends Fragment {
 
         dealValueTextView.setText(valueText);
 
-        if(!deal.getImages().isEmpty()){
-            String url = deal.getImages().get(0);
-            imageLoader.displayImage(url, imageView, imageLoaderDisplayOptions);
+
+        productViewFlipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(),
+                android.R.anim.fade_in));
+        productViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(),
+                android.R.anim.fade_out));
+
+        if(!deal.getImages().isEmpty()) {
+            for (String url : deal.getImages()){
+                ImageView imageView = new ImageView(getActivity());
+                imageView.setAdjustViewBounds(true);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageLoader.displayImage(url, imageView, imageLoaderDisplayOptions);
+                productViewFlipper.addView(imageView);
+            }
+            if(deal.getImages().size() > 1) {
+                productViewFlipper.setAutoStart(true);
+                productViewFlipper.startFlipping();
+            }
         }
 
-        participateButton.setTypeface(typefaceLoto);
 
     }
 

@@ -18,24 +18,22 @@
             android:layout_alignRight="@+id/dealProgressBar"
             android:clipToPadding="true">
 
-            <ImageView
+            <ViewFlipper
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/dealPictureView"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/deal_blank"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter" />
+                android:id="@+id/productViewFlipper"
+                android:flipInterval="3000" >
+
+            </ViewFlipper>
 
             <ProgressBar
                 style="@style/ProgressBarMidipileTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/progress_bar_duration_height"
                 android:id="@+id/dealProgressBar"
-                android:layout_below="@+id/dealPictureView"
-                android:layout_alignLeft="@+id/dealPictureView"
-                android:layout_alignRight="@+id/dealPictureView" />
+                android:layout_below="@+id/productViewFlipper"
+                android:layout_alignLeft="@+id/productViewFlipper"
+                android:layout_alignRight="@+id/productViewFlipper" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -96,6 +94,15 @@
                     android:scrollbars="vertical"
                     android:layout_below="@+id/dealValue"
                     android:background="@android:color/white" />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deal_participate_button"
+                    android:id="@+id/participateButtonBottom"
+                    android:background="@color/midipiletheme_color"
+                    android:textColor="@android:color/white"
+                    android:textAllCaps="true" />
 
             </RelativeLayout>
 

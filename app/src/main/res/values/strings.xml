@@ -55,4 +55,8 @@
         <item>Le trouver</item>
     </array>
 
+
+    <string name="deal_map_eshop">E-shop</string>
+    <string name="deal_map_website">Site Web</string>
+
 </resources>
