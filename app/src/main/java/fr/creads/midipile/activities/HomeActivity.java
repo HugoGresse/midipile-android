@@ -169,6 +169,10 @@ public class HomeActivity extends FragmentActivity
         //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         //actionBar.setDisplayShowTitleEnabled(true);
         //actionBar.setTitle(mTitle);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     public void enableSystemBarTint(){
@@ -260,9 +264,6 @@ public class HomeActivity extends FragmentActivity
 
     @Override
     public void onDealsSelected(int position) {
-        Toast.makeText(getApplicationContext(), deals.get(position).getNom(),
-                Toast.LENGTH_SHORT).show();
-
         dealPosition = position;
 
         Bundle args=new Bundle();
