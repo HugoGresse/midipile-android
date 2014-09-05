@@ -112,7 +112,7 @@ public class DealProductFragment extends Fragment {
         detailWebView.loadData(webviewData, "text/html", "utf-8");
 
         valueText = getActivity().getResources().getString(R.string.deal_value_prefix);
-        valueText += " " + Float.toString(deal.getValeur()) + "€ (";
+        valueText += " " + Float.toString(deal.getValeur()) + "€ \n(";
         valueText += Integer.toString(deal.getQuantite()) + " " + getActivity().getResources().getString(R.string.deal_value_suffix) + " )";
 
         dealValueTextView.setText(valueText);
