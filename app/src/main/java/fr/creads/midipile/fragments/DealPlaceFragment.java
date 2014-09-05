@@ -1,6 +1,8 @@
 package fr.creads.midipile.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,13 +16,14 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.objects.Deal;
+import fr.creads.midipile.objects.PointOfSale;
 
 /**
  * Author : Hugo Gresse
@@ -62,7 +65,6 @@ public class DealPlaceFragment extends Fragment
         } catch (InflateException e) {
             /* map is already there, just return view as it is */
             Log.e(Constants.TAG, e.toString());
-
         }
 
         return rootView;
@@ -76,14 +78,13 @@ public class DealPlaceFragment extends Fragment
             mapFragment = new MidipileSupportMapFragment();
             mapFragment.setMapCallback(this); // This activity will receive the Map object once the map fragment is fully loaded
 
-            Log.d(Constants.TAG, "map frag -=-=-=-=-=-");
             // Then we add it using a FragmentTransaction.
             FragmentTransaction fragmentTransaction =
                     getFragmentManager().beginTransaction();
 
             fragmentTransaction.add(R.id.map, mapFragment, "dealMap");
-
             fragmentTransaction.commit();
+
         }
         else
         {
@@ -101,6 +102,20 @@ public class DealPlaceFragment extends Fragment
 
         deal = ((HomeActivity)getActivity()).getSelectedDeal();
 
+        eshop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getEshop())));
+            }
+        });
+        website.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getWebsite())));
+            }
+        });
+
+
     }
 
 
@@ -114,13 +129,27 @@ public class DealPlaceFragment extends Fragment
     @Override
     public void onGoogleMapCreated() {
 
-        android.support.v4.app.FragmentManager fm = getFragmentManager();
+        Log.d(Constants.TAG, " ========== MAP READY");
 
-        SupportMapFragment mapTemp = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        map = mapFragment.getMap();
 
-        Log.i(Constants.TAG, mapTemp.getClass().toString());
+        // add marker
+        for(PointOfSale pdv : deal.getPdv()){
+            map.addMarker(new MarkerOptions()
+                            .position(pdv.getLatLng())
+                            .title(pdv.getIntitule())
+            );
 
-        map = mapTemp.getMap();
+        }
+
+
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker)));
+
+//        map.moveCamera(CameraUpdateFactory.newLatLngZoom(barPos, 15));
+//        // Zoom in, animating the camera.
+//        map.animateCamera(CameraUpdateFactory.zoomIn());
+//        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+//        map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
 
         setInsets(getActivity(), map);
     }
