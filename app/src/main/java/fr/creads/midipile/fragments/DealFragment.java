@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -71,14 +72,33 @@ public class DealFragment extends Fragment
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.fragmentDealLayout);
         setInsets(this.getActivity(), layout);
+    }
+
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
 
         deal = getArguments().getParcelable("deal");
 
-        actionBar.setTitle(deal.getNom());
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                getActivity().onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     public void onAttach(Activity activity) {

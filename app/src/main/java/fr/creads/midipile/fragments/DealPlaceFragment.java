@@ -15,8 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -48,9 +51,6 @@ public class DealPlaceFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-
-        setGoogleMapFragment();
     }
 
     @Override
@@ -62,7 +62,6 @@ public class DealPlaceFragment extends Fragment
             mapFrameLayout = (FrameLayout) rootView.findViewById((R.id.map));
             eshop = (Button) rootView.findViewById((R.id.mapEshop));
             website = (Button) rootView.findViewById((R.id.mapWebsite));
-
         } catch (InflateException e) {
             /* map is already there, just return view as it is */
             Log.e(Constants.TAG, e.toString());
@@ -85,7 +84,6 @@ public class DealPlaceFragment extends Fragment
 
             fragmentTransaction.add(R.id.map, mapFragment, "dealMap");
             fragmentTransaction.commit();
-
         }
         else
         {
@@ -101,7 +99,16 @@ public class DealPlaceFragment extends Fragment
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
+        setGoogleMapFragment();
+
         deal = ((HomeActivity)getActivity()).getSelectedDeal();
+
+        if(deal.getEshop().isEmpty()){
+            eshop.setVisibility(View.GONE);
+        }
+        if(deal.getWebsite().isEmpty()){
+            website.setVisibility(View.GONE);
+        }
 
         eshop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,10 +122,7 @@ public class DealPlaceFragment extends Fragment
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getWebsite())));
             }
         });
-
-
     }
-
 
     public static void setInsets(Activity context, GoogleMap mMap2) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
@@ -129,28 +133,35 @@ public class DealPlaceFragment extends Fragment
 
     @Override
     public void onGoogleMapCreated() {
-
-        Log.d(Constants.TAG, " ========== MAP READY");
-
         map = mapFragment.getMap();
+
+        setInsets(getActivity(), map);
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         // add marker
         for(PointOfSale pdv : deal.getPdv()){
+            builder.include(pdv.getLatLng());
+
             map.addMarker(new MarkerOptions()
                             .position(pdv.getLatLng())
-                            .title(pdv.getIntitule())
+                            .title(pdv.getIntitule() + "\n" + pdv.getAdresse())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
             );
         }
 
+        Log.d(Constants.TAG, Integer.toString(deal.getNumberOfPdv()));
+        // center map on marker if any
+        if(deal.getNumberOfPdv() > 0) {
+            LatLngBounds bounds = builder.build();
+            final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
 
-
-//        map.moveCamera(CameraUpdateFactory.newLatLngZoom(barPos, 15));
-//        // Zoom in, animating the camera.
-//        map.animateCamera(CameraUpdateFactory.zoomIn());
-//        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-//        map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-
-        setInsets(getActivity(), map);
+            map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    map.moveCamera(cu);
+                }
+            });
+        }
     }
 }

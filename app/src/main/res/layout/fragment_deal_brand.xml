@@ -40,13 +40,15 @@
                 android:layout_below="@+id/brandImageView">
 
                 <fr.creads.midipile.layoutselements.FontTextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/deal_blank_title"
                     android:id="@+id/dealSocieteTitleTextView"
                     android:textSize="20sp"
                     midipile:fontName="latoregular.ttf"
-                    android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
+                    android:layout_marginBottom="@dimen/deal_detail_padding_vertical"
+                    android:gravity="center_horizontal"
+                    android:textStyle="bold" />
 
                 <WebView
                     android:layout_width="fill_parent"

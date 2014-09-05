@@ -91,13 +91,13 @@
                     android:id="@+id/dealDetail"
                     android:layout_alignParentBottom="false"
                     android:layout_marginTop="@dimen/deal_detail_padding_vertical"
-                    android:scrollbars="vertical"
                     android:layout_below="@+id/dealValue"
                     android:background="@android:color/white" />
 
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/dealDetail"
                     android:text="@string/deal_participate_button"
                     android:id="@+id/participateButtonBottom"
                     android:background="@color/midipiletheme_color"

@@ -39,6 +39,7 @@ public class Deal implements Parcelable {
     private String date_fin;
 
     private List<PointOfSale> pdv;
+    private Integer numberOfPdv;
 
     public Deal(){
 
@@ -197,6 +198,10 @@ public class Deal implements Parcelable {
 
     public List<PointOfSale> getPdv(){
         return pdv;
+    }
+
+    public int getNumberOfPdv(){
+        return numberOfPdv;
     }
 
     @Override

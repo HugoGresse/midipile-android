@@ -170,9 +170,7 @@ public class HomeActivity extends FragmentActivity
         //actionBar.setDisplayShowTitleEnabled(true);
         //actionBar.setTitle(mTitle);
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
     }
 
     public void enableSystemBarTint(){
