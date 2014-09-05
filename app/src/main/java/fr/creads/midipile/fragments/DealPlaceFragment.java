@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -138,12 +139,11 @@ public class DealPlaceFragment extends Fragment
             map.addMarker(new MarkerOptions()
                             .position(pdv.getLatLng())
                             .title(pdv.getIntitule())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
             );
-
         }
 
 
-//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker)));
 
 //        map.moveCamera(CameraUpdateFactory.newLatLngZoom(barPos, 15));
 //        // Zoom in, animating the camera.
