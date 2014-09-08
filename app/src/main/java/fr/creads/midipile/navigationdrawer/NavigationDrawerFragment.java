@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -21,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
@@ -127,6 +130,9 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.addFooterView(footerView);
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        setInsets(this.getActivity(), mDrawerListView);
+
         return mDrawerListView;
     }
 
@@ -263,6 +269,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -276,9 +283,7 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
         //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
     }
 
     private ActionBar getActionBar() {
@@ -294,4 +299,13 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+
+    public static void setInsets(Activity context, View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
+        SystemBarTintManager tintManager = new SystemBarTintManager(context);
+        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+        view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
+    }
+
 }

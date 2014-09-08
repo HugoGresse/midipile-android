@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -16,6 +16,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.DealsAdapter;
 import fr.creads.midipile.objects.Deal;
 
@@ -23,10 +24,17 @@ import fr.creads.midipile.objects.Deal;
  * Author : Hugo Gresse
  * Date : 27/08/14
  */
-public class DealsDayFragment extends Fragment {
+public class DealsDayFragment extends Fragment  {
 
     private ListView dealsListView;
-    private LinearLayout listDealsContainer;
+
+    private onDealsSelectedListener mDealsSelectedCallback;
+
+    public interface onDealsSelectedListener {
+        public void onDealsSelected(int dealId);
+    }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -39,18 +47,39 @@ public class DealsDayFragment extends Fragment {
 
         Log.d("fr.creads.midipile", "dealsDay create view  ======");
         View rootView = inflater.inflate(R.layout.fragment_dealsday, container, false);
-        listDealsContainer = (LinearLayout)rootView.findViewById(R.id.listDealsContainer);
         dealsListView = (ListView) rootView.findViewById(R.id.listDealsDayView);
-
         setInsets(getActivity(), dealsListView);
 
         return rootView;
     }
 
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setDealsAdapters( ((HomeActivity)getActivity()).getLastDeals() );
+
+        dealsListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
+            {
+                mDealsSelectedCallback.onDealsSelected(position);
+            }
+        });
+    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        try {
+            mDealsSelectedCallback = (onDealsSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+
+
     }
 
     @Override

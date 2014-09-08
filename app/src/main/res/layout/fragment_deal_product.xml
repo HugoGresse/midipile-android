@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:midipile="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true"
+        android:clipToPadding="false"
+        android:id="@+id/productScrollView">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/dealProgressBar"
+            android:clipToPadding="true">
+
+            <ViewFlipper
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/productViewFlipper"
+                android:flipInterval="3000" >
+
+            </ViewFlipper>
+
+            <ProgressBar
+                style="@style/ProgressBarMidipileTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/progress_bar_duration_height"
+                android:id="@+id/dealProgressBar"
+                android:layout_below="@+id/productViewFlipper"
+                android:layout_alignLeft="@+id/productViewFlipper"
+                android:layout_alignRight="@+id/productViewFlipper" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/dealProgressBar"
+                android:layout_alignLeft="@+id/dealProgressBar"
+                android:layout_alignRight="@+id/dealProgressBar"
+                android:paddingLeft="@dimen/deal_detail_padding_horizontal"
+                android:paddingRight="@dimen/deal_detail_padding_horizontal"
+                android:paddingTop="@dimen/deal_detail_padding_vertical"
+                android:scrollbars="none">
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deal_participate_button"
+                    android:id="@+id/participateButton"
+                    android:background="@color/midipiletheme_color"
+                    android:textColor="@android:color/white"
+                    android:textAllCaps="true" />
+
+                <fr.creads.midipile.layoutselements.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deal_discover_title"
+                    android:id="@+id/presTextView"
+                    android:layout_below="@+id/participateButton"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/midipile_black"
+                    midipile:fontName="latoregular.ttf"
+                    android:layout_marginTop="@dimen/deal_detail_padding_vertical"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dealValue"
+                    android:layout_below="@+id/presTextView"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@color/background_drawer_focus"
+                    android:textSize="16sp"
+                    android:layout_marginTop="@dimen/deal_detail_padding_vertical"
+                    android:text="@string/deal_value_prefix"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textColor="@color/midipiletheme_color"
+                    android:textAllCaps="true" />
+
+                <WebView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dealDetail"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="@dimen/deal_detail_padding_vertical"
+                    android:layout_below="@+id/dealValue"
+                    android:background="@android:color/white" />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/dealDetail"
+                    android:text="@string/deal_participate_button"
+                    android:id="@+id/participateButtonBottom"
+                    android:background="@color/midipiletheme_color"
+                    android:textColor="@android:color/white"
+                    android:textAllCaps="true" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

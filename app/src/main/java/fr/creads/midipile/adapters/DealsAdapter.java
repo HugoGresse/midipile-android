@@ -47,8 +47,6 @@ public class DealsAdapter extends BaseAdapter {
 
         imageLoader = ImageLoader.getInstance();
         imageLoaderDisplayOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(android.R.color.white)
-                .showImageForEmptyUri(android.R.color.white)
                 .displayer(new FadeInBitmapDisplayer(500))
                 .cacheInMemory(true)
                 .build();
