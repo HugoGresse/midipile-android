@@ -30,7 +30,6 @@
         <item>@drawable/ic_human</item>
     </array>
 
-
     <string name="nav_footer_copyright">Midipile ® Copyright 2014 - Tous droits réservés</string>
     <string name="nav_footer_contact">Contact</string>
     <string name="nav_footer_cgu">- CGU -</string>
@@ -55,9 +54,19 @@
         <item>Le trouver</item>
     </array>
 
-
     <string name="deal_share_body">Chaque jour un nouveau produit à remporter</string>
     <string name="deal_map_eshop">E-shop</string>
     <string name="deal_map_website">Site Web</string>
+
+
+    <string name="user_login">Connexion</string>
+    <string name="user_register">Inscription</string>
+
+    <array name="user_loginregister_tabs">
+        <item>Me connecter</item>
+        <item>M\'inscrire</item>
+    </array>
+
+
 
 </resources>

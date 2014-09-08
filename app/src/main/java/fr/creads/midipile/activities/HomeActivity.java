@@ -2,19 +2,15 @@ package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -28,6 +24,7 @@ import fr.creads.midipile.fragments.DealFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
 import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
+import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
 import fr.creads.midipile.objects.Deal;
@@ -79,7 +76,6 @@ public class HomeActivity extends FragmentActivity
         enableSystemBarTint();
 
         loadLastDeals();
-
     }
 
     /**
@@ -116,7 +112,7 @@ public class HomeActivity extends FragmentActivity
                 changeFragment( new HomeFragment(), position);
                 break;
             case 1:
-                changeFragment( new LastWinnerFragment(), position);
+                changeFragment( new LoginRegisterFragment(), position);
                 break;
             case 2:
                 changeFragment( new LastWinnerFragment(), position);
@@ -155,10 +151,12 @@ public class HomeActivity extends FragmentActivity
     private void changeFragment(Fragment frag, int position, int enter, int exit, int pop_enter, int pop_exit){
         // Fragment must implement the callback.
         if (!(frag instanceof OnDataLoadedListener)) {
-            throw new IllegalStateException(
-                    "Fragment must implement the onDataLoadedListener.");
+            Log.e(Constants.TAG, "Fragment must implement the onDataLoadedListener.");
+            // throw new IllegalStateException(
+            // "Fragment must implement the onDataLoadedListener.");
+        } else {
+            mLoadedCallbacks = (OnDataLoadedListener) frag;
         }
-        mLoadedCallbacks = (OnDataLoadedListener) frag;
 
         try {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
