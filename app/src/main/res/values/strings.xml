@@ -59,6 +59,8 @@
     <string name="deal_map_website">Site Web</string>
 
 
+
+
     <string name="user_login">Connexion</string>
     <string name="user_register">Inscription</string>
 
@@ -66,6 +68,19 @@
         <item>Me connecter</item>
         <item>M\'inscrire</item>
     </array>
+
+
+    <string name="user_placeholder_name">Nom</string>
+    <string name="user_placeholder_prenom">Prénom</string>
+    <string name="user_placeholder_email">Adresse email</string>
+    <string name="user_placeholder_password">Mot de passe</string>
+    <string name="user_placeholder_password_forget">Mot de passe oublié ?</string>
+    <string name="user_login_button">Me connecter</string>
+    <string name="user_register_button">M'inscrire</string>
+    <string name="user_login_separator">Ou</string>
+    <string name="user_login_fb_helper">Se connecter via Facebook connect</string>
+    <string name="user_register_fb_helper">M'inscrire via Facebook connect</string>
+    <string name="user_login_fb_button">Utiliser Facebook connect</string>
 
 
 
