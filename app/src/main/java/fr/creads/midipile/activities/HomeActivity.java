@@ -57,6 +57,8 @@ public class HomeActivity extends FragmentActivity
 
     private OnDataLoadedListener mLoadedCallbacks;
 
+    private boolean homeFragmentAlreadyCreated = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +86,8 @@ public class HomeActivity extends FragmentActivity
      * Init the acvitity and navigatio ndrawer after spalsh screen
      */
     public void afterOnCreate(){
+        if(homeFragmentAlreadyCreated) return;
+
         getActionBar().show();
 
         setContentView(R.layout.activity_home);
@@ -100,6 +104,7 @@ public class HomeActivity extends FragmentActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         enableSystemBarTint();
+        homeFragmentAlreadyCreated = true;
     }
 
     @Override
@@ -155,12 +160,16 @@ public class HomeActivity extends FragmentActivity
         }
         mLoadedCallbacks = (OnDataLoadedListener) frag;
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(enter, exit, pop_enter, pop_exit);
+        try {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(enter, exit, pop_enter, pop_exit);
 
-        transaction.replace(R.id.container, frag, Integer.toString(position));
-        transaction.addToBackStack(null);
-        transaction.commit();
+            transaction.replace(R.id.container, frag, Integer.toString(position));
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } catch(IllegalStateException exception){
+            Log.e(Constants.TAG, "Unable to commit fragment, could be activity as been killed in background. " + exception.toString());
+        }
     }
 
 
