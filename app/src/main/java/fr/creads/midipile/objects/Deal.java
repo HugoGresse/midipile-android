@@ -21,6 +21,7 @@ public class Deal implements Parcelable {
     private String societe;
     private String description_societe;
     private String website;
+    private String url;
     private String eshop;
     private String facebook;
     private String twitter;
@@ -56,6 +57,7 @@ public class Deal implements Parcelable {
         societe = in.readString();
         description_societe = in.readString();
         website = in.readString();
+        url = in.readString();
         eshop = in.readString();
         facebook = in.readString();
         twitter = in.readString();
@@ -81,6 +83,7 @@ public class Deal implements Parcelable {
         parcel.writeString(societe);
         parcel.writeString(description_societe);
         parcel.writeString(website);
+        parcel.writeString(url);
         parcel.writeString(eshop);
         parcel.writeString(facebook);
         parcel.writeString(twitter);
@@ -135,6 +138,10 @@ public class Deal implements Parcelable {
 
     public String getDescriptionSociete() {
         return description_societe;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public String getWebsite() {

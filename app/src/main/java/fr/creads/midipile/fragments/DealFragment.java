@@ -3,16 +3,20 @@ package fr.creads.midipile.fragments;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.ShareActionProvider;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -34,9 +38,11 @@ import fr.creads.midipile.objects.Deal;
 public class DealFragment extends Fragment
         implements TabHost.OnTabChangeListener, OnDataLoadedListener {
 
-    ActionBar actionBar;
-    FragmentActivity myContext;
-    HomeActivity homeActivity;
+    private ActionBar actionBar;
+    private ShareActionProvider mShareActionProvider;
+
+    private FragmentActivity myContext;
+    private HomeActivity homeActivity;
 
     private TabHost tabHost;
     private TabFragmentPagerAdapter mAdapter;
@@ -55,6 +61,7 @@ public class DealFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         actionBar = myContext.getActionBar();
+        this.setHasOptionsMenu(true);
 
         mTabsTitles = getResources().getStringArray(R.array.deal_fragment_tabs);
 
@@ -63,6 +70,7 @@ public class DealFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
 
         View rootView = inflater.inflate(R.layout.fragment_deal, container, false);
         setupAdapter(rootView);
@@ -88,6 +96,20 @@ public class DealFragment extends Fragment
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.deal_detail, menu);
+
+        // Locate MenuItem with ShareActionProviderr
+        MenuItem item = menu.findItem(R.id.action_share_deal);
+
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+
+
+        mShareActionProvider.setShareIntent(getShareIntent());
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -97,6 +119,15 @@ public class DealFragment extends Fragment
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Call to update the share intent
+    private Intent getShareIntent() {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, deal.getNom());
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, deal.getNom() + " " + deal.getUrl());
+        return sharingIntent;
     }
 
 

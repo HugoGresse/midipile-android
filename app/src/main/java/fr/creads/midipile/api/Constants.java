@@ -6,7 +6,7 @@ package fr.creads.midipile.api;
  */
 public class Constants {
 
-    public static final String URL_API = "http://whopping-otter-2882.vagrantshare.com/1";
+    public static final String URL_API = "http://bad-duckbill-0063.vagrantshare.com/1";
 
     public static final String URL_LASTDEALS = "/deals";
 
