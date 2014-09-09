@@ -35,7 +35,10 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class HomeActivity extends FragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, DealsDayFragment.onDealsSelectedListener  {
+        implements
+            NavigationDrawerFragment.NavigationDrawerCallbacks,
+            DealsDayFragment.onDealsSelectedListener,
+            LoginRegisterLoginFragment.onButtonClickListener {
 
     private MidipileAPI midipileService;
 
@@ -242,7 +245,7 @@ public class HomeActivity extends FragmentActivity
     }
 
     public ArrayList<Deal> getLastDeals(){
-        if(deals.isEmpty()){
+        if(null == deals || deals.isEmpty()){
             Log.i("fr.creads.midipile", "getDealsEmpty");
             return new ArrayList<Deal>();
         } else {
