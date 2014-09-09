@@ -82,4 +82,13 @@ public class User implements Parcelable {
 
         in.readTypedList(badges, Badge.CREATOR);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                '}';
+    }
 }

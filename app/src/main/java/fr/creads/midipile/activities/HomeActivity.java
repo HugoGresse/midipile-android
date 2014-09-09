@@ -1,9 +1,11 @@
 package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -15,9 +17,12 @@ import android.view.Window;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
@@ -47,10 +52,15 @@ public class HomeActivity extends FragmentActivity
             DealsDayFragment.onDealsSelectedListener,
             LoginRegisterLoginFragment.onButtonClickListener {
 
+    private static final String USER_SHAREDPREF = "userlogged";
+
     private MidipileAPI midipileService;
+
 
     private ArrayList<Deal> deals;
     private int dealPosition;
+
+    private User user;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -325,7 +335,11 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(User u, Response response) {
 
+                setSharedUser(u);
+
                 Log.i("fr.creads.midipile", "User logged");
+
+                Log.i(Constants.TAG, getUser().toString());
             }
 
             @Override
@@ -335,5 +349,29 @@ public class HomeActivity extends FragmentActivity
                 Log.i("fr.creads.midipile", error.getResponse().toString());
             }
         });
+    }
+
+    public void setSharedUser(User user){
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        sp.edit().putString(USER_SHAREDPREF, new Gson().toJson(user)).apply();
+    }
+
+    public User getUser(){
+        if(null == user) {
+            // try to get user from shared pref
+
+            SharedPreferences sp = getPreferences(MODE_PRIVATE);
+            String userString = sp.getString(USER_SHAREDPREF, null);
+
+            if(null == userString || userString.isEmpty()) {
+                return null;
+            }
+
+            Type type = new TypeToken<User>() {}.getType();
+            user = (User) new Gson().fromJson(userString, type);
+        }
+
+        return user;
+
     }
 }
