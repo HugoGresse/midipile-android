@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/scrollView"
-        android:layout_centerHorizontal="true">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loginScrollView"
+        android:layout_centerHorizontal="true"
+        android:clipToPadding="true"
+        android:layout_alignParentEnd="true"
+        android:fitsSystemWindows="false"
+        android:background="@drawable/bg_blurred">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/imageView3"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bg_blurred" />
+            android:layout_height="fill_parent"
+            android:id="@+id/loginRelativeLayout"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
             <RelativeLayout
                 android:layout_width="@dimen/user_form_width"
@@ -54,7 +51,8 @@
                     android:background="@drawable/edittext_round"
                     android:textSize="@dimen/user_form_edit_sp"
                     android:textStyle="normal"
-                    android:textColorHint="@color/user_text_color_hint" />
+                    android:textColorHint="@color/user_text_color_hint"
+                    android:text="h.gresse@creads.org" />
 
                 <EditText
                     android:layout_width="fill_parent"
@@ -70,7 +68,8 @@
                     android:layout_marginBottom="5dp"
                     android:textStyle="normal"
                     android:textColorLink="@color/user_text_color"
-                    android:textColorHint="@color/user_text_color_hint" />
+                    android:textColorHint="@color/user_text_color_hint"
+                    android:text="azerty" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -159,7 +158,7 @@
 
             </RelativeLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

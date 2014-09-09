@@ -18,17 +18,18 @@ public class User implements Parcelable {
     private String prenom;
     private String rue;
     private String rue_bis;
-    private Integer code_postal;
     private String ville;
     private String pays;
 
-    private Integer mobile;
-    private Integer newsletter;
 
-    private Double fid;
+    private String code_postal;
+    private String mobile;
+    private String newsletter;
 
-    private Integer chance;
-    private Float credit;
+    private String fid;
+
+    private String chance;
+    private String credit;
 
     private List<Badge> badges = new ArrayList<Badge>();
 
@@ -49,12 +50,12 @@ public class User implements Parcelable {
         parcel.writeString(ville);
         parcel.writeString(pays);
 
-        parcel.writeInt(newsletter);
-        parcel.writeInt(code_postal);
-        parcel.writeInt(mobile);
-        parcel.writeInt(chance);
-        parcel.writeDouble(fid);
-        parcel.writeFloat(credit);
+        parcel.writeString(newsletter);
+        parcel.writeString(code_postal);
+        parcel.writeString(mobile);
+        parcel.writeString(chance);
+        parcel.writeString(fid);
+        parcel.writeString(credit);
 
         parcel.writeTypedList(badges);
     }
@@ -71,12 +72,12 @@ public class User implements Parcelable {
         ville = in.readString();
         pays = in.readString();
 
-        newsletter = in.readInt();
-        code_postal = in.readInt();
-        mobile = in.readInt();
-        chance = in.readInt();
-        fid = in.readDouble();
-        credit = in.readFloat();
+        newsletter = in.readString();
+        code_postal = in.readString();
+        mobile = in.readString();
+        chance = in.readString();
+        fid = in.readString();
+        credit = in.readString();
 
 
         in.readTypedList(badges, Badge.CREATOR);

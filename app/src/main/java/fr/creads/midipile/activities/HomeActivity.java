@@ -2,6 +2,7 @@ package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
@@ -25,14 +28,18 @@ import fr.creads.midipile.fragments.DealsDayFragment;
 import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
+import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
 import fr.creads.midipile.objects.Deal;
 import fr.creads.midipile.objects.Deals;
+import fr.creads.midipile.objects.User;
+import fr.creads.midipile.utilities.MidipileUtilities;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 public class HomeActivity extends FragmentActivity
         implements
@@ -59,20 +66,33 @@ public class HomeActivity extends FragmentActivity
 
     private boolean homeFragmentAlreadyCreated = false;
 
+    private Typeface latoTypeface;
+    private Typeface latoBoldTypeface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // hide ActionBar on start
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getActionBar().hide();
+
         super.onCreate(savedInstanceState);
+
+
+        latoTypeface = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+        latoBoldTypeface = Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+
+        Gson gson = new GsonBuilder()
+                .serializeNulls()
+                .create();
 
         // init rest api
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.URL_API)
+                .setConverter(new GsonConverter(gson))
                 .build();
         midipileService = restAdapter.create(MidipileAPI.class);
 
 
-        // hide ActionBar on start
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getActionBar().hide();
 
         setContentView(R.layout.fragment_splashscren);
 
@@ -281,6 +301,39 @@ public class HomeActivity extends FragmentActivity
         Fragment dealFragment = new DealFragment();
         dealFragment.setArguments(args);
 
-        changeFragment( dealFragment, 1,  R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        changeFragment(dealFragment, 1, R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+    }
+
+    public Typeface getLatoTypeface(){
+        return latoTypeface;
+    }
+    public Typeface getLatoBoldTypeface(){
+        return latoBoldTypeface;
+    }
+
+    @Override
+    public void onLoginClick(String email, String password) {
+
+        password = MidipileUtilities.getSha1(password);
+
+
+
+        Log.d(Constants.TAG, "connect listener");
+        Log.d(Constants.TAG, email);
+        Log.d(Constants.TAG, password);
+        midipileService.postLogin(email, password, new Callback<User>() {
+            @Override
+            public void success(User u, Response response) {
+
+                Log.i("fr.creads.midipile", "User logged");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                Log.i("fr.creads.midipile", error.toString());
+                Log.i("fr.creads.midipile", error.getResponse().toString());
+            }
+        });
     }
 }

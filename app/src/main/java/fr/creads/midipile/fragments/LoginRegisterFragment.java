@@ -114,8 +114,8 @@ public class LoginRegisterFragment extends Fragment implements TabHost.OnTabChan
         mPager.setAdapter(mAdapter);
 
         // set currentItem to product
-        mPager.setCurrentItem(1);
-        tabHost.setCurrentTab(1);
+        // mPager.setCurrentItem(1);
+        //tabHost.setCurrentTab(1);
 
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
