@@ -91,4 +91,135 @@ public class User implements Parcelable {
                 ", prenom='" + prenom + '\'' +
                 '}';
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCivilite() {
+        return civilite;
+    }
+
+    public void setCivilite(String civilite) {
+        this.civilite = civilite;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getRue() {
+        return rue;
+    }
+
+    public void setRue(String rue) {
+        this.rue = rue;
+    }
+
+    public String getRue_bis() {
+        return rue_bis;
+    }
+
+    public void setRue_bis(String rue_bis) {
+        this.rue_bis = rue_bis;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getPays() {
+        return pays;
+    }
+
+    public void setPays(String pays) {
+        this.pays = pays;
+    }
+
+    public String getCode_postal() {
+        return code_postal;
+    }
+
+    public void setCode_postal(String code_postal) {
+        this.code_postal = code_postal;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getNewsletter() {
+        return newsletter;
+    }
+
+    public void setNewsletter(String newsletter) {
+        this.newsletter = newsletter;
+    }
+
+    public String getFid() {
+        return fid;
+    }
+
+    public void setFid(String fid) {
+        this.fid = fid;
+    }
+
+    public Integer getChance() {
+        Integer chanceInt;
+        chanceInt = (Integer) Integer.parseInt(chance);
+        if(null == chanceInt) {
+            chanceInt = 0;
+        }
+        return chanceInt;
+    }
+
+
+    public String getChanceString() {
+        return chance;
+    }
+
+
+    public void setChance(String chance) {
+        this.chance = chance;
+    }
+
+    public String getCredit() {
+        return credit;
+    }
+
+    public void setCredit(String credit) {
+        this.credit = credit;
+    }
+
+    public List<Badge> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(List<Badge> badges) {
+        this.badges = badges;
+    }
 }

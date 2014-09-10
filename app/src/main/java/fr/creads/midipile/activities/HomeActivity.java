@@ -2,10 +2,8 @@ package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +20,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
@@ -60,6 +57,9 @@ public class HomeActivity extends FragmentActivity
     private ArrayList<Deal> deals;
     private int dealPosition;
 
+    /**
+     * The user connnected to the app
+     */
     private User user;
 
     /**
@@ -109,6 +109,8 @@ public class HomeActivity extends FragmentActivity
         enableSystemBarTint();
 
         loadLastDeals();
+
+        user = getUser();
     }
 
     /**
@@ -134,12 +136,23 @@ public class HomeActivity extends FragmentActivity
 
         enableSystemBarTint();
         homeFragmentAlreadyCreated = true;
+
+        // display user in nav drawer
+        if(null != user){
+            Log.d(Constants.TAG, "display user");
+            mNavigationDrawerFragment.displayUser(user);
+        }
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
 
         Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
+
+        if(null != user) {
+            position -= 1;
+        }
+
         switch (position) {
             case 0:
                 changeFragment( new HomeFragment(), position);
@@ -217,7 +230,7 @@ public class HomeActivity extends FragmentActivity
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(Color.parseColor(getResources().getString(R.color.background_actionBar)));
+        tintManager.setTintColor(getResources().getColor(R.color.background_actionBar));
     }
 
 
@@ -259,7 +272,10 @@ public class HomeActivity extends FragmentActivity
 
                 deals = (ArrayList<Deal>) d.getDeals();
                 Log.i("fr.creads.midipile", "Deals loaded");
-                mLoadedCallbacks.onDealsLoaded();
+
+                if(null != mLoadedCallbacks) {
+                    mLoadedCallbacks.onDealsLoaded();
+                }
             }
 
             @Override
@@ -336,7 +352,7 @@ public class HomeActivity extends FragmentActivity
             public void success(User u, Response response) {
 
                 setSharedUser(u);
-
+                mNavigationDrawerFragment.displayUser(u);
                 Log.i("fr.creads.midipile", "User logged");
 
                 Log.i(Constants.TAG, getUser().toString());
@@ -370,6 +386,8 @@ public class HomeActivity extends FragmentActivity
             Type type = new TypeToken<User>() {}.getType();
             user = (User) new Gson().fromJson(userString, type);
         }
+
+        Log.d(Constants.TAG, Integer.toString(user.getChance()));
 
         return user;
 

@@ -22,12 +22,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.activities.HomeActivity;
+import fr.creads.midipile.objects.User;
 
 
 /**
@@ -62,6 +65,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ListView mDrawerListView;
     private View mFragmentContainerView;
     private View footerView;
+    private View headerView;
 
     private ArrayList<NavDrawerItem> mDrawerItems;
     private String[] mNavMenuTitles;
@@ -70,6 +74,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private boolean headerUserDisplayed = false;
 
     public NavigationDrawerFragment() {
     }
@@ -89,6 +94,9 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         // Select either the default item (0) or the last selected item.
+        if( null != ((HomeActivity)getActivity()).getUser() ) {
+            selectItem(mCurrentSelectedPosition+1);
+        }
         selectItem(mCurrentSelectedPosition);
     }
 
@@ -116,7 +124,11 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                if(headerUserDisplayed) {
+                    selectItem(position +1);
+                } else {
+                    selectItem(position);
+                }
             }
         });
 
@@ -300,12 +312,34 @@ public class NavigationDrawerFragment extends Fragment {
         void onNavigationDrawerItemSelected(int position);
     }
 
-
+    /**
+     * Set padding to the given view to work with translucent navigation bar
+     * @param context
+     * @param view
+     */
     public static void setInsets(Activity context, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
+    }
+
+    public void displayUser(User user){
+        headerView =  ((LayoutInflater)getActionBar().getThemedContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.navigation_drawer_header, null, false);
+
+        TextView name = (TextView) headerView.findViewById(R.id.userNameTextView);
+        TextView chance = (TextView) headerView.findViewById(R.id.userChanceTextView);
+
+        name.setText(user.getPrenom() + " " + user.getNom());
+        chance.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
+
+        mDrawerListView.addHeaderView(headerView);
+
+        headerUserDisplayed = true;
+
+        mCurrentSelectedPosition = 1;
     }
 
 }
