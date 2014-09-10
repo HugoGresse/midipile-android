@@ -50,44 +50,44 @@
                     android:gravity="center_horizontal"
                     android:textStyle="bold" />
 
-                <WebView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/productWebView"
-                    android:layout_below="@+id/dealSocieteTitleTextView"
-                    android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
-
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/fbButton"
-                    android:layout_below="@+id/productWebView"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
                     android:src="@drawable/ic_fb"
                     android:background="@android:color/transparent"
+                    android:layout_below="@+id/dealSocieteTitleTextView"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_marginRight="10dp" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/twButton"
-                    android:layout_below="@+id/productWebView"
                     android:layout_toRightOf="@+id/fbButton"
                     android:layout_toEndOf="@+id/fbButton"
                     android:src="@drawable/ic_tw"
                     android:background="@android:color/transparent"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:layout_alignTop="@+id/fbButton" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/webButton"
-                    android:layout_below="@+id/productWebView"
                     android:layout_toRightOf="@+id/twButton"
                     android:layout_toEndOf="@+id/twButton"
                     android:src="@drawable/ic_web"
-                    android:background="@android:color/transparent" />
+                    android:background="@android:color/transparent"
+                    android:layout_alignTop="@+id/twButton" />
+
+                <WebView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/productWebView"
+                    android:layout_below="@+id/fbButton"
+                    android:layout_marginTop="@dimen/deal_detail_padding_vertical" />
 
             </RelativeLayout>
 
