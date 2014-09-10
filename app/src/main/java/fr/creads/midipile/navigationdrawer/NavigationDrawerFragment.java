@@ -96,8 +96,9 @@ public class NavigationDrawerFragment extends Fragment {
         // Select either the default item (0) or the last selected item.
         if( null != ((HomeActivity)getActivity()).getUser() ) {
             selectItem(mCurrentSelectedPosition+1);
+        } else {
+            selectItem(mCurrentSelectedPosition);
         }
-        selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -125,7 +126,7 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(headerUserDisplayed) {
-                    selectItem(position +1);
+                    selectItem(position);
                 } else {
                     selectItem(position);
                 }
