@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -150,11 +151,12 @@ public class HomeActivity extends FragmentActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
 
-        Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
 
         if(null != user) {
             position -= 1;
         }
+
+        Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
 
         switch (position) {
             case 0:
@@ -173,21 +175,6 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                changeFragment( new HomeFragment(), number);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
-
-
     private void changeFragment(Fragment frag, int position){
         changeFragment(frag, position, R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
     }
@@ -198,6 +185,15 @@ public class HomeActivity extends FragmentActivity
      * @param position
      */
     private void changeFragment(Fragment frag, int position, int enter, int exit, int pop_enter, int pop_exit){
+        changeFragment(frag, position, enter, exit, pop_enter, pop_exit, true);
+    }
+
+    /**
+     * Change content fragment
+     * @param frag
+     * @param position
+     */
+    private void changeFragment(Fragment frag, int position, int enter, int exit, int pop_enter, int pop_exit, boolean addToBackStack){
         // Fragment must implement the callback.
         if (!(frag instanceof OnDataLoadedListener)) {
             Log.e(Constants.TAG, "Fragment must implement the onDataLoadedListener.");
@@ -207,13 +203,25 @@ public class HomeActivity extends FragmentActivity
             mLoadedCallbacks = (OnDataLoadedListener) frag;
         }
 
-        try {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(enter, exit, pop_enter, pop_exit);
+        String backStateName =  frag.getClass().getName();
+        String fragmentTag = backStateName;
 
-            transaction.replace(R.id.container, frag, Integer.toString(position));
-            transaction.addToBackStack(null);
-            transaction.commit();
+
+        try {
+
+            FragmentManager manager = getSupportFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null){ //fragment not in back stack, create it.
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.setCustomAnimations(enter, exit, pop_enter, pop_exit);
+                transaction.replace(R.id.container, frag, Integer.toString(position));
+                transaction.addToBackStack(backStateName);
+                transaction.commit();
+                Log.d(Constants.TAG, "addToBackTack");
+            } else {
+                Log.d(Constants.TAG, "Remove from back stack");
+            }
         } catch(IllegalStateException exception){
             Log.e(Constants.TAG, "Unable to commit fragment, could be activity as been killed in background. " + exception.toString());
         }
@@ -314,7 +322,7 @@ public class HomeActivity extends FragmentActivity
 
     public Deal getSelectedDeal(){
         if(deals.isEmpty()){
-            return new Deal();
+            return null;
         } else {
             return deals.get(dealPosition);
         }
@@ -324,13 +332,17 @@ public class HomeActivity extends FragmentActivity
     public void onDealsSelected(int position) {
         dealPosition = position;
 
+        onDealsSelected(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+    }
+
+    public void onDealsSelected(int animEnter, int animExit, int popEnter, int popExit) {
         Bundle args=new Bundle();
-        args.putParcelable("deal", deals.get(position));
+        args.putParcelable("deal", getSelectedDeal());
 
         Fragment dealFragment = new DealFragment();
         dealFragment.setArguments(args);
 
-        changeFragment(dealFragment, 1, R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        changeFragment(dealFragment, 1, animEnter, animExit, popEnter, popExit, false);
     }
 
     @Override
@@ -349,6 +361,12 @@ public class HomeActivity extends FragmentActivity
                 mNavigationDrawerFragment.displayUser(u);
 
                 Log.i(Constants.TAG, getUser().toString());
+
+                if(null != getSelectedDeal()){
+                    onDealsSelected(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+
+                    Toast.makeText(getApplicationContext(), "Return to previous fragment", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
