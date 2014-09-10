@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,6 +27,7 @@ import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
 import fr.creads.midipile.dialogs.DealNetworkDialogFragment;
 import fr.creads.midipile.fragments.DealFragment;
+import fr.creads.midipile.fragments.DealProductFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
 import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
@@ -47,6 +49,7 @@ public class HomeActivity extends FragmentActivity
         implements
             NavigationDrawerFragment.NavigationDrawerCallbacks,
             DealsDayFragment.onDealsSelectedListener,
+            DealProductFragment.onButtonParticipateClickListener,
             LoginRegisterLoginFragment.onButtonClickListener {
 
     private static final String USER_SHAREDPREF = "userlogged";
@@ -330,41 +333,53 @@ public class HomeActivity extends FragmentActivity
         changeFragment(dealFragment, 1, R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
     }
 
-    public Typeface getLatoTypeface(){
-        return latoTypeface;
-    }
-    public Typeface getLatoBoldTypeface(){
-        return latoBoldTypeface;
-    }
-
     @Override
     public void onLoginClick(String email, String password) {
 
+        // encrypt password before sending
         password = MidipileUtilities.getSha1(password);
 
-
-
-        Log.d(Constants.TAG, "connect listener");
-        Log.d(Constants.TAG, email);
-        Log.d(Constants.TAG, password);
         midipileService.postLogin(email, password, new Callback<User>() {
             @Override
             public void success(User u, Response response) {
 
+                Toast.makeText(getApplicationContext(), "Vous êtes connecté", Toast.LENGTH_LONG).show();
+
                 setSharedUser(u);
                 mNavigationDrawerFragment.displayUser(u);
-                Log.i("fr.creads.midipile", "User logged");
 
                 Log.i(Constants.TAG, getUser().toString());
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                Toast.makeText(getApplicationContext(), "Impossible de vous connecter", Toast.LENGTH_SHORT).show();
                 Log.i("fr.creads.midipile", error.toString());
                 Log.i("fr.creads.midipile", error.getResponse().toString());
             }
         });
+    }
+
+
+    @Override
+    public void onParticipateClick(Deal deal) {
+
+        if(null != user){
+            // user logged // send particpation
+            Toast.makeText(getApplicationContext(), "Participation en cours", Toast.LENGTH_SHORT).show();
+
+        } else {
+            // loginRegister fragment set on position 8
+            changeFragment( new LoginRegisterFragment(), 8);
+        }
+    }
+
+
+    public Typeface getLatoTypeface(){
+        return latoTypeface;
+    }
+    public Typeface getLatoBoldTypeface(){
+        return latoBoldTypeface;
     }
 
     public void setSharedUser(User user){
@@ -392,4 +407,5 @@ public class HomeActivity extends FragmentActivity
         return user;
 
     }
+
 }
