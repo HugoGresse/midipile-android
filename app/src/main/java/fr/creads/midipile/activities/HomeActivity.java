@@ -365,7 +365,7 @@ public class HomeActivity extends FragmentActivity
                 if(null != getSelectedDeal()){
                     onDealsSelected(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
 
-                    Toast.makeText(getApplicationContext(), "Return to previous fragment", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Return to previous fragment", Toast.LENGTH_SHORT).show();
                 }
             }
 
