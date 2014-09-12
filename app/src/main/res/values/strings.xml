@@ -10,9 +10,17 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Paramètres</string>
 
-    <string name="dialog_network_error">Impossible de charger les données. Vérifiez votre connexion au réseau.</string>
+    <string name="dialog_network_error_title">Impossible de charger les données.</string>
+    <string name="dialog_network_error">Vérifiez votre connexion au réseau.</string>
     <string name="dialog_network_error_ok">Réessayer</string>
     <string name="dialog_network_error_no">Annuler</string>
+
+
+    <string name="dialog_forgetpassword_title">Mot de passe oublié.</string>
+    <string name="dialog_forgetpassword">Pour récupérer votre mot de passe, entrer votre adresse email.</string>
+    <string name="dialog_forgetpassword_ok">Envoyer</string>
+    <string name="dialog_forgetpassword_no">Annuler</string>
+
 
     !-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">

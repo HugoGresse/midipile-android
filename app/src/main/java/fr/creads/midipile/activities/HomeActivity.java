@@ -1,6 +1,8 @@
 package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,11 +12,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -22,11 +28,12 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
-import fr.creads.midipile.dialogs.DealNetworkDialogFragment;
 import fr.creads.midipile.fragments.DealFragment;
 import fr.creads.midipile.fragments.DealProductFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
@@ -45,6 +52,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
+import retrofit.mime.TypedByteArray;
 
 public class HomeActivity extends FragmentActivity
         implements
@@ -159,6 +167,11 @@ public class HomeActivity extends FragmentActivity
         Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
 
         switch (position) {
+            case -1:
+                // click on user profil
+                Log.d("fr.creads.midipile", "Disconnecting");
+                user=null;
+                break;
             case 0:
                 changeFragment( new HomeFragment(), position);
                 break;
@@ -292,10 +305,26 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void failure(RetrofitError error) {
                 afterOnCreate();
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                // Create and show the dialog.
-                DealNetworkDialogFragment dealNetworkDialogFragment = new DealNetworkDialogFragment();
-                dealNetworkDialogFragment.show(ft, "dialog");
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                alertDialogBuilder.setTitle(R.string.dialog_network_error_title);
+                alertDialogBuilder.setMessage(R.string.dialog_network_error);
+
+                alertDialogBuilder.setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        loadLastDeals();
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
                 Log.i("fr.creads.midipile", error.toString());
             }
         });
@@ -371,7 +400,7 @@ public class HomeActivity extends FragmentActivity
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getApplicationContext(), "Impossible de vous connecter", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Impossible de vous connecter. Vérifiez votre email et mot de passe.", Toast.LENGTH_SHORT).show();
                 Log.i("fr.creads.midipile", error.toString());
                 Log.i("fr.creads.midipile", error.getResponse().toString());
             }
@@ -423,7 +452,61 @@ public class HomeActivity extends FragmentActivity
         Log.d(Constants.TAG, Integer.toString(user.getChance()));
 
         return user;
-
     }
+
+    public void showForgetPasswordDialog(){
+
+        LayoutInflater inflater=HomeActivity.this.getLayoutInflater();
+        View layout=inflater.inflate(R.layout.dialog_forgetpassword,null);
+        final EditText emailEditText=(EditText)layout.findViewById(R.id.forgetPasswordEditText);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+        alertDialogBuilder
+                .setTitle(R.string.dialog_forgetpassword_title)
+                .setMessage(R.string.dialog_forgetpassword)
+                .setView(layout)
+                .setPositiveButton(R.string.dialog_forgetpassword_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Set an EditText view to get user input
+                        postForgetPassword(emailEditText.getText().toString());
+                    }
+                })
+                .setNegativeButton(R.string.dialog_forgetpassword_no,new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    public void postForgetPassword(String email){
+        midipileService.postForgetPassword(email, new Callback<Map<String, String>>() {
+            @Override
+            public void success(Map<String, String> message, Response response) {
+
+                Toast.makeText(getApplicationContext(), message.get("success"), Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
+
+                Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                }.getType());
+
+                try {
+                    List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
+                    Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+                } catch(Exception e){
+                    Log.e(Constants.TAG, e.getMessage());
+                }
+            }
+        });
+    }
+
+
 
 }

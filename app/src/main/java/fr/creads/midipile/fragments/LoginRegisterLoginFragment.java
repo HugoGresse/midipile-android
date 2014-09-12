@@ -128,6 +128,13 @@ public class LoginRegisterLoginFragment extends Fragment{
             }
         });
 
+        forgetPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)getActivity()).showForgetPasswordDialog();
+            }
+        });
+
         passwordEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button

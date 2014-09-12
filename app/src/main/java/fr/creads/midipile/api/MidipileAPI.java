@@ -1,5 +1,7 @@
 package fr.creads.midipile.api;
 
+import java.util.Map;
+
 import fr.creads.midipile.objects.Deals;
 import fr.creads.midipile.objects.User;
 import retrofit.Callback;
@@ -22,6 +24,12 @@ public interface MidipileAPI {
     public void postLogin(@Field("email") String email,
                           @Field("password") String password,
                           Callback<User> callback);
+
+
+    @FormUrlEncoded
+    @POST(Constants.URL_FORGETPASSWORD)
+    public void postForgetPassword(@Field("email") String email,
+                          Callback<Map<String, String>> callback);
 
 
 
