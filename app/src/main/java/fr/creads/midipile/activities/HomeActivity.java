@@ -576,7 +576,6 @@ public class HomeActivity extends FragmentActivity
             }
             @Override
             public void onComplete(Profile response) {
-                hideDialog();
                 postFacebookLoginRegister(
                         response.getId(),
                         response.getEmail(),
@@ -596,21 +595,18 @@ public class HomeActivity extends FragmentActivity
      */
     private void postFacebookLoginRegister(String fid, String email, String firstname, String lastname){
 
-        Log.d(Constants.TAG, fid);
-        Log.d(Constants.TAG, email);
-        Log.d(Constants.TAG, firstname);
-        Log.d(Constants.TAG, lastname);
-
         midipileService.postLoginFacebook(email, fid, fid, firstname, lastname, "1", new Callback<User>() {
             @Override
             public void success(User u, Response response) {
                 setUser(u);
+
+                hideDialog();
             }
 
             @Override
             public void failure(RetrofitError error) {
 
-
+                hideDialog();
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
 
                 AlertDialog alertDialog = alertDialogBuilder
@@ -626,7 +622,6 @@ public class HomeActivity extends FragmentActivity
                 alertDialog.show();
 
                 Log.i("fr.creads.midipile", error.toString());
-                Log.i("fr.creads.midipile", error.getResponse().toString());
             }
         });
     }
