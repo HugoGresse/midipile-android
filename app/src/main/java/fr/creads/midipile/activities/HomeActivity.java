@@ -655,12 +655,11 @@ public class HomeActivity extends FragmentActivity
             final String cgv,
             final String newsletter) {
 
-        // encrypt password before sending
-        String passwordSha1 = MidipileUtilities.getSha1(password);
+        // password is not encrypted yet
 
         showDialog("Inscription à Midipile");
 
-        midipileService.postRegister(firstname, lastname, email, passwordSha1, cgv, newsletter, new Callback<User>() {
+        midipileService.postRegister(firstname, lastname, email, password, cgv, newsletter, new Callback<User>() {
             @Override
             public void success(User u, Response response) {
 
