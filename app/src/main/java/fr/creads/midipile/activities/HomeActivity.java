@@ -449,15 +449,22 @@ public class HomeActivity extends FragmentActivity
         // encrypt password before sending
         password = MidipileUtilities.getSha1(password);
 
+
+        showDialog("Connexion à Midipile");
+
         midipileService.postLogin(email, password, new Callback<User>() {
             @Override
             public void success(User u, Response response) {
+
+                hideDialog();
+
                 setUser(u);
             }
 
             @Override
             public void failure(RetrofitError error) {
 
+                hideDialog();
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
 
@@ -518,10 +525,14 @@ public class HomeActivity extends FragmentActivity
 
                 @Override
                 public void onException(Throwable throwable) {
+
+                    hideDialog();
                 }
 
                 @Override
                 public void onFail(String s) {
+
+                    hideDialog();
                 }
             });
         } else {
