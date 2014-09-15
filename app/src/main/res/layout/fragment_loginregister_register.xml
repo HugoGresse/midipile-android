@@ -31,23 +31,34 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:text="Name"
                     android:ems="10"
-                    android:id="@+id/userNameEditText"
+                    android:id="@+id/userFirstNameEditText"
+                    android:hint="@string/user_placeholder_prenom"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp" />
+                    android:background="@drawable/edittext_round"
+                    android:textSize="@dimen/user_form_edit_sp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="normal"
+                    android:textColorLink="@color/user_text_color"
+                    android:textColorHint="@color/user_text_color_hint"/>
 
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:text="Name"
                     android:ems="10"
-                    android:id="@+id/userFirstNameEditText"
-                    android:layout_below="@+id/userNameEditText"
+                    android:id="@+id/userNameEditText"
+                    android:hint="@string/user_placeholder_name"
+                    android:layout_below="@+id/userFirstNameEditText"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp" />
+                    android:background="@drawable/edittext_round"
+                    android:textSize="@dimen/user_form_edit_sp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="normal"
+                    android:textColorLink="@color/user_text_color"
+                    android:textColorHint="@color/user_text_color_hint"
+                    />
 
                 <EditText
                     android:layout_width="@dimen/user_form_width"
@@ -56,10 +67,15 @@
                     android:ems="10"
                     android:id="@+id/userEmailEditText"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/userFirstNameEditText"
+                    android:layout_below="@+id/userNameEditText"
                     android:singleLine="true"
                     android:hint="@string/user_placeholder_email"
-                    android:layout_marginBottom="10dp" />
+                    android:background="@drawable/edittext_round"
+                    android:textSize="@dimen/user_form_edit_sp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="normal"
+                    android:textColorLink="@color/user_text_color"
+                    android:textColorHint="@color/user_text_color_hint" />
 
                 <EditText
                     android:layout_width="fill_parent"
@@ -70,17 +86,35 @@
                     android:id="@+id/userPasswordEditText"
                     android:layout_below="@+id/userEmailEditText"
                     android:layout_centerHorizontal="true"
-                    android:hint="@string/user_placeholder_password" />
+                    android:hint="@string/user_placeholder_password"
+                    android:background="@drawable/edittext_round"
+                    android:textSize="@dimen/user_form_edit_sp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="normal"
+                    android:textColorLink="@color/user_text_color"
+                    android:textColorHint="@color/user_text_color_hint"/>
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/user_login_button"
                     android:id="@+id/userLoginButton"
+                    android:layout_below="@+id/userPasswordEditText"
                     android:layout_centerHorizontal="true"
                     android:textAllCaps="true"
                     android:layout_marginBottom="20dp"
-                    android:layout_below="@+id/userPasswordEditText" />
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:background="@drawable/button_green"/>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/line1"
+                    android:background="@color/midipiletheme_color"
+                    android:layout_toLeftOf="@+id/connectHelperTextView"
+                    android:layout_alignTop="@+id/connectHelperTextView"
+                    android:layout_marginTop="7dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -89,19 +123,24 @@
                     android:id="@+id/connectHelperTextView"
                     android:layout_below="@+id/userLoginButton"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="20dp" />
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/midipiletheme_color"
+                    android:layout_marginLeft="0dp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:textSize="12sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView"
-                    android:layout_alignTop="@+id/connectHelperTextView"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView2"
-                    android:layout_alignTop="@+id/connectHelperTextView" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/line2"
+                    android:background="@color/midipiletheme_color"
+                    android:layout_toRightOf="@+id/connectHelperTextView"
+                    android:layout_alignTop="@+id/connectHelperTextView"
+                    android:layout_marginTop="7dp" />
+
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,15 +150,21 @@
                     android:layout_below="@+id/connectHelperTextView"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="5dp" />
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/user_text_color"
+                    android:textStyle="italic" />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/user_login_fb_button"
                     android:id="@+id/userFacebookLoginButton"
                     android:layout_below="@+id/helperFbTextView"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/fb_button"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
             </RelativeLayout>
 
         </RelativeLayout>
