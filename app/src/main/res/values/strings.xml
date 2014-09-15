@@ -16,6 +16,12 @@
     <string name="dialog_network_error_ok">Réessayer</string>
     <string name="dialog_network_error_no">Annuler</string>
 
+    <string name="dialog_user_title">Connexion à Midipile</string>
+    <string name="dialog_user_text">Impossible de vous connectez. Vérifiez votre email et mot de passe.</string>
+    <string name="dialog_facebook_title">Connexion à Facebook</string>
+    <string name="dialog_facebook_nopermission">Vous n\'avez pas accepté les permissions de l\'application Facebook Midipile</string>
+    <string name="dialog_facebook_unabletogetprofil">Impossible de vous connectez avec Facebook</string>
+
 
     <string name="dialog_forgetpassword_title">Mot de passe oublié.</string>
     <string name="dialog_forgetpassword">Pour récupérer votre mot de passe, entrer votre adresse email.</string>
