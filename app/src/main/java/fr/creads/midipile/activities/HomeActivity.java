@@ -3,6 +3,7 @@ package fr.creads.midipile.activities;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.sromku.simple.fb.SimpleFacebook;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -65,7 +67,6 @@ public class HomeActivity extends FragmentActivity
 
     private MidipileAPI midipileService;
 
-
     private ArrayList<Deal> deals;
     private int dealPosition;
 
@@ -73,6 +74,9 @@ public class HomeActivity extends FragmentActivity
      * The user connnected to the app
      */
     private User user;
+
+
+    private SimpleFacebook mSimpleFacebook;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -99,6 +103,7 @@ public class HomeActivity extends FragmentActivity
 
         super.onCreate(savedInstanceState);
 
+        mSimpleFacebook = SimpleFacebook.getInstance(this);
 
         latoTypeface = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
         latoBoldTypeface = Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
@@ -123,6 +128,52 @@ public class HomeActivity extends FragmentActivity
         loadLastDeals();
 
         user = getUser();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSimpleFacebook = SimpleFacebook.getInstance(this);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+
+
+        if(null != user) {
+            position -= 1;
+        }
+
+        Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
+
+        switch (position) {
+            case -1:
+                // click on user profil
+                Log.d("fr.creads.midipile", "Disconnecting");
+                user=null;
+                break;
+            case 0:
+                changeFragment( new HomeFragment(), position);
+                break;
+            case 1:
+                changeFragment( new LoginRegisterFragment(), position);
+                break;
+            case 2:
+                changeFragment( new LastWinnerFragment(), position);
+                break;
+            case 3:
+                break;
+        }
+    }
+
+
+    private void changeFragment(Fragment frag, int position){
+        changeFragment(frag, position, R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
     }
 
     /**
@@ -154,42 +205,6 @@ public class HomeActivity extends FragmentActivity
             Log.d(Constants.TAG, "display user");
             mNavigationDrawerFragment.displayUser(user);
         }
-    }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-
-
-        if(null != user) {
-            position -= 1;
-        }
-
-        Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
-
-        switch (position) {
-            case -1:
-                // click on user profil
-                Log.d("fr.creads.midipile", "Disconnecting");
-                user=null;
-                break;
-            case 0:
-                changeFragment( new HomeFragment(), position);
-                break;
-            case 1:
-                changeFragment( new LoginRegisterFragment(), position);
-                break;
-            case 2:
-                changeFragment( new LastWinnerFragment(), position);
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
-
-    private void changeFragment(Fragment frag, int position){
-        changeFragment(frag, position, R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
     }
 
     /**
@@ -428,6 +443,12 @@ public class HomeActivity extends FragmentActivity
     public Typeface getLatoBoldTypeface(){
         return latoBoldTypeface;
     }
+
+
+
+
+
+
 
     public void setSharedUser(User user){
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
