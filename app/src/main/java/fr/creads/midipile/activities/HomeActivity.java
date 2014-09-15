@@ -48,6 +48,7 @@ import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
+import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
 import fr.creads.midipile.objects.Deal;
@@ -66,7 +67,8 @@ public class HomeActivity extends FragmentActivity
             NavigationDrawerFragment.NavigationDrawerCallbacks,
             DealsDayFragment.onDealsSelectedListener,
             DealProductFragment.onButtonParticipateClickListener,
-            LoginRegisterLoginFragment.onButtonClickListener {
+            LoginRegisterLoginFragment.onButtonClickListener,
+            LoginRegisterRegisterFragment.onRegisterButtonClickListener {
 
     private static final String USER_SHAREDPREF = "userlogged";
 
@@ -449,7 +451,6 @@ public class HomeActivity extends FragmentActivity
         // encrypt password before sending
         password = MidipileUtilities.getSha1(password);
 
-
         showDialog("Connexion à Midipile");
 
         midipileService.postLogin(email, password, new Callback<User>() {
@@ -488,6 +489,15 @@ public class HomeActivity extends FragmentActivity
 
     @Override
     public void sendFacebookLoginClick() {
+        doFacebookLogin();
+    }
+
+    @Override
+    public void onRegisterFacebook() {
+        doFacebookLogin();
+    }
+
+    public void doFacebookLogin(){
         // if user is already logged
         if( !mSimpleFacebook.isLogin()){
             mSimpleFacebook.login(new OnLoginListener() {
@@ -506,7 +516,7 @@ public class HomeActivity extends FragmentActivity
                             .setMessage(R.string.dialog_facebook_nopermission)
                             .setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,int id) {
-                                    sendFacebookLoginClick();
+                                    doFacebookLogin();
                                 }
                             })
                             .setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
@@ -538,9 +548,7 @@ public class HomeActivity extends FragmentActivity
         } else {
             getFacebookProfile();
         }
-
     }
-
 
     private void getFacebookProfile(){
 
@@ -572,7 +580,7 @@ public class HomeActivity extends FragmentActivity
                         .setMessage(R.string.dialog_facebook_unabletogetprofil)
                         .setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                sendFacebookLoginClick();
+                                doFacebookLogin();
                             }
                         })
                         .setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
@@ -638,12 +646,85 @@ public class HomeActivity extends FragmentActivity
     }
 
 
+    @Override
+    public void onRegisterClick(
+            final String firstname,
+            final String lastname,
+            final String email,
+            final String password,
+            final String cgv,
+            final String newsletter) {
+
+        // encrypt password before sending
+        String passwordSha1 = MidipileUtilities.getSha1(password);
+
+        showDialog("Inscription à Midipile");
+
+        midipileService.postRegister(firstname, lastname, email, passwordSha1, cgv, newsletter, new Callback<User>() {
+            @Override
+            public void success(User u, Response response) {
+
+                hideDialog();
+
+                setUser(u);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                hideDialog();
+
+                Log.i("fr.creads.midipile", error.toString());
+
+                if(error.isNetworkError()){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_register_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    onRegisterClick(firstname,lastname,email,password,cgv,newsletter);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
 
 
+                    alertDialogBuilder.setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                            loadLastDeals();
+                        }
+                    });
 
+                    alertDialogBuilder.setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                            dialog.cancel();
+                        }
+                    });
 
+                } else {
+                    String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
 
+                    Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                    }.getType());
 
+                    try {
+                        List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
+                        Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e){
+                        Log.e(Constants.TAG, e.getMessage());
+                    }
+                }
+            }
+        });
+    }
 
 
     public void setSharedUser(User user){
@@ -754,7 +835,6 @@ public class HomeActivity extends FragmentActivity
             changeFragment( new LoginRegisterFragment(), 8);
         }
     }
-
 
 
 }

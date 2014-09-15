@@ -38,7 +38,7 @@
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/edittext_round"
                     android:textSize="@dimen/user_form_edit_sp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:textStyle="normal"
                     android:textColorLink="@color/user_text_color"
                     android:textColorHint="@color/user_text_color_hint"/>
@@ -54,7 +54,7 @@
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/edittext_round"
                     android:textSize="@dimen/user_form_edit_sp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:textStyle="normal"
                     android:textColorLink="@color/user_text_color"
                     android:textColorHint="@color/user_text_color_hint"
@@ -72,7 +72,7 @@
                     android:hint="@string/user_placeholder_email"
                     android:background="@drawable/edittext_round"
                     android:textSize="@dimen/user_form_edit_sp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:textStyle="normal"
                     android:textColorLink="@color/user_text_color"
                     android:textColorHint="@color/user_text_color_hint" />
@@ -89,23 +89,45 @@
                     android:hint="@string/user_placeholder_password"
                     android:background="@drawable/edittext_round"
                     android:textSize="@dimen/user_form_edit_sp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:textStyle="normal"
                     android:textColorLink="@color/user_text_color"
                     android:textColorHint="@color/user_text_color_hint"/>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_placeholder_newsletter"
+                    android:id="@+id/newsletterCheckBox"
+                    android:layout_below="@+id/userPasswordEditText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:textSize="14sp"
+                    android:checked="true" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_placeholder_cgv"
+                    android:id="@+id/cgvCheckBox"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/newsletterCheckBox"
+                    android:layout_marginBottom="10dp" />
 
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/user_login_button"
                     android:id="@+id/userLoginButton"
-                    android:layout_below="@+id/userPasswordEditText"
                     android:layout_centerHorizontal="true"
                     android:textAllCaps="true"
                     android:layout_marginBottom="20dp"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
-                    android:background="@drawable/button_green"/>
+                    android:background="@drawable/button_green"
+                    android:layout_below="@+id/cgvCheckBox" />
 
                 <View
                     android:layout_width="fill_parent"

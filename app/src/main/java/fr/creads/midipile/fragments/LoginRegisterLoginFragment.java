@@ -106,8 +106,6 @@ public class LoginRegisterLoginFragment extends Fragment{
             throw new ClassCastException(activity.toString()
                     + " must implement onButtonClickListener");
         }
-
-
     }
 
     @Override

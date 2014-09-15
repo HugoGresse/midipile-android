@@ -37,6 +37,17 @@ public interface MidipileAPI {
                           Callback<User> callback);
 
     @FormUrlEncoded
+    @POST(Constants.URL_REGISTER)
+    public void postRegister(
+            @Field("firstname") String firstname,
+            @Field("lastname") String lastname,
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("cgv") String cgv,
+            @Field("newsletter") String newsletter,
+            Callback<User> callback);
+
+    @FormUrlEncoded
     @POST(Constants.URL_FORGETPASSWORD)
     public void postForgetPassword(@Field("email") String email,
                           Callback<Map<String, String>> callback);

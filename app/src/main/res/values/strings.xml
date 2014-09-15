@@ -18,6 +18,9 @@
 
     <string name="dialog_user_title">Connexion à Midipile</string>
     <string name="dialog_user_text">Impossible de vous connectez. Vérifiez votre email et mot de passe.</string>
+
+    <string name="dialog_register_title">Impossible de vous inscrire.</string>
+
     <string name="dialog_facebook_title">Connexion à Facebook</string>
     <string name="dialog_facebook_nopermission">Vous n\'avez pas accepté les permissions de l\'application Facebook Midipile</string>
     <string name="dialog_facebook_unabletogetprofil">Impossible de vous connectez avec Facebook</string>
@@ -91,6 +94,8 @@
     <string name="user_placeholder_prenom">Prénom</string>
     <string name="user_placeholder_email">Adresse email</string>
     <string name="user_placeholder_password">Mot de passe</string>
+    <string name="user_placeholder_newsletter">Recevoir nos offres quotidiennes</string>
+    <string name="user_placeholder_cgv">Accepter les conditions générales d\'utilisation*</string>
     <string name="user_placeholder_password_forget">Mot de passe oublié ?</string>
     <string name="user_login_button">Me connecter</string>
     <string name="user_register_button">M\'inscrire</string>

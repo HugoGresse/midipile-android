@@ -9,6 +9,7 @@ public class Constants {
     public static final String URL_API = "http://great-lion-1342.vagrantshare.com/1";
 
     public static final String URL_LASTDEALS = "/deals";
+    public static final String URL_REGISTER = "/users";
     public static final String URL_LOGIN = "/users/login";
     public static final String URL_LOGINFB = "/users/loginfb";
     public static final String URL_FORGETPASSWORD = "/users/forgetpassword";
