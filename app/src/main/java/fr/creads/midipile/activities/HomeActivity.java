@@ -153,13 +153,6 @@ public class HomeActivity extends FragmentActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
 
-
-        if(null != user) {
-            position -= 1;
-        }
-
-        Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
-
         switch (position) {
             case -1:
                 // click on user profil

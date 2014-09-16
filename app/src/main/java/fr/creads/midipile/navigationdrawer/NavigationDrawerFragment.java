@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +30,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 
 import fr.creads.midipile.R;
-import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.objects.User;
 
 
@@ -94,11 +94,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         // Select either the default item (0) or the last selected item.
-        if( null != ((HomeActivity)getActivity()).getUser() ) {
-            selectItem(mCurrentSelectedPosition+1);
-        } else {
-            selectItem(mCurrentSelectedPosition);
-        }
+        selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -125,11 +121,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(headerUserDisplayed) {
-                    selectItem(position);
-                } else {
-                    selectItem(position);
-                }
+                selectItem(position);
             }
         });
 
@@ -228,15 +220,25 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void selectItem(int position) {
+
         mCurrentSelectedPosition = position;
+
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
+
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
+
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
+
+            if(headerUserDisplayed){
+                mCallbacks.onNavigationDrawerItemSelected(position-1);
+            } else {
+                mCallbacks.onNavigationDrawerItemSelected(position);
+            }
+
         }
     }
 
