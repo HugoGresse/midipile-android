@@ -27,6 +27,27 @@ public interface MidipileAPI {
 
 
     @FormUrlEncoded
+    @POST(Constants.URL_LOGINFB)
+    public void postLoginFacebook(@Field("email") String email,
+                          @Field("password") String password,
+                          @Field("fid") String fid,
+                          @Field("firstname") String firstname,
+                          @Field("lastname") String lastname,
+                          @Field("cgv") String cgv,
+                          Callback<User> callback);
+
+    @FormUrlEncoded
+    @POST(Constants.URL_REGISTER)
+    public void postRegister(
+            @Field("firstname") String firstname,
+            @Field("lastname") String lastname,
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("cgv") String cgv,
+            @Field("newsletter") String newsletter,
+            Callback<User> callback);
+
+    @FormUrlEncoded
     @POST(Constants.URL_FORGETPASSWORD)
     public void postForgetPassword(@Field("email") String email,
                           Callback<Map<String, String>> callback);

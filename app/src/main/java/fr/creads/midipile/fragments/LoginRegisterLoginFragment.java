@@ -43,11 +43,11 @@ public class LoginRegisterLoginFragment extends Fragment{
     private TextView helperFacebookTextView;
     private ImageView bgImage;
 
-
     private onButtonClickListener mClickButtonListener;
 
     public interface onButtonClickListener {
         public void onLoginClick(String email, String password);
+        public void sendFacebookLoginClick();
     }
 
     @Override
@@ -75,9 +75,7 @@ public class LoginRegisterLoginFragment extends Fragment{
         loginFacebookButton = (Button) rootView.findViewById(R.id.userFacebookLoginButton);
         connectTextView = (TextView) rootView.findViewById(R.id.connectTextView);
         helperFacebookTextView = (TextView) rootView.findViewById(R.id.helperFbTextView);
-//        setInsets(getActivity(), bgImage);
-
-
+        //        setInsets(getActivity(), bgImage);
 
         return rootView;
     }
@@ -90,8 +88,8 @@ public class LoginRegisterLoginFragment extends Fragment{
         forgetPasswordButton.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         connectTextView.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         helperFacebookTextView.setTypeface(((HomeActivity) getActivity()).getLatoTypeface());
-        loginFacebookButton.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
 
+        loginFacebookButton.setTypeface(((HomeActivity) getActivity()).getLatoTypeface());
         loginButton.setTypeface(((HomeActivity)getActivity()).getLatoBoldTypeface());
 
         setButtonListener();
@@ -108,10 +106,12 @@ public class LoginRegisterLoginFragment extends Fragment{
             throw new ClassCastException(activity.toString()
                     + " must implement onButtonClickListener");
         }
-
-
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     public static void setInsets(Activity context, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
@@ -147,10 +147,18 @@ public class LoginRegisterLoginFragment extends Fragment{
                 return false;
             }
         });
+
+
+        loginFacebookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClickButtonListener.sendFacebookLoginClick();
+            }
+        });
+
     }
 
     private void sendEventClick(){
-
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
@@ -166,8 +174,10 @@ public class LoginRegisterLoginFragment extends Fragment{
             return;
         }
 
-
         mClickButtonListener.onLoginClick(email, password);
     }
+
+
+
 
 }

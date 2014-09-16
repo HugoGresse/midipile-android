@@ -2,7 +2,9 @@ package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -25,6 +27,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.listeners.OnLoginListener;
+import com.sromku.simple.fb.listeners.OnProfileListener;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,6 +48,7 @@ import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
+import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
 import fr.creads.midipile.objects.Deal;
@@ -59,12 +67,12 @@ public class HomeActivity extends FragmentActivity
             NavigationDrawerFragment.NavigationDrawerCallbacks,
             DealsDayFragment.onDealsSelectedListener,
             DealProductFragment.onButtonParticipateClickListener,
-            LoginRegisterLoginFragment.onButtonClickListener {
+            LoginRegisterLoginFragment.onButtonClickListener,
+            LoginRegisterRegisterFragment.onRegisterButtonClickListener {
 
     private static final String USER_SHAREDPREF = "userlogged";
 
     private MidipileAPI midipileService;
-
 
     private ArrayList<Deal> deals;
     private int dealPosition;
@@ -73,6 +81,11 @@ public class HomeActivity extends FragmentActivity
      * The user connnected to the app
      */
     private User user;
+
+
+    private SimpleFacebook mSimpleFacebook;
+
+    private ProgressDialog mProgressDialog;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -99,6 +112,7 @@ public class HomeActivity extends FragmentActivity
 
         super.onCreate(savedInstanceState);
 
+        mSimpleFacebook = SimpleFacebook.getInstance(this);
 
         latoTypeface = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
         latoBoldTypeface = Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
@@ -123,6 +137,52 @@ public class HomeActivity extends FragmentActivity
         loadLastDeals();
 
         user = getUser();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSimpleFacebook = SimpleFacebook.getInstance(this);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+
+
+        if(null != user) {
+            position -= 1;
+        }
+
+        Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
+
+        switch (position) {
+            case -1:
+                // click on user profil
+                Log.d("fr.creads.midipile", "Disconnecting");
+                user=null;
+                break;
+            case 0:
+                changeFragment( new HomeFragment(), position);
+                break;
+            case 1:
+                changeFragment( new LoginRegisterFragment(), position);
+                break;
+            case 2:
+                changeFragment( new LastWinnerFragment(), position);
+                break;
+            case 3:
+                break;
+        }
+    }
+
+
+    private void changeFragment(Fragment frag, int position){
+        changeFragment(frag, position, R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
     }
 
     /**
@@ -154,42 +214,6 @@ public class HomeActivity extends FragmentActivity
             Log.d(Constants.TAG, "display user");
             mNavigationDrawerFragment.displayUser(user);
         }
-    }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-
-
-        if(null != user) {
-            position -= 1;
-        }
-
-        Log.d("fr.creads.midipile", "onNavigationDrawerItemSelected ====== position:" + Integer.toString(position));
-
-        switch (position) {
-            case -1:
-                // click on user profil
-                Log.d("fr.creads.midipile", "Disconnecting");
-                user=null;
-                break;
-            case 0:
-                changeFragment( new HomeFragment(), position);
-                break;
-            case 1:
-                changeFragment( new LoginRegisterFragment(), position);
-                break;
-            case 2:
-                changeFragment( new LastWinnerFragment(), position);
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
-
-    private void changeFragment(Fragment frag, int position){
-        changeFragment(frag, position, R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
     }
 
     /**
@@ -284,6 +308,46 @@ public class HomeActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    protected void showDialog() {
+        if (mProgressDialog == null) {
+            setProgressDialog("Chargement des données");
+        }
+        mProgressDialog.show();
+    }
+    protected void showDialog(String title) {
+        if (mProgressDialog == null) {
+            setProgressDialog(title);
+        }
+        mProgressDialog.show();
+    }
+    protected void hideDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+    private void setProgressDialog(String title) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle(title);
+        mProgressDialog.setMessage("Chargement...");
+    }
+
+
+    public Typeface getLatoTypeface(){
+        return latoTypeface;
+    }
+    public Typeface getLatoBoldTypeface(){
+        return latoBoldTypeface;
+    }
+
+
+
+
+
+
+
+
+
     public void loadLastDeals(){
 
         midipileService.getLastDeals(new Callback<Deals>() {
@@ -374,64 +438,310 @@ public class HomeActivity extends FragmentActivity
         changeFragment(dealFragment, 1, animEnter, animExit, popEnter, popExit, false);
     }
 
+
+
+
+
+
+
+
+
     @Override
     public void onLoginClick(String email, String password) {
-
         // encrypt password before sending
         password = MidipileUtilities.getSha1(password);
+
+        showDialog("Connexion à Midipile");
 
         midipileService.postLogin(email, password, new Callback<User>() {
             @Override
             public void success(User u, Response response) {
 
-                Toast.makeText(getApplicationContext(), "Vous êtes connecté", Toast.LENGTH_LONG).show();
+                hideDialog();
 
-                setSharedUser(u);
-                mNavigationDrawerFragment.displayUser(u);
-
-                Log.i(Constants.TAG, getUser().toString());
-
-                if(null != getSelectedDeal()){
-                    onDealsSelected(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
-
-                    //Toast.makeText(getApplicationContext(), "Return to previous fragment", Toast.LENGTH_SHORT).show();
-                }
+                setUser(u);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getApplicationContext(), "Impossible de vous connecter. Vérifiez votre email et mot de passe.", Toast.LENGTH_SHORT).show();
+
+                hideDialog();
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                AlertDialog alertDialog = alertDialogBuilder
+                        .setTitle(R.string.dialog_user_title)
+                        .setMessage(R.string.dialog_user_text)
+                        .setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .create();
+
+                alertDialog.show();
+
                 Log.i("fr.creads.midipile", error.toString());
                 Log.i("fr.creads.midipile", error.getResponse().toString());
             }
         });
     }
 
+    @Override
+    public void sendFacebookLoginClick() {
+        doFacebookLogin();
+    }
 
     @Override
-    public void onParticipateClick(Deal deal) {
+    public void onRegisterFacebook() {
+        doFacebookLogin();
+    }
 
-        if(null != user){
-            // user logged // send particpation
-            Toast.makeText(getApplicationContext(), "Participation en cours", Toast.LENGTH_SHORT).show();
+    public void doFacebookLogin(){
+        // if user is already logged
+        if( !mSimpleFacebook.isLogin()){
+            mSimpleFacebook.login(new OnLoginListener() {
+                @Override
+                public void onLogin() {
+                    getFacebookProfile();
+                }
 
+                @Override
+                public void onNotAcceptingPermissions(Permission.Type type) {
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_facebook_title)
+                            .setMessage(R.string.dialog_facebook_nopermission)
+                            .setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    doFacebookLogin();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                @Override
+                public void onThinking() {
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+
+                    hideDialog();
+                }
+
+                @Override
+                public void onFail(String s) {
+
+                    hideDialog();
+                }
+            });
         } else {
-            // loginRegister fragment set on position 8
-            changeFragment( new LoginRegisterFragment(), 8);
+            getFacebookProfile();
         }
     }
 
+    private void getFacebookProfile(){
 
-    public Typeface getLatoTypeface(){
-        return latoTypeface;
+        Profile.Properties properties = new Profile.Properties.Builder()
+                .add(Profile.Properties.ID)
+                .add(Profile.Properties.FIRST_NAME)
+                .add(Profile.Properties.LAST_NAME)
+                .add(Profile.Properties.EMAIL)
+                .build();
+
+        mSimpleFacebook.getProfile(new OnProfileListener() {
+            @Override
+            public void onThinking() {
+                showDialog("Connexion à Facebook");
+            }
+            @Override
+            public void onException(Throwable throwable) {
+                hideDialog();
+                Log.d(Constants.TAG, throwable.getMessage());
+            }
+            @Override
+            public void onFail(String reason) {
+                hideDialog();
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                AlertDialog alertDialog = alertDialogBuilder
+                        .setTitle(R.string.dialog_facebook_title)
+                        .setMessage(R.string.dialog_facebook_unabletogetprofil)
+                        .setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                doFacebookLogin();
+                            }
+                        })
+                        .setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .create();
+
+                alertDialog.show();
+
+            }
+            @Override
+            public void onComplete(Profile response) {
+                postFacebookLoginRegister(
+                        response.getId(),
+                        response.getEmail(),
+                        response.getFirstName(),
+                        response.getLastName());
+
+            }
+        });
     }
-    public Typeface getLatoBoldTypeface(){
-        return latoBoldTypeface;
+
+    /**
+     * Logged or register with facebook
+     * @param email
+     * @param fid
+     * @param firstname
+     * @param lastname
+     */
+    private void postFacebookLoginRegister(String fid, String email, String firstname, String lastname){
+
+        midipileService.postLoginFacebook(email, fid, fid, firstname, lastname, "1", new Callback<User>() {
+            @Override
+            public void success(User u, Response response) {
+                setUser(u);
+
+                hideDialog();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                hideDialog();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                AlertDialog alertDialog = alertDialogBuilder
+                        .setTitle(R.string.dialog_user_title)
+                        .setMessage(R.string.dialog_user_text)
+                        .setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .create();
+
+                alertDialog.show();
+
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
     }
+
+
+    @Override
+    public void onRegisterClick(
+            final String firstname,
+            final String lastname,
+            final String email,
+            final String password,
+            final String cgv,
+            final String newsletter) {
+
+        // password is not encrypted yet
+
+        showDialog("Inscription à Midipile");
+
+        midipileService.postRegister(firstname, lastname, email, password, cgv, newsletter, new Callback<User>() {
+            @Override
+            public void success(User u, Response response) {
+
+                hideDialog();
+
+                setUser(u);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                hideDialog();
+
+                Log.i("fr.creads.midipile", error.toString());
+
+                if(error.isNetworkError()){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_register_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    onRegisterClick(firstname,lastname,email,password,cgv,newsletter);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+
+
+                    alertDialogBuilder.setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                            loadLastDeals();
+                        }
+                    });
+
+                    alertDialogBuilder.setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                } else {
+                    String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
+
+                    Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                    }.getType());
+
+                    try {
+                        List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
+                        Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e){
+                        Log.e(Constants.TAG, e.getMessage());
+                    }
+                }
+            }
+        });
+    }
+
 
     public void setSharedUser(User user){
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
         sp.edit().putString(USER_SHAREDPREF, new Gson().toJson(user)).apply();
+    }
+
+    private void setUser(User u){
+        Toast.makeText(getApplicationContext(), "Vous êtes connecté", Toast.LENGTH_LONG).show();
+
+        setSharedUser(u);
+        mNavigationDrawerFragment.displayUser(u);
+
+        Log.i(Constants.TAG, getUser().toString());
+
+        if(null != getSelectedDeal()){
+            onDealsSelected(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+        }
     }
 
     public User getUser(){
@@ -507,6 +817,23 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+
+
+
+
+
+    @Override
+    public void onParticipateClick(Deal deal) {
+
+        if(null != user){
+            // user logged // send particpation
+            Toast.makeText(getApplicationContext(), "Participation en cours", Toast.LENGTH_SHORT).show();
+
+        } else {
+            // loginRegister fragment set on position 8
+            changeFragment( new LoginRegisterFragment(), 8);
+        }
+    }
 
 
 }
