@@ -9,6 +9,7 @@ import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 
 /**
  * Author : Hugo Gresse
@@ -46,6 +47,22 @@ public interface MidipileAPI {
             @Field("cgv") String cgv,
             @Field("newsletter") String newsletter,
             Callback<User> callback);
+
+
+    @FormUrlEncoded
+    @PUT(Constants.URL_USER_ME)
+    public void putUser(
+            @Field("firstname") String firstname,
+            @Field("lastname") String lastname,
+            @Field("email") String email,
+            @Field("mobile") String mobile,
+            @Field("rue") String rue,
+            @Field("rue_bis") String rue_bis,
+            @Field("code_postal") String code_postal,
+            @Field("ville") String ville,
+            @Field("password") String password,
+            Callback<User> callback);
+
 
     @FormUrlEncoded
     @POST(Constants.URL_FORGETPASSWORD)

@@ -99,6 +99,7 @@
     <string name="user_placeholder_adress_more">Complément d\'adresse</string>
     <string name="user_placeholder_postalcode">Code postal</string>
     <string name="user_placeholder_city">Ville</string>
+    <string name="user_placeholder_country">Pays</string>
     <string name="user_placeholder_newsletter">Recevoir nos offres quotidiennes</string>
     <string name="user_placeholder_cgv">Accepter les conditions générales d\'utilisation*</string>
     <string name="user_placeholder_password_forget">Mot de passe oublié ?</string>

@@ -813,8 +813,44 @@ public class HomeActivity extends FragmentActivity
     }
 
     @Override
-    public void onUserSave() {
+    public void onUserSave(Map<String, String> userData) {
         Log.d(Constants.TAG, "onuserSave listener homeActivity");
+
+        midipileService.putUser(
+                userData.get("firstname"),
+                userData.get("lastname"),
+                userData.get("email"),
+                userData.get("phone"),
+                userData.get("adress"),
+                userData.get("adressMore"),
+                userData.get("postcode"),
+                userData.get("city"),
+                userData.get("password"),
+                new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                Toast.makeText(getApplicationContext(), "Vos coordonnées ont été modifiées", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
+
+                Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                }.getType());
+
+                try {
+                    List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
+                    Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+                } catch(Exception e){
+                    Log.e(Constants.TAG, e.getMessage());
+                }
+            }
+        });
+
+
+
+
     }
 
     public void logoutUser(){

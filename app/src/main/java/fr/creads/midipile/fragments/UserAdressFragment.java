@@ -1,7 +1,6 @@
 package fr.creads.midipile.fragments;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
@@ -27,7 +30,7 @@ public class UserAdressFragment extends Fragment {
     private OnUserUpdateListener mUserUpdateCallback;
 
     public interface OnUserUpdateListener {
-        public void onUserSave();
+        public void onUserSave(Map<String, String> data);
     }
 
     private ScrollView adressScrollView;
@@ -41,7 +44,7 @@ public class UserAdressFragment extends Fragment {
     private EditText userPostalcodeEditText;
     private EditText userCityEditText;
     private EditText userPasswordEditText;
-    private Button userLoginButton;
+    private Button userSaveButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -65,7 +68,8 @@ public class UserAdressFragment extends Fragment {
         userPostalcodeEditText = (EditText) rootView.findViewById(R.id.userPostalcodeEditText);
         userCityEditText = (EditText) rootView.findViewById(R.id.userCityEditText);
         userPasswordEditText = (EditText) rootView.findViewById(R.id.userPasswordEditText);
-        userLoginButton = (Button) rootView.findViewById(R.id.userLoginButton);
+
+        userSaveButton = (Button) rootView.findViewById(R.id.userSaveButton);
 
         return rootView;
     }
@@ -83,7 +87,7 @@ public class UserAdressFragment extends Fragment {
         userPostalcodeEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         userCityEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         userPasswordEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
-        userLoginButton.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userSaveButton.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
 
         setInsets(getActivity(), adressScrollView);
     }
@@ -105,26 +109,85 @@ public class UserAdressFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        // Checks whether a hardware keyboard is available
-        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-            // keyboard visible
-            adressScrollView.setPadding(0, 0, 0, 0);
-        } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-            setInsets(getActivity(), adressScrollView);
-        }
-    }
-
     public static void setInsets(Activity context, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, 0, 0, config.getPixelInsetBottom());
     }
+
+
+    private void setButtonListener(){
+        userSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEventClick();
+            }
+        });
+    }
+
+
+    private void sendEventClick(){
+        String firstname = userFirstnameEditText.getText().toString();
+        String lastname = userLastnameEditText.getText().toString();
+        String email = userEmailEditText.getText().toString();
+        String phone = userPhoneEditText.getText().toString();
+        String adress = userAdressEditText.getText().toString();
+        String adressMore = userAdressMoreEditText.getText().toString();
+        String postcode = userPostalcodeEditText.getText().toString();
+        String city = userCityEditText.getText().toString();
+        String password = userPasswordEditText.getText().toString();
+
+
+
+        if(firstname.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci de remplir votre prénom", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(lastname.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci de remplir votre nom", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(email.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci de remplir votre adresse email", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(phone.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci de remplir votre numéro de téléphone", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(adress.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci de remplir votre adresse", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(postcode.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci d'entrer votre code postal", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(city.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci d'entrer votre ville", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(password.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci d'entrer votre mot de passe", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("firstname", firstname);
+        data.put("lastname", lastname);
+        data.put("email", email);
+        data.put("phone", phone);
+        data.put("adress", adress);
+        data.put("adressMore", adressMore);
+        data.put("postcode", postcode);
+        data.put("city", city);
+        data.put("password", password);
+
+        mUserUpdateCallback.onUserSave(data);
+    }
+
+
+
 
 }
