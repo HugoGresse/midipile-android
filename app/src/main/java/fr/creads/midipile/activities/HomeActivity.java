@@ -817,7 +817,13 @@ public class HomeActivity extends FragmentActivity
         Log.d(Constants.TAG, "onuserSave listener homeActivity");
     }
 
-
+    public void logoutUser(){
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        sp.edit().remove(USER_SHAREDPREF).apply();
+        user = null;
+        mNavigationDrawerFragment.hideUser();
+        Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
+    }
 
 
 

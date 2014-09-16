@@ -103,6 +103,7 @@
     <string name="user_placeholder_cgv">Accepter les conditions générales d\'utilisation*</string>
     <string name="user_placeholder_password_forget">Mot de passe oublié ?</string>
     <string name="user_login_button">Me connecter</string>
+    <string name="user_logout_button">Déconnexion</string>
     <string name="user_register_button">M\'inscrire</string>
     <string name="user_save_button">Enregistrer</string>
     <string name="user_login_separator">Ou</string>

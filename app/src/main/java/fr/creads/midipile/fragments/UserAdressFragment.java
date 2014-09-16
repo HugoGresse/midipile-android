@@ -7,11 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.activities.HomeActivity;
 
 /**
  * Author : Hugo Gresse
@@ -25,8 +29,18 @@ public class UserAdressFragment extends Fragment {
         public void onUserSave();
     }
 
-
     private ScrollView adressScrollView;
+    private TextView titleTextView;
+    private EditText userFirstnameEditText;
+    private EditText userLastnameEditText;
+    private EditText userEmailEditText;
+    private EditText userPhoneEditText;
+    private EditText userAdressEditText;
+    private EditText userAdressMoreEditText;
+    private EditText userPostalcodeEditText;
+    private EditText userCityEditText;
+    private EditText userPasswordEditText;
+    private Button userLoginButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -39,12 +53,35 @@ public class UserAdressFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_user_adress, container, false);
         adressScrollView = (ScrollView) rootView.findViewById(R.id.loginScrollView);
+        titleTextView = (TextView) rootView.findViewById(R.id.userAdressTitle);
+        userFirstnameEditText = (EditText) rootView.findViewById(R.id.userFirstnameEditText);
+        userLastnameEditText = (EditText) rootView.findViewById(R.id.userLastnameEditText);
+        userEmailEditText = (EditText) rootView.findViewById(R.id.userEmailEditText);
+        userPhoneEditText = (EditText) rootView.findViewById(R.id.userPhoneEditText);
+        userAdressEditText = (EditText) rootView.findViewById(R.id.userAdressEditText);
+        userAdressMoreEditText = (EditText) rootView.findViewById(R.id.userAdressMoreEditText);
+        userPostalcodeEditText = (EditText) rootView.findViewById(R.id.userPostalcodeEditText);
+        userCityEditText = (EditText) rootView.findViewById(R.id.userCityEditText);
+        userPasswordEditText = (EditText) rootView.findViewById(R.id.userPasswordEditText);
+        userLoginButton = (Button) rootView.findViewById(R.id.userLoginButton);
 
         return rootView;
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        titleTextView.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userFirstnameEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userLastnameEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userEmailEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userPhoneEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userAdressEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userAdressMoreEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userPostalcodeEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userCityEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userPasswordEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userLoginButton.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
 
         setInsets(getActivity(), adressScrollView);
     }

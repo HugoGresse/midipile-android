@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
 
 /**
@@ -45,6 +49,7 @@ public class UserFragment extends Fragment implements TabHost.OnTabChangeListene
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
         mTabsTitles = getResources().getStringArray(R.array.user_tabs);
 
     }
@@ -76,6 +81,24 @@ public class UserFragment extends Fragment implements TabHost.OnTabChangeListene
         super.onAttach(activity);
         myContext=(FragmentActivity) activity;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.user_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.lagout:
+                ((HomeActivity)getActivity()).logoutUser();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void setupAdapter(View rootView){
 

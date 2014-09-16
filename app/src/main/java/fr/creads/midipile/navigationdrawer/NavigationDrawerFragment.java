@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -332,6 +331,9 @@ public class NavigationDrawerFragment extends Fragment {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.navigation_drawer_header, null, false);
 
+
+        headerView.setTag("navigationHeaderView");
+
         TextView name = (TextView) headerView.findViewById(R.id.userNameTextView);
         TextView chance = (TextView) headerView.findViewById(R.id.userChanceTextView);
 
@@ -343,6 +345,12 @@ public class NavigationDrawerFragment extends Fragment {
         headerUserDisplayed = true;
 
         mCurrentSelectedPosition = 1;
+    }
+
+
+    public void hideUser(){
+        mDrawerListView.removeHeaderView(mDrawerListView.findViewWithTag("navigationHeaderView"));
+        headerUserDisplayed = false;
     }
 
 }
