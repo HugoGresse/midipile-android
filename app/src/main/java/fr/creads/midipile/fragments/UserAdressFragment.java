@@ -1,6 +1,7 @@
 package fr.creads.midipile.fragments;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -52,6 +53,7 @@ public class UserAdressFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_user_adress, container, false);
+
         adressScrollView = (ScrollView) rootView.findViewById(R.id.loginScrollView);
         titleTextView = (TextView) rootView.findViewById(R.id.userAdressTitle);
         userFirstnameEditText = (EditText) rootView.findViewById(R.id.userFirstnameEditText);
@@ -101,6 +103,21 @@ public class UserAdressFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks whether a hardware keyboard is available
+        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
+            // keyboard visible
+            adressScrollView.setPadding(0, 0, 0, 0);
+        } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
+            setInsets(getActivity(), adressScrollView);
+        }
     }
 
     public static void setInsets(Activity context, View view) {

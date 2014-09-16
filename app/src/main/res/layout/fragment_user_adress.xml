@@ -100,7 +100,7 @@
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
+                    android:inputType="textPostalAddress"
                     android:id="@+id/userAdressEditText"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/userPhoneEditText"
@@ -115,7 +115,7 @@
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
+                    android:inputType="textPostalAddress"
                     android:id="@+id/userAdressMoreEditText"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/userAdressEditText"
@@ -138,7 +138,7 @@
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
+                    android:inputType="number"
                     android:id="@+id/userPostalcodeEditText"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/userAdressMoreEditText"
@@ -154,7 +154,7 @@
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
+                    android:inputType="text"
                     android:id="@+id/userCityEditText"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/userAdressMoreEditText"
