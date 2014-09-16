@@ -49,6 +49,8 @@ import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
+import fr.creads.midipile.fragments.UserAdressFragment;
+import fr.creads.midipile.fragments.UserFragment;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
 import fr.creads.midipile.objects.Deal;
@@ -68,7 +70,8 @@ public class HomeActivity extends FragmentActivity
             DealsDayFragment.onDealsSelectedListener,
             DealProductFragment.onButtonParticipateClickListener,
             LoginRegisterLoginFragment.onButtonClickListener,
-            LoginRegisterRegisterFragment.onRegisterButtonClickListener {
+            LoginRegisterRegisterFragment.onRegisterButtonClickListener,
+            UserAdressFragment.OnUserUpdateListener{
 
     private static final String USER_SHAREDPREF = "userlogged";
 
@@ -156,8 +159,7 @@ public class HomeActivity extends FragmentActivity
         switch (position) {
             case -1:
                 // click on user profil
-                Log.d("fr.creads.midipile", "Disconnecting");
-                user=null;
+                changeFragment( new UserFragment(), position);
                 break;
             case 0:
                 changeFragment( new HomeFragment(), position);
@@ -810,6 +812,10 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+    @Override
+    public void onUserSave() {
+        Log.d(Constants.TAG, "onuserSave listener homeActivity");
+    }
 
 
 
