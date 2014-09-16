@@ -135,6 +135,10 @@ public class DealPlaceFragment extends Fragment
     public void onGoogleMapCreated() {
         map = mapFragment.getMap();
 
+        if(null == map){
+            return;
+        }
+
         setInsets(getActivity(), map);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();

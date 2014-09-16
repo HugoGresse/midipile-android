@@ -19,4 +19,9 @@
     <dimen name="deal_detail_padding_mapbutton_horizontal">20dp</dimen>
     <dimen name="deal_detail_padding_mapbutton_vertical">10dp</dimen>
 
+
+    <dimen name="user_form_width">250dp</dimen>
+    <dimen name="user_form_title_sp">18sp</dimen>
+    <dimen name="user_form_edit_sp">14sp</dimen>
+
 </resources>

@@ -2,17 +2,35 @@
 <resources>
 
     <string name="app_name">Midipile</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+
+    <!-- fb app id -->
+    <string name="app_id">308179055936670</string>
+
     <string name="navigation_drawer_open">Ouvrir le menu</string>
     <string name="navigation_drawer_close">Fermer le menu</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Paramètres</string>
 
-    <string name="dialog_network_error">Impossible de charger les données. Vérifiez votre connexion au réseau.</string>
+    <string name="dialog_network_error_title">Impossible de charger les données.</string>
+    <string name="dialog_network_error">Vérifiez votre connexion au réseau.</string>
     <string name="dialog_network_error_ok">Réessayer</string>
     <string name="dialog_network_error_no">Annuler</string>
+
+    <string name="dialog_user_title">Connexion à Midipile</string>
+    <string name="dialog_user_text">Impossible de vous connectez. Vérifiez votre email et mot de passe.</string>
+
+    <string name="dialog_register_title">Impossible de vous inscrire.</string>
+
+    <string name="dialog_facebook_title">Connexion à Facebook</string>
+    <string name="dialog_facebook_nopermission">Vous n\'avez pas accepté les permissions de l\'application Facebook Midipile</string>
+    <string name="dialog_facebook_unabletogetprofil">Impossible de vous connectez avec Facebook</string>
+
+
+    <string name="dialog_forgetpassword_title">Mot de passe oublié.</string>
+    <string name="dialog_forgetpassword">Pour récupérer votre mot de passe, entrer votre adresse email.</string>
+    <string name="dialog_forgetpassword_ok">Envoyer</string>
+    <string name="dialog_forgetpassword_no">Annuler</string>
+
 
     !-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
@@ -31,6 +49,7 @@
     </array>
 
 
+    <string name="nav_header_chance">chance(s)</string>
     <string name="nav_footer_copyright">Midipile ® Copyright 2014 - Tous droits réservés</string>
     <string name="nav_footer_contact">Contact</string>
     <string name="nav_footer_cgu">- CGU -</string>
@@ -55,9 +74,38 @@
         <item>Le trouver</item>
     </array>
 
-
     <string name="deal_share_body">Chaque jour un nouveau produit à remporter</string>
     <string name="deal_map_eshop">E-shop</string>
     <string name="deal_map_website">Site Web</string>
+
+
+
+
+    <string name="user_login">Connexion</string>
+    <string name="user_register">Inscription</string>
+
+    <array name="user_loginregister_tabs">
+        <item>Me connecter</item>
+        <item>M\'inscrire</item>
+    </array>
+
+
+    <string name="user_placeholder_name">Nom</string>
+    <string name="user_placeholder_prenom">Prénom</string>
+    <string name="user_placeholder_email">Adresse email</string>
+    <string name="user_placeholder_password">Mot de passe</string>
+    <string name="user_placeholder_newsletter">Recevoir nos offres quotidiennes</string>
+    <string name="user_placeholder_cgv">Accepter les conditions générales d\'utilisation*</string>
+    <string name="user_placeholder_password_forget">Mot de passe oublié ?</string>
+    <string name="user_login_button">Me connecter</string>
+    <string name="user_register_button">M\'inscrire</string>
+    <string name="user_login_separator">Ou</string>
+    <string name="user_login_fb_helper">Se connecter via Facebook connect</string>
+    <string name="user_register_fb_helper">M\'inscrire via Facebook connect</string>
+    <string name="user_login_fb_button">Utiliser Facebook connect</string>
+
+
+
+
 
 </resources>
