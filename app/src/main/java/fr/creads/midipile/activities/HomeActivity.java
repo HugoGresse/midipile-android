@@ -452,19 +452,12 @@ public class HomeActivity extends FragmentActivity
         midipileService.postLogin(email, password, new Callback<User>() {
             @Override
             public void success(User u, Response response) {
-
                 hideDialog();
-
-                setUser(u);
-
-                setUserXwsseHeader(response.getHeaders());
-
-
+                setUser(u, response.getHeaders());
             }
 
             @Override
             public void failure(RetrofitError error) {
-
                 hideDialog();
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
@@ -487,7 +480,7 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
-    public void setUserXwsseHeader(List<Header> headers){
+    public String getResponseXwsseHeaders(List<Header> headers){
         for (Header header : headers) {
 
             if(null == header ){
@@ -503,11 +496,11 @@ public class HomeActivity extends FragmentActivity
             if( null != header.getValue() && !header.getValue().isEmpty() ){
                 // add xwsse header to user
                 if(  header.getName().equals("X-Wsse") ||  header.getName().equals("x-wsse")){
-                    user.setXwsseHeader(header.getValue());
-                    return;
+                    return header.getValue();
                 }
             }
         }
+        return "";
     }
 
     @Override
@@ -637,11 +630,10 @@ public class HomeActivity extends FragmentActivity
      */
     private void postFacebookLoginRegister(String fid, String email, String firstname, String lastname){
 
-        midipileService.postLoginFacebook(email, fid, fid, firstname, lastname, "1", new Callback<User>() {
+        midipileService.postLoginFacebook(email, fid, fid, firstname, lastname, "1", "android", MidipileUtilities.getUniquePsuedoID(), new Callback<User>() {
             @Override
             public void success(User u, Response response) {
-                setUser(u);
-                setUserXwsseHeader(response.getHeaders());
+                setUser(u, response.getHeaders());
                 hideDialog();
             }
 
@@ -682,12 +674,12 @@ public class HomeActivity extends FragmentActivity
 
         showDialog("Inscription à Midipile");
 
-        midipileService.postRegister(firstname, lastname, email, password, cgv, newsletter, new Callback<User>() {
+        midipileService.postRegister(firstname, lastname, email, password, cgv, newsletter,
+                "android", MidipileUtilities.getUniquePsuedoID(), new Callback<User>() {
             @Override
             public void success(User u, Response response) {
                 hideDialog();
-                setUser(u);
-                setUserXwsseHeader(response.getHeaders());
+                setUser(u, response.getHeaders());
             }
 
             @Override
@@ -716,20 +708,6 @@ public class HomeActivity extends FragmentActivity
                             .create();
 
                     alertDialog.show();
-
-
-                    alertDialogBuilder.setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,int id) {
-                            loadLastDeals();
-                        }
-                    });
-
-                    alertDialogBuilder.setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,int id) {
-                            dialog.cancel();
-                        }
-                    });
-
                 } else {
                     String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
 
@@ -753,17 +731,23 @@ public class HomeActivity extends FragmentActivity
         sp.edit().putString(USER_SHAREDPREF, new Gson().toJson(user)).apply();
     }
 
-    private void setUser(User u){
+    private void setUser(User u, List<Header> headers){
         Toast.makeText(getApplicationContext(), "Vous êtes connecté", Toast.LENGTH_LONG).show();
-
-        setSharedUser(u);
+        user = u;
+        user.setXwsseHeader(getResponseXwsseHeaders(headers));
+        setSharedUser(user);
         mNavigationDrawerFragment.displayUser(u);
-
-        Log.i(Constants.TAG, getUser().toString());
 
         if(null != getSelectedDeal()){
             onDealsSelected(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
         }
+    }
+
+    private void updateUser(User u, List<Header> headers){
+        user = u;
+        user.setXwsseHeader(getResponseXwsseHeaders(headers));
+        setSharedUser(user);
+        mNavigationDrawerFragment.displayUser(user);
     }
 
     public User getUser(){
@@ -840,8 +824,10 @@ public class HomeActivity extends FragmentActivity
     }
 
     @Override
-    public void onUserSave(Map<String, String> userData) {
+    public void onUserSave(final Map<String, String> userData) {
         Log.d(Constants.TAG, "onuserSave listener homeActivity");
+
+        showDialog("Enregistrement de vos informations");
 
         midipileService.putUser(
                 user.getXwsseHeader(),
@@ -856,30 +842,54 @@ public class HomeActivity extends FragmentActivity
                 userData.get("password"),
                 new Callback<User>() {
             @Override
-            public void success(User user, Response response) {
+            public void success(User u, Response response) {
                 Toast.makeText(getApplicationContext(), "Vos coordonnées ont été modifiées", Toast.LENGTH_LONG).show();
+                updateUser(u, response.getHeaders());
+                hideDialog();
             }
 
             @Override
             public void failure(RetrofitError error) {
-                String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
 
-                try {
-                    Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
-                    }.getType());
 
-                    List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
-                    Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+                if(error.isNetworkError()){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
 
-                } catch (Exception e){
-                    Log.e(Constants.TAG, e.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_register_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    onUserSave(userData);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                } else {
+                    String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
+
+                    Log.d(Constants.TAG, json.toString());
+                    try {
+                        Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                        }.getType());
+
+                        List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
+                        Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+
+                    } catch (Exception e){
+                        Log.e(Constants.TAG, e.getMessage());
+                    }
                 }
+
+                hideDialog();
             }
         });
-
-
-
-
     }
 
     public void logoutUser(){
@@ -889,7 +899,7 @@ public class HomeActivity extends FragmentActivity
         mNavigationDrawerFragment.hideUser();
         Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
 
-        changeFragment(new DealsDayFragment(), 1);
+        changeFragment(new HomeFragment(), 1);
     }
 
 
