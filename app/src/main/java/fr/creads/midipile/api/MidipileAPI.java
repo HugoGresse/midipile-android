@@ -8,6 +8,7 @@ import retrofit.Callback;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.PUT;
 
@@ -52,6 +53,7 @@ public interface MidipileAPI {
     @FormUrlEncoded
     @PUT(Constants.URL_USER_ME)
     public void putUser(
+            @Header("x-wsse") String xwsse,
             @Field("firstname") String firstname,
             @Field("lastname") String lastname,
             @Field("email") String email,

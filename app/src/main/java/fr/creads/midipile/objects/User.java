@@ -31,6 +31,8 @@ public class User implements Parcelable {
     private String chance;
     private String credit;
 
+    private String wxsseHeaders;
+
     private List<Badge> badges = new ArrayList<Badge>();
 
     @Override
@@ -197,11 +199,13 @@ public class User implements Parcelable {
         return chanceInt;
     }
 
-
     public String getChanceString() {
         return chance;
     }
 
+    public String getXwsseHeader(){
+        return wxsseHeaders;
+    }
 
     public void setChance(String chance) {
         this.chance = chance;
@@ -221,5 +225,9 @@ public class User implements Parcelable {
 
     public void setBadges(List<Badge> badges) {
         this.badges = badges;
+    }
+
+    public void setXwsseHeader(String header){
+        wxsseHeaders = header;
     }
 }

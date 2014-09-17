@@ -152,7 +152,7 @@
                     android:layout_toLeftOf="@+id/centerHelper" />
 
                 <EditText
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:id="@+id/userCityEditText"
@@ -165,7 +165,8 @@
                     android:textSize="@dimen/user_form_edit_sp"
                     android:textStyle="normal"
                     android:textColorHint="@color/user_text_color_hint"
-                    android:layout_toRightOf="@+id/centerHelper" />
+                    android:layout_toRightOf="@+id/centerHelper"
+                    android:maxLines="1" />
 
 
                 <EditText

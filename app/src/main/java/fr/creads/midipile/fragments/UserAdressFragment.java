@@ -20,6 +20,7 @@ import java.util.Map;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
+import fr.creads.midipile.objects.User;
 
 /**
  * Author : Hugo Gresse
@@ -32,6 +33,8 @@ public class UserAdressFragment extends Fragment {
     public interface OnUserUpdateListener {
         public void onUserSave(Map<String, String> data);
     }
+
+    private User user;
 
     private ScrollView adressScrollView;
     private TextView titleTextView;
@@ -49,6 +52,8 @@ public class UserAdressFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+        user = ((HomeActivity)getActivity()).getUser();
     }
 
     @Override
@@ -89,7 +94,25 @@ public class UserAdressFragment extends Fragment {
         userPasswordEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         userSaveButton.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
 
+
+        userFirstnameEditText.setText(user.getPrenom());
+        userLastnameEditText.setText(user.getNom());
+        userEmailEditText.setText(user.getEmail());
+        userPhoneEditText.setText(user.getMobile());
+        userAdressEditText.setText(user.getRue());
+        userAdressMoreEditText.setText(user.getRue_bis());
+        userPostalcodeEditText.setText(user.getCode_postal());
+        userCityEditText.setText(user.getVille());
+
+
+
         setInsets(getActivity(), adressScrollView);
+        userSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEventClick();
+            }
+        });
     }
 
     @Override
@@ -115,17 +138,6 @@ public class UserAdressFragment extends Fragment {
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, 0, 0, config.getPixelInsetBottom());
     }
-
-
-    private void setButtonListener(){
-        userSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendEventClick();
-            }
-        });
-    }
-
 
     private void sendEventClick(){
         String firstname = userFirstnameEditText.getText().toString();
@@ -168,10 +180,6 @@ public class UserAdressFragment extends Fragment {
             Toast.makeText(getActivity(), "Merci d'entrer votre ville", Toast.LENGTH_LONG).show();
             return;
         }
-        if(password.isEmpty()) {
-            Toast.makeText(getActivity(), "Merci d'entrer votre mot de passe", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         Map<String, String> data = new HashMap<String, String>();
         data.put("firstname", firstname);
@@ -182,7 +190,10 @@ public class UserAdressFragment extends Fragment {
         data.put("adressMore", adressMore);
         data.put("postcode", postcode);
         data.put("city", city);
-        data.put("password", password);
+
+        if(!password.isEmpty()) {
+            data.put("password", password);
+        }
 
         mUserUpdateCallback.onUserSave(data);
     }
