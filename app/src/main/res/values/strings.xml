@@ -120,7 +120,9 @@
         <item>Parrainage</item>
     </array>
 
+
     <string name="user_adress_title">Mes coordonnées</string>
+    <string name="user_badge_title">Mes badges</string>
 
 
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:paddingLeft="@dimen/badge_padding_horizontal"
+    android:paddingRight="@dimen/badge_padding_horizontal"
+    android:paddingTop="@dimen/badge_padding_vertical"
+    android:paddingBottom="@dimen/badge_padding_vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/badgeIconImageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_human"
+        android:layout_marginRight="10dp"
+        android:background="@color/midipiletheme_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/badgeTitleTextView"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/badgeIconImageView"
+        android:layout_toEndOf="@+id/badgeIconImageView"
+        android:textColor="@color/midipiletheme_color"
+        android:textAllCaps="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/badgeDescriptionTextView"
+        android:layout_below="@+id/badgeTitleTextView"
+        android:layout_alignLeft="@+id/badgeTitleTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/badgeChanceTextView"
+        android:layout_below="@+id/badgeDescriptionTextView"
+        android:textColor="@color/midipiletheme_color"
+        android:textSize="12sp"
+        android:layout_alignLeft="@+id/badgeDescriptionTextView" />
+</RelativeLayout>

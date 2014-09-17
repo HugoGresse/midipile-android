@@ -24,4 +24,8 @@
     <dimen name="user_form_title_sp">18sp</dimen>
     <dimen name="user_form_edit_sp">14sp</dimen>
 
+
+    <dimen name="badge_padding_horizontal">30dp</dimen>
+    <dimen name="badge_padding_vertical">30dp</dimen>
+
 </resources>

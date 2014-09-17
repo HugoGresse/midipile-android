@@ -27,12 +27,16 @@ import java.util.List;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
+import fr.creads.midipile.listeners.OnBadgesLoadedListener;
+import fr.creads.midipile.objects.Badge;
 
 /**
  * Author : Hugo Gresse
  * Date : 16/09/14
  */
-public class UserFragment extends Fragment implements TabHost.OnTabChangeListener {
+public class UserFragment extends Fragment implements
+        TabHost.OnTabChangeListener,
+        OnBadgesLoadedListener {
 
 
     private ActionBar actionBar;
@@ -178,4 +182,8 @@ public class UserFragment extends Fragment implements TabHost.OnTabChangeListene
         view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
     }
 
+    @Override
+    public void onBadgeLoaded(List<Badge> badges) {
+        ((UserBadgeFragment)mAdapter.getItem(0)).setBadgeAdapter(badges);
+    }
 }

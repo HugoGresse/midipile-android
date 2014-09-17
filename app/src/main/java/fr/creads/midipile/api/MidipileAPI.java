@@ -1,7 +1,10 @@
 package fr.creads.midipile.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import fr.creads.midipile.objects.Badge;
 import fr.creads.midipile.objects.Deals;
 import fr.creads.midipile.objects.User;
 import retrofit.Callback;
@@ -20,6 +23,10 @@ public interface MidipileAPI {
 
     @GET(Constants.URL_LASTDEALS)
     public void getLastDeals(Callback<Deals> callback);
+
+    @GET(Constants.URL_BADGES)
+    public void getBadges(Callback<ArrayList<Badge>> callback);
+
 
     @FormUrlEncoded
     @POST(Constants.URL_LOGIN)

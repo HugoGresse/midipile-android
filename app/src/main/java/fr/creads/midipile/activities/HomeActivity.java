@@ -51,8 +51,10 @@ import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
 import fr.creads.midipile.fragments.UserAdressFragment;
 import fr.creads.midipile.fragments.UserFragment;
+import fr.creads.midipile.listeners.OnBadgesLoadedListener;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
+import fr.creads.midipile.objects.Badge;
 import fr.creads.midipile.objects.Deal;
 import fr.creads.midipile.objects.Deals;
 import fr.creads.midipile.objects.User;
@@ -81,6 +83,8 @@ public class HomeActivity extends FragmentActivity
     private ArrayList<Deal> deals;
     private int dealPosition;
 
+    private List<Badge> badges;
+
     /**
      * The user connnected to the app
      */
@@ -96,12 +100,8 @@ public class HomeActivity extends FragmentActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
-
     private OnDataLoadedListener mLoadedCallbacks;
+    private OnBadgesLoadedListener mBadgesLoadedCallbacks;
 
     private boolean homeFragmentAlreadyCreated = false;
 
@@ -195,7 +195,6 @@ public class HomeActivity extends FragmentActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -241,14 +240,13 @@ public class HomeActivity extends FragmentActivity
 
 
         try {
-
             FragmentManager manager = getSupportFragmentManager();
             boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
 
             if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null){ //fragment not in back stack, create it.
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction.setCustomAnimations(enter, exit, pop_enter, pop_exit);
-                transaction.replace(R.id.container, frag, Integer.toString(position));
+                transaction.replace(R.id.container, frag, frag.getClass().getName());
                 transaction.addToBackStack(backStateName);
                 transaction.commit();
                 Log.d(Constants.TAG, "addToBackTack");
@@ -355,7 +353,6 @@ public class HomeActivity extends FragmentActivity
                 }
 
                 deals = (ArrayList<Deal>) d.getDeals();
-                Log.i("fr.creads.midipile", "Deals loaded");
 
                 if(null != mLoadedCallbacks) {
                     mLoadedCallbacks.onDealsLoaded();
@@ -904,6 +901,9 @@ public class HomeActivity extends FragmentActivity
 
 
 
+
+
+
     @Override
     public void onParticipateClick(Deal deal) {
 
@@ -918,4 +918,69 @@ public class HomeActivity extends FragmentActivity
     }
 
 
+
+
+
+
+    public void loadBadgesList(){
+        midipileService.getBadges(new Callback<ArrayList<Badge>>() {
+
+            @Override
+            public void success(ArrayList<Badge> badgeItems, Response response) {
+                badges = badgeItems;
+
+                UserFragment userFragment = (UserFragment) getSupportFragmentManager().findFragmentByTag(UserFragment.class.getName());
+
+                if (!(userFragment instanceof OnBadgesLoadedListener)) {
+                    throw new IllegalStateException(
+                      "Fragment must implement the OnBadgesLoadedListener.");
+                } else {
+                    mBadgesLoadedCallbacks = (OnBadgesLoadedListener) userFragment;
+                    mBadgesLoadedCallbacks.onBadgeLoaded(badges);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if(error.isNetworkError()){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_network_error_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    loadBadgesList();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
+    }
+
+    public List<Badge> getBadges(){
+
+        Log.d(Constants.TAG, "getting badges");
+
+        if(null == badges) {
+
+            Log.d(Constants.TAG, "getting badges null");
+            return new ArrayList<Badge>();
+        } else {
+
+            Log.d(Constants.TAG, "getting badges not null");
+            return badges;
+        }
+
+    }
 }
