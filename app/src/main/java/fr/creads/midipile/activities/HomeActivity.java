@@ -60,6 +60,7 @@ import fr.creads.midipile.utilities.MidipileUtilities;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.Header;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 import retrofit.mime.TypedByteArray;
@@ -455,6 +456,10 @@ public class HomeActivity extends FragmentActivity
                 hideDialog();
 
                 setUser(u);
+
+                setUserXwsseHeader(response.getHeaders());
+
+
             }
 
             @Override
@@ -480,6 +485,29 @@ public class HomeActivity extends FragmentActivity
                 Log.i("fr.creads.midipile", error.getResponse().toString());
             }
         });
+    }
+
+    public void setUserXwsseHeader(List<Header> headers){
+        for (Header header : headers) {
+
+            if(null == header ){
+                continue;
+            }
+            if(null == header.getName()){
+                continue;
+            }
+            if(header.getName().isEmpty()){
+                continue;
+            }
+
+            if( null != header.getValue() && !header.getValue().isEmpty() ){
+                // add xwsse header to user
+                if(  header.getName().equals("X-Wsse") ||  header.getName().equals("x-wsse")){
+                    user.setXwsseHeader(header.getValue());
+                    return;
+                }
+            }
+        }
     }
 
     @Override
@@ -613,7 +641,7 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(User u, Response response) {
                 setUser(u);
-
+                setUserXwsseHeader(response.getHeaders());
                 hideDialog();
             }
 
@@ -657,10 +685,9 @@ public class HomeActivity extends FragmentActivity
         midipileService.postRegister(firstname, lastname, email, password, cgv, newsletter, new Callback<User>() {
             @Override
             public void success(User u, Response response) {
-
                 hideDialog();
-
                 setUser(u);
+                setUserXwsseHeader(response.getHeaders());
             }
 
             @Override
@@ -817,6 +844,7 @@ public class HomeActivity extends FragmentActivity
         Log.d(Constants.TAG, "onuserSave listener homeActivity");
 
         midipileService.putUser(
+                user.getXwsseHeader(),
                 userData.get("firstname"),
                 userData.get("lastname"),
                 userData.get("email"),
@@ -836,13 +864,14 @@ public class HomeActivity extends FragmentActivity
             public void failure(RetrofitError error) {
                 String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
 
-                Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
-                }.getType());
-
                 try {
+                    Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                    }.getType());
+
                     List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
                     Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
-                } catch(Exception e){
+
+                } catch (Exception e){
                     Log.e(Constants.TAG, e.getMessage());
                 }
             }
