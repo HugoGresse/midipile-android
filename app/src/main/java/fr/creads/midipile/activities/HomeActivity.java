@@ -888,6 +888,8 @@ public class HomeActivity extends FragmentActivity
         user = null;
         mNavigationDrawerFragment.hideUser();
         Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
+
+        changeFragment(new DealsDayFragment(), 1);
     }
 
 
