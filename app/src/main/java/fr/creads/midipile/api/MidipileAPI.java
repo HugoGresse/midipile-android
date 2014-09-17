@@ -36,6 +36,8 @@ public interface MidipileAPI {
                           @Field("firstname") String firstname,
                           @Field("lastname") String lastname,
                           @Field("cgv") String cgv,
+                          @Field("referer") String referer,
+                          @Field("id_device") String id_device,
                           Callback<User> callback);
 
     @FormUrlEncoded
@@ -47,6 +49,8 @@ public interface MidipileAPI {
             @Field("password") String password,
             @Field("cgv") String cgv,
             @Field("newsletter") String newsletter,
+            @Field("referer") String referer,
+            @Field("id_device") String id_device,
             Callback<User> callback);
 
 
