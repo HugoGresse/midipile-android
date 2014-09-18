@@ -1045,9 +1045,7 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(Map<String, String> mapData, Response response) {
                 hideDialog();
-
-                getResources().getColor(R.color.midipiletheme_color)
-
+                
                 try {
 
                     SuperActivityToast successSuperToast = new SuperActivityToast(HomeActivity.this);
@@ -1061,6 +1059,13 @@ public class HomeActivity extends FragmentActivity
 
                 } catch (Exception e){
                     Log.d(Constants.TAG, "Erreur lors de la participation : 200 " + e.getMessage());
+                }
+
+                try {
+                    user.setChance(mapData.get("chance"));
+                    updateUser(user);
+                } catch (Exception e){
+                    Log.e(Constants.TAG, "Error while getting chance after participating");
                 }
 
             }
