@@ -3,6 +3,8 @@ package fr.creads.midipile.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class User implements Parcelable {
     private String ville;
     private String pays;
 
+    @SerializedName("parrainage_code")
+    private String parrainageCode;
+
 
     private String code_postal;
     private String mobile;
@@ -34,6 +39,7 @@ public class User implements Parcelable {
     private String wxsseHeaders;
 
     private List<Badge> badges = new ArrayList<Badge>();
+    private List<User> filleuls = new ArrayList<User>();
 
     @Override
     public int describeContents() {
@@ -51,6 +57,7 @@ public class User implements Parcelable {
         parcel.writeString(rue_bis);
         parcel.writeString(ville);
         parcel.writeString(pays);
+        parcel.writeString(parrainageCode);
 
         parcel.writeString(newsletter);
         parcel.writeString(code_postal);
@@ -60,6 +67,7 @@ public class User implements Parcelable {
         parcel.writeString(credit);
 
         parcel.writeTypedList(badges);
+        parcel.writeTypedList(filleuls);
     }
 
     public User(){}
@@ -73,6 +81,7 @@ public class User implements Parcelable {
         civilite = in.readString();
         ville = in.readString();
         pays = in.readString();
+        parrainageCode = in.readString();
 
         newsletter = in.readString();
         code_postal = in.readString();
@@ -83,6 +92,7 @@ public class User implements Parcelable {
 
 
         in.readTypedList(badges, Badge.CREATOR);
+        in.readTypedList(filleuls, User.CREATOR);
     }
 
     @Override
@@ -93,6 +103,22 @@ public class User implements Parcelable {
                 ", prenom='" + prenom + '\'' +
                 '}';
     }
+
+
+    public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {
+        public User createFromParcel(Parcel source) {
+            User mUser = new User();
+            mUser.nom = source.readString();
+            mUser.prenom = source.readString();
+            mUser.email = source.readString();
+            return mUser;
+        }
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
 
     public String getEmail() {
         return email;
@@ -207,6 +233,10 @@ public class User implements Parcelable {
         return wxsseHeaders;
     }
 
+    public void setXwsseHeader(String header){
+        wxsseHeaders = header;
+    }
+
     public void setChance(String chance) {
         this.chance = chance;
     }
@@ -227,7 +257,19 @@ public class User implements Parcelable {
         this.badges = badges;
     }
 
-    public void setXwsseHeader(String header){
-        wxsseHeaders = header;
+    public String getParrainageCode() {
+        return parrainageCode;
+    }
+
+    public void setParrainageCode(String parrainageCode) {
+        this.parrainageCode = parrainageCode;
+    }
+
+    public List<User> getFilleuls() {
+        return filleuls;
+    }
+
+    public void setFilleuls(List<User> filleuls) {
+        this.filleuls = filleuls;
     }
 }
