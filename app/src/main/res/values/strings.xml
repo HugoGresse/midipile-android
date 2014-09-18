@@ -33,6 +33,10 @@
     <string name="dialog_forgetpassword_no">Annuler</string>
 
 
+    <string name="dialog_deal_participate_share_ok">Oui</string>
+    <string name="dialog_deal_participate_share_cancel">Non</string>
+
+
     !-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item >Offres du jour</item>
@@ -69,6 +73,7 @@
     <string name="deal_value_suffix"> LOTS à gagner</string>
     <string name="deal_participate_button">Je participe</string>
     <string name="deal_participate_success">Participation enregistré !</string>
+    <string name="deal_participate_share_message">Voulez vous ouvrir l\'application de </string>
 
     <array name="deal_fragment_tabs">
         <item>La marque</item>

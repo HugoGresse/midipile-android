@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -1038,6 +1039,7 @@ public class HomeActivity extends FragmentActivity
 
     public void postParticipation(Deal deal){
 
+
         showDialog("Participation en cours");
 
         midipileService.postPlayDeal(user.getXwsseHeader(), deal.getId(), new Callback<Map<String, String>>() {
@@ -1045,7 +1047,7 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(Map<String, String> mapData, Response response) {
                 hideDialog();
-                
+
                 try {
 
                     SuperActivityToast successSuperToast = new SuperActivityToast(HomeActivity.this);
@@ -1066,6 +1068,36 @@ public class HomeActivity extends FragmentActivity
                     updateUser(user);
                 } catch (Exception e){
                     Log.e(Constants.TAG, "Error while getting chance after participating");
+                }
+
+
+                if( !getSelectedDeal().getPlayStore().isEmpty()){
+
+                    String message = getResources().getString(R.string.deal_participate_share_message) + " " + getSelectedDeal().getSociete() + " ?";
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setMessage(message)
+                            .setPositiveButton(R.string.dialog_deal_participate_share_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    try {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getSelectedDeal().getPlayStore())));
+                                    } catch (android.content.ActivityNotFoundException anfe) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getSelectedDeal().getPlayStore())));
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_deal_participate_share_cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+
+
                 }
 
             }
