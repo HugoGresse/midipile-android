@@ -1,13 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:midipile="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Parrainage (coming soon)"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/scrollView" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="@dimen/user_padding_horizontal"
+            android:paddingRight="@dimen/user_padding_horizontal">
+
+            <fr.creads.midipile.layoutselements.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_parrainage_title"
+                android:id="@+id/titleParrainageTextView"
+                android:layout_alignParentTop="true"
+                android:singleLine="false"
+                midipile:fontName="latoregular.ttf"
+                android:textSize="@dimen/user_form_title_sp"
+                android:textColor="@color/midipiletheme_color"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp" />
+
+            <fr.creads.midipile.layoutselements.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                midipile:fontName="latoregular.ttf"
+                android:id="@+id/parrainageCodeTextView"
+                android:background="@drawable/edittext_round"
+                android:layout_below="@+id/titleParrainageTextView"
+                android:layout_marginBottom="30dp"
+                android:singleLine="true" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/shareParrainageButton"
+                android:layout_alignTop="@+id/parrainageCodeTextView"
+                android:layout_toRightOf="@+id/parrainageCodeTextView"
+                android:layout_toEndOf="@+id/parrainageCodeTextView"
+                android:src="@drawable/ic_action_share"
+                android:background="@null"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="10dp" />
+
+            <fr.creads.midipile.layoutselements.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_parrainage_filleuls"
+                midipile:fontName="latoregular.ttf"
+                android:id="@+id/filleulsTitleTextVIew"
+                android:layout_below="@+id/parrainageCodeTextView"
+                android:textColor="@color/midipile_black"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_parrainage_filleuls_empty"
+                android:id="@+id/filleulsListTextView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/filleulsTitleTextVIew"
+                android:textSize="12sp"
+                android:textColor="@color/midipile_black" />
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>

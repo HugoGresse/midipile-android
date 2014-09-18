@@ -1,17 +1,21 @@
 package fr.creads.midipile.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.activities.HomeActivity;
+import fr.creads.midipile.api.Constants;
 
 /**
  * Author : Hugo Gresse
@@ -19,8 +23,9 @@ import fr.creads.midipile.R;
  */
 public class UserParrainageFragment extends Fragment {
 
-
-    private ScrollView badgeScrollView;
+    private ImageButton shareCodeButton;
+    private TextView parrainageCodeTextView;
+    private TextView filleulsTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -33,11 +38,37 @@ public class UserParrainageFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_user_parrainage, container, false);
 
+        shareCodeButton = (ImageButton) rootView.findViewById(R.id.shareParrainageButton);
+        parrainageCodeTextView = (TextView) rootView.findViewById(R.id.parrainageCodeTextView);
+        filleulsTextView = (TextView) rootView.findViewById(R.id.filleulsListTextView);
+
         return rootView;
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        final String userParrainageCode = ((HomeActivity)getActivity()).getUser().getParrainageCode();
+
+        parrainageCodeTextView.setText(userParrainageCode);
+
+        shareCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(
+                        android.content.Intent.EXTRA_TEXT,
+                        getResources().getString(R.string.user_parrainage_share) + " " + userParrainageCode + " " +  Constants.URL_SITE);
+
+                startActivity(Intent.createChooser(
+                        sharingIntent,
+                        getResources().getString(R.string.user_parrainage_share_title)));
+            }
+        });
+
 
     }
 

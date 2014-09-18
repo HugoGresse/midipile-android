@@ -3,8 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:paddingBottom="@dimen/badge_padding_vertical"
-    android:paddingLeft="@dimen/badge_padding_horizontal"
-    android:paddingRight="@dimen/badge_padding_horizontal">
+    android:paddingLeft="@dimen/user_padding_horizontal"
+    android:paddingRight="@dimen/user_padding_horizontal">
 
     <ImageView
         android:layout_width="50dp"
@@ -22,7 +22,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text=""
         android:id="@+id/badgeTitleTextView"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/badgeIconImageView"
@@ -35,7 +35,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text=""
         android:id="@+id/badgeDescriptionTextView"
         android:layout_below="@+id/badgeTitleTextView"
         android:layout_alignLeft="@+id/badgeTitleTextView"
@@ -45,7 +45,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text=""
         android:id="@+id/badgeChanceTextView"
         android:layout_below="@+id/badgeDescriptionTextView"
         android:textColor="@color/midipiletheme_color"
