@@ -131,8 +131,6 @@ public class HomeActivity extends FragmentActivity
                 .build();
         midipileService = restAdapter.create(MidipileAPI.class);
 
-
-
         setContentView(R.layout.fragment_splashscren);
 
         enableSystemBarTint();
@@ -140,6 +138,10 @@ public class HomeActivity extends FragmentActivity
         loadLastDeals();
 
         user = getUser();
+
+        if( null != user){
+            refreshUserChance();
+        }
 
         super.onCreate(savedInstanceState);
     }
@@ -207,7 +209,6 @@ public class HomeActivity extends FragmentActivity
 
         // display user in nav drawer
         if(null != user){
-            Log.d(Constants.TAG, "display user");
             mNavigationDrawerFragment.displayUser(user);
         }
     }
@@ -741,6 +742,12 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    private void updateUser(User u){
+        user = u;
+        setSharedUser(user);
+        mNavigationDrawerFragment.displayUser(user);
+    }
+    
     private void updateUser(User u, List<Header> headers){
         user = u;
         user.setXwsseHeader(getResponseXwsseHeaders(headers));
@@ -762,8 +769,6 @@ public class HomeActivity extends FragmentActivity
             Type type = new TypeToken<User>() {}.getType();
             user = (User) new Gson().fromJson(userString, type);
         }
-
-        Log.d(Constants.TAG, Integer.toString(user.getChance()));
 
         return user;
     }
@@ -823,8 +828,6 @@ public class HomeActivity extends FragmentActivity
 
     @Override
     public void onUserSave(final Map<String, String> userData) {
-        Log.d(Constants.TAG, "onuserSave listener homeActivity");
-
         showDialog("Enregistrement de vos informations");
 
         midipileService.putUser(
@@ -872,7 +875,6 @@ public class HomeActivity extends FragmentActivity
                 } else {
                     String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
 
-                    Log.d(Constants.TAG, json.toString());
                     try {
                         Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
                         }.getType());
@@ -900,7 +902,52 @@ public class HomeActivity extends FragmentActivity
         changeFragment(new HomeFragment(), 1);
     }
 
+    public void refreshUserChance(){
 
+        if(null == user && user.getXwsseHeader().isEmpty()) {
+            return;
+        }
+
+        midipileService.getChances(user.getXwsseHeader(), new Callback<Map<String, String>>() {
+
+            @Override
+            public void success(Map<String, String> stringStringMap, Response response) {
+
+                try {
+                    user.setChance(stringStringMap.get("chance"));
+                    updateUser(user);
+                } catch (Exception e){
+                    Log.e(Constants.TAG, "Error while getting chance from refrech chance");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_user_refresh_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    loadBadgesList();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
+    }
 
 
 

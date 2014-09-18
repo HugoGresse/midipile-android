@@ -18,6 +18,7 @@
 
     <string name="dialog_user_title">Connexion à Midipile</string>
     <string name="dialog_user_text">Impossible de vous connectez. Vérifiez votre email et mot de passe.</string>
+    <string name="dialog_user_refresh_title">Impossible mettre à jour vos données.</string>
 
     <string name="dialog_register_title">Impossible de vous inscrire.</string>
 

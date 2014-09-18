@@ -17,6 +17,7 @@ public class Constants {
     public static final String URL_LOGINFB = "/users/loginfb";
     public static final String URL_FORGETPASSWORD = "/users/forgetpassword";
     public static final String URL_USER_ME = "/users/me";
+    public static final String URL_USER_ME_CHANCE = "/users/me/chance";
 
     public static final String TAG = "fr.creads.midipile";
 }

@@ -27,6 +27,12 @@ public interface MidipileAPI {
     public void getBadges(Callback<ArrayList<Badge>> callback);
 
 
+    @GET(Constants.URL_USER_ME_CHANCE)
+    public void getChances(
+            @Header("x-wsse") String xwsse,
+            Callback<Map<String, String>> callback);
+
+
     @FormUrlEncoded
     @POST(Constants.URL_LOGIN)
     public void postLogin(@Field("email") String email,
