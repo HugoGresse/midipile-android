@@ -94,17 +94,40 @@
     <string name="user_placeholder_prenom">Prénom</string>
     <string name="user_placeholder_email">Adresse email</string>
     <string name="user_placeholder_password">Mot de passe</string>
+    <string name="user_placeholder_phone">Téléphone</string>
+    <string name="user_placeholder_adress">Adresse de livraison</string>
+    <string name="user_placeholder_adress_more">Complément d\'adresse</string>
+    <string name="user_placeholder_postalcode">Code postal</string>
+    <string name="user_placeholder_city">Ville</string>
+    <string name="user_placeholder_country">Pays</string>
     <string name="user_placeholder_newsletter">Recevoir nos offres quotidiennes</string>
     <string name="user_placeholder_cgv">Accepter les conditions générales d\'utilisation*</string>
     <string name="user_placeholder_password_forget">Mot de passe oublié ?</string>
     <string name="user_login_button">Me connecter</string>
+    <string name="user_logout_button">Déconnexion</string>
     <string name="user_register_button">M\'inscrire</string>
+    <string name="user_save_button">Enregistrer</string>
     <string name="user_login_separator">Ou</string>
     <string name="user_login_fb_helper">Se connecter via Facebook connect</string>
     <string name="user_register_fb_helper">M\'inscrire via Facebook connect</string>
     <string name="user_login_fb_button">Utiliser Facebook connect</string>
 
 
+
+    <array name="user_tabs">
+        <item>Badges</item>
+        <item>Adresse</item>
+        <item>Parrainage</item>
+    </array>
+
+
+    <string name="user_adress_title">Mes coordonnées</string>
+    <string name="user_badge_title">Mes badges</string>
+    <string name="user_parrainage_title">Votre code de parrainage</string>
+    <string name="user_parrainage_filleuls">Vos filleuls :</string>
+    <string name="user_parrainage_filleuls_empty">Vous n\'avez pas de filleuls pour l\'instant</string>
+    <string name="user_parrainage_share">Un nouveau produit tendance à gagner ça te tente ? Rejoins moi sur Midipile ! Code parrainage : </string>
+    <string name="user_parrainage_share_title">Partagez votre code de parrainage</string>
 
 
 

@@ -177,7 +177,7 @@ public class LoginRegisterRegisterFragment extends Fragment{
             return;
         }
 
-        if(email.isEmpty()) {
+        if(lastname.isEmpty()) {
             Toast.makeText(getActivity(), "Merci de remplir votre nom",
                     Toast.LENGTH_LONG).show();
             return;

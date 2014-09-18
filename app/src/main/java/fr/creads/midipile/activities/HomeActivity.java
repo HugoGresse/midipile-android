@@ -49,8 +49,12 @@ import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
+import fr.creads.midipile.fragments.UserAdressFragment;
+import fr.creads.midipile.fragments.UserFragment;
+import fr.creads.midipile.listeners.OnBadgesLoadedListener;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
+import fr.creads.midipile.objects.Badge;
 import fr.creads.midipile.objects.Deal;
 import fr.creads.midipile.objects.Deals;
 import fr.creads.midipile.objects.User;
@@ -58,6 +62,7 @@ import fr.creads.midipile.utilities.MidipileUtilities;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.Header;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 import retrofit.mime.TypedByteArray;
@@ -68,7 +73,8 @@ public class HomeActivity extends FragmentActivity
             DealsDayFragment.onDealsSelectedListener,
             DealProductFragment.onButtonParticipateClickListener,
             LoginRegisterLoginFragment.onButtonClickListener,
-            LoginRegisterRegisterFragment.onRegisterButtonClickListener {
+            LoginRegisterRegisterFragment.onRegisterButtonClickListener,
+            UserAdressFragment.OnUserUpdateListener{
 
     private static final String USER_SHAREDPREF = "userlogged";
 
@@ -76,6 +82,8 @@ public class HomeActivity extends FragmentActivity
 
     private ArrayList<Deal> deals;
     private int dealPosition;
+
+    private List<Badge> badges;
 
     /**
      * The user connnected to the app
@@ -92,12 +100,8 @@ public class HomeActivity extends FragmentActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
-
     private OnDataLoadedListener mLoadedCallbacks;
+    private OnBadgesLoadedListener mBadgesLoadedCallbacks;
 
     private boolean homeFragmentAlreadyCreated = false;
 
@@ -110,7 +114,6 @@ public class HomeActivity extends FragmentActivity
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getActionBar().hide();
 
-        super.onCreate(savedInstanceState);
 
         mSimpleFacebook = SimpleFacebook.getInstance(this);
 
@@ -137,6 +140,8 @@ public class HomeActivity extends FragmentActivity
         loadLastDeals();
 
         user = getUser();
+
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -156,8 +161,7 @@ public class HomeActivity extends FragmentActivity
         switch (position) {
             case -1:
                 // click on user profil
-                Log.d("fr.creads.midipile", "Disconnecting");
-                user=null;
+                changeFragment( new UserFragment(), position);
                 break;
             case 0:
                 changeFragment( new HomeFragment(), position);
@@ -192,7 +196,6 @@ public class HomeActivity extends FragmentActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -238,14 +241,13 @@ public class HomeActivity extends FragmentActivity
 
 
         try {
-
             FragmentManager manager = getSupportFragmentManager();
             boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
 
             if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null){ //fragment not in back stack, create it.
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction.setCustomAnimations(enter, exit, pop_enter, pop_exit);
-                transaction.replace(R.id.container, frag, Integer.toString(position));
+                transaction.replace(R.id.container, frag, frag.getClass().getName());
                 transaction.addToBackStack(backStateName);
                 transaction.commit();
                 Log.d(Constants.TAG, "addToBackTack");
@@ -352,7 +354,6 @@ public class HomeActivity extends FragmentActivity
                 }
 
                 deals = (ArrayList<Deal>) d.getDeals();
-                Log.i("fr.creads.midipile", "Deals loaded");
 
                 if(null != mLoadedCallbacks) {
                     mLoadedCallbacks.onDealsLoaded();
@@ -446,18 +447,15 @@ public class HomeActivity extends FragmentActivity
 
         showDialog("Connexion à Midipile");
 
-        midipileService.postLogin(email, password, new Callback<User>() {
+        midipileService.postLogin(email, password, MidipileUtilities.getUniquePsuedoID(), new Callback<User>() {
             @Override
             public void success(User u, Response response) {
-
                 hideDialog();
-
-                setUser(u);
+                setUser(u, response.getHeaders());
             }
 
             @Override
             public void failure(RetrofitError error) {
-
                 hideDialog();
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
@@ -478,6 +476,29 @@ public class HomeActivity extends FragmentActivity
                 Log.i("fr.creads.midipile", error.getResponse().toString());
             }
         });
+    }
+
+    public String getResponseXwsseHeaders(List<Header> headers){
+        for (Header header : headers) {
+
+            if(null == header ){
+                continue;
+            }
+            if(null == header.getName()){
+                continue;
+            }
+            if(header.getName().isEmpty()){
+                continue;
+            }
+
+            if( null != header.getValue() && !header.getValue().isEmpty() ){
+                // add xwsse header to user
+                if(  header.getName().equals("X-Wsse") ||  header.getName().equals("x-wsse")){
+                    return header.getValue();
+                }
+            }
+        }
+        return "";
     }
 
     @Override
@@ -607,11 +628,10 @@ public class HomeActivity extends FragmentActivity
      */
     private void postFacebookLoginRegister(String fid, String email, String firstname, String lastname){
 
-        midipileService.postLoginFacebook(email, fid, fid, firstname, lastname, "1", new Callback<User>() {
+        midipileService.postLoginFacebook(email, fid, fid, firstname, lastname, "1", "android", MidipileUtilities.getUniquePsuedoID(), new Callback<User>() {
             @Override
             public void success(User u, Response response) {
-                setUser(u);
-
+                setUser(u, response.getHeaders());
                 hideDialog();
             }
 
@@ -652,13 +672,12 @@ public class HomeActivity extends FragmentActivity
 
         showDialog("Inscription à Midipile");
 
-        midipileService.postRegister(firstname, lastname, email, password, cgv, newsletter, new Callback<User>() {
+        midipileService.postRegister(firstname, lastname, email, password, cgv, newsletter,
+                "android", MidipileUtilities.getUniquePsuedoID(), new Callback<User>() {
             @Override
             public void success(User u, Response response) {
-
                 hideDialog();
-
-                setUser(u);
+                setUser(u, response.getHeaders());
             }
 
             @Override
@@ -687,20 +706,6 @@ public class HomeActivity extends FragmentActivity
                             .create();
 
                     alertDialog.show();
-
-
-                    alertDialogBuilder.setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,int id) {
-                            loadLastDeals();
-                        }
-                    });
-
-                    alertDialogBuilder.setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,int id) {
-                            dialog.cancel();
-                        }
-                    });
-
                 } else {
                     String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
 
@@ -724,17 +729,23 @@ public class HomeActivity extends FragmentActivity
         sp.edit().putString(USER_SHAREDPREF, new Gson().toJson(user)).apply();
     }
 
-    private void setUser(User u){
+    private void setUser(User u, List<Header> headers){
         Toast.makeText(getApplicationContext(), "Vous êtes connecté", Toast.LENGTH_LONG).show();
-
-        setSharedUser(u);
+        user = u;
+        user.setXwsseHeader(getResponseXwsseHeaders(headers));
+        setSharedUser(user);
         mNavigationDrawerFragment.displayUser(u);
-
-        Log.i(Constants.TAG, getUser().toString());
 
         if(null != getSelectedDeal()){
             onDealsSelected(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
         }
+    }
+
+    private void updateUser(User u, List<Header> headers){
+        user = u;
+        user.setXwsseHeader(getResponseXwsseHeaders(headers));
+        setSharedUser(user);
+        mNavigationDrawerFragment.displayUser(user);
     }
 
     public User getUser(){
@@ -810,6 +821,85 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+    @Override
+    public void onUserSave(final Map<String, String> userData) {
+        Log.d(Constants.TAG, "onuserSave listener homeActivity");
+
+        showDialog("Enregistrement de vos informations");
+
+        midipileService.putUser(
+                user.getXwsseHeader(),
+                userData.get("firstname"),
+                userData.get("lastname"),
+                userData.get("email"),
+                userData.get("phone"),
+                userData.get("adress"),
+                userData.get("adressMore"),
+                userData.get("postcode"),
+                userData.get("city"),
+                userData.get("password"),
+                new Callback<User>() {
+            @Override
+            public void success(User u, Response response) {
+                Toast.makeText(getApplicationContext(), "Vos coordonnées ont été modifiées", Toast.LENGTH_LONG).show();
+                updateUser(u, response.getHeaders());
+                hideDialog();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+
+                if(error.isNetworkError()){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_register_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    onUserSave(userData);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                } else {
+                    String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
+
+                    Log.d(Constants.TAG, json.toString());
+                    try {
+                        Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                        }.getType());
+
+                        List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
+                        Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+
+                    } catch (Exception e){
+                        Log.e(Constants.TAG, e.getMessage());
+                    }
+                }
+
+                hideDialog();
+            }
+        });
+    }
+
+    public void logoutUser(){
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        sp.edit().remove(USER_SHAREDPREF).apply();
+        user = null;
+        mNavigationDrawerFragment.hideUser();
+        Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
+
+        changeFragment(new HomeFragment(), 1);
+    }
+
 
 
 
@@ -829,4 +919,67 @@ public class HomeActivity extends FragmentActivity
     }
 
 
+
+
+
+
+    public void loadBadgesList(){
+
+        if(null != badges && !badges.isEmpty()){
+            return;
+        }
+
+        midipileService.getBadges(new Callback<ArrayList<Badge>>() {
+
+            @Override
+            public void success(ArrayList<Badge> badgeItems, Response response) {
+                badges = badgeItems;
+
+                UserFragment userFragment = (UserFragment) getSupportFragmentManager().findFragmentByTag(UserFragment.class.getName());
+
+                if (!(userFragment instanceof OnBadgesLoadedListener)) {
+                    throw new IllegalStateException(
+                      "Fragment must implement the OnBadgesLoadedListener.");
+                } else {
+                    mBadgesLoadedCallbacks = (OnBadgesLoadedListener) userFragment;
+                    mBadgesLoadedCallbacks.onBadgeLoaded(badges);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if(error.isNetworkError()){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_network_error_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    loadBadgesList();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
+    }
+
+    public List<Badge> getBadges(){
+        if(null == badges) {
+            return new ArrayList<Badge>();
+        } else {
+            return badges;
+        }
+
+    }
 }

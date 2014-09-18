@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:paddingBottom="@dimen/badge_padding_vertical"
+    android:paddingLeft="@dimen/user_padding_horizontal"
+    android:paddingRight="@dimen/user_padding_horizontal">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/badgeIconImageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_badgeapp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/list_background_badge"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/badgeTitleTextView"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/badgeIconImageView"
+        android:layout_toEndOf="@+id/badgeIconImageView"
+        android:textColor="@color/midipiletheme_color"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="@dimen/badge_title_size" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/badgeDescriptionTextView"
+        android:layout_below="@+id/badgeTitleTextView"
+        android:layout_alignLeft="@+id/badgeTitleTextView"
+        android:textColor="@color/midipile_black"
+        android:textSize="@dimen/badge_title_size" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/badgeChanceTextView"
+        android:layout_below="@+id/badgeDescriptionTextView"
+        android:textColor="@color/midipiletheme_color"
+        android:textSize="@dimen/badge_chance_size"
+        android:layout_alignLeft="@+id/badgeDescriptionTextView" />
+</RelativeLayout>

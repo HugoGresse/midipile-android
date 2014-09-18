@@ -27,6 +27,18 @@
                 android:layout_height="fill_parent"
                 android:layout_centerHorizontal="true">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_register"
+                    android:id="@+id/registerTitleTextView"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/user_form_title_sp"
+                    android:textColor="@color/user_text_color" />
+
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -34,14 +46,14 @@
                     android:ems="10"
                     android:id="@+id/userFirstNameEditText"
                     android:hint="@string/user_placeholder_prenom"
-                    android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/edittext_round"
                     android:textSize="@dimen/user_form_edit_sp"
                     android:layout_marginBottom="10dp"
                     android:textStyle="normal"
                     android:textColorLink="@color/user_text_color"
-                    android:textColorHint="@color/user_text_color_hint"/>
+                    android:textColorHint="@color/user_text_color_hint"
+                    android:layout_below="@+id/registerTitleTextView" />
 
                 <EditText
                     android:layout_width="fill_parent"

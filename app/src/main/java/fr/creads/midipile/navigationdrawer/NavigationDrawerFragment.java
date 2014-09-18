@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,6 +74,9 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private boolean headerUserDisplayed = false;
+
+    private TextView userNameTextView;
+    private TextView userChanceTextView;
 
     public NavigationDrawerFragment() {
     }
@@ -328,21 +330,36 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     public void displayUser(User user){
-        headerView =  ((LayoutInflater)getActionBar().getThemedContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.navigation_drawer_header, null, false);
+        // update view if user already displayed
+        if(headerUserDisplayed) {
+            userNameTextView.setText(user.getPrenom() + " " + user.getNom());
+            userChanceTextView.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
+        } else {
+            headerView =  ((LayoutInflater)getActionBar().getThemedContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                    .inflate(R.layout.navigation_drawer_header, null, false);
 
-        TextView name = (TextView) headerView.findViewById(R.id.userNameTextView);
-        TextView chance = (TextView) headerView.findViewById(R.id.userChanceTextView);
 
-        name.setText(user.getPrenom() + " " + user.getNom());
-        chance.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
+            headerView.setTag("navigationHeaderView");
 
-        mDrawerListView.addHeaderView(headerView);
+            userNameTextView = (TextView) headerView.findViewById(R.id.userNameTextView);
+            userChanceTextView = (TextView) headerView.findViewById(R.id.userChanceTextView);
 
-        headerUserDisplayed = true;
+            userNameTextView.setText(user.getPrenom() + " " + user.getNom());
+            userChanceTextView.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
 
-        mCurrentSelectedPosition = 1;
+            mDrawerListView.addHeaderView(headerView);
+
+            headerUserDisplayed = true;
+
+            mCurrentSelectedPosition = 1;
+        }
+    }
+
+
+    public void hideUser(){
+        mDrawerListView.removeHeaderView(mDrawerListView.findViewWithTag("navigationHeaderView"));
+        headerUserDisplayed = false;
     }
 
 }
