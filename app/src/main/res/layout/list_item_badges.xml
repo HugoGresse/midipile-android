@@ -2,21 +2,20 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:paddingLeft="@dimen/badge_padding_horizontal"
-    android:paddingRight="@dimen/badge_padding_horizontal"
-    android:paddingTop="@dimen/badge_padding_vertical"
     android:paddingBottom="@dimen/badge_padding_vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/badgeIconImageView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/ic_human"
+        android:src="@drawable/ic_badgeapp"
         android:layout_marginRight="10dp"
-        android:background="@color/midipiletheme_color" />
+        android:background="@drawable/list_background_badge"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +26,9 @@
         android:layout_toRightOf="@+id/badgeIconImageView"
         android:layout_toEndOf="@+id/badgeIconImageView"
         android:textColor="@color/midipiletheme_color"
-        android:textAllCaps="true" />
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="@dimen/badge_title_size" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +36,9 @@
         android:text="New Text"
         android:id="@+id/badgeDescriptionTextView"
         android:layout_below="@+id/badgeTitleTextView"
-        android:layout_alignLeft="@+id/badgeTitleTextView" />
+        android:layout_alignLeft="@+id/badgeTitleTextView"
+        android:textColor="@color/midipile_black"
+        android:textSize="@dimen/badge_title_size" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,6 +47,6 @@
         android:id="@+id/badgeChanceTextView"
         android:layout_below="@+id/badgeDescriptionTextView"
         android:textColor="@color/midipiletheme_color"
-        android:textSize="12sp"
+        android:textSize="@dimen/badge_chance_size"
         android:layout_alignLeft="@+id/badgeDescriptionTextView" />
 </RelativeLayout>

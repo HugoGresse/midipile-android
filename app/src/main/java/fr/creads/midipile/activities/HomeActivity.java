@@ -923,6 +923,11 @@ public class HomeActivity extends FragmentActivity
 
 
     public void loadBadgesList(){
+
+        if(null != badges && !badges.isEmpty()){
+            return;
+        }
+
         midipileService.getBadges(new Callback<ArrayList<Badge>>() {
 
             @Override
@@ -969,16 +974,9 @@ public class HomeActivity extends FragmentActivity
     }
 
     public List<Badge> getBadges(){
-
-        Log.d(Constants.TAG, "getting badges");
-
         if(null == badges) {
-
-            Log.d(Constants.TAG, "getting badges null");
             return new ArrayList<Badge>();
         } else {
-
-            Log.d(Constants.TAG, "getting badges not null");
             return badges;
         }
 

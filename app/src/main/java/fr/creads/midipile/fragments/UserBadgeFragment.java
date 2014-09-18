@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.List;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.BadgesAdapter;
+import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.objects.Badge;
 
 /**
@@ -27,6 +29,7 @@ public class UserBadgeFragment extends Fragment{
     private ListView badgeListView;
 
     private List<Badge> badges;
+    private List<Badge> userBadges;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -34,6 +37,7 @@ public class UserBadgeFragment extends Fragment{
         ((HomeActivity)getActivity()).loadBadgesList();
 
         badges =  ((HomeActivity)getActivity()).getBadges();
+        userBadges = ((HomeActivity)getActivity()).getUser().getBadges();
     }
 
     @Override
@@ -63,6 +67,19 @@ public class UserBadgeFragment extends Fragment{
 
     public void setBadgeAdapter(List<Badge> badges){
         if(null != badgeListView){
+
+
+            for (int i = 0; i < userBadges.size(); i++) {
+                Badge elementOne = userBadges.get(i);
+                if (badges.contains(elementOne)) {
+                    //element in one is removed from two
+                    badges.get(badges.indexOf(elementOne)).setUserBadge(true);
+                    Log.d(Constants.TAG, " set selected badge ture --------");
+                }
+            }
+
+
+
             badgeListView.setAdapter(new BadgesAdapter(getActivity().getApplicationContext(), badges));
         }
     }

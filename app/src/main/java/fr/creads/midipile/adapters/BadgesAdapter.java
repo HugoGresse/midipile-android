@@ -2,6 +2,10 @@ package fr.creads.midipile.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrixColorFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.objects.Badge;
 
 /**
@@ -26,10 +31,24 @@ public class BadgesAdapter extends BaseAdapter {
     private ArrayList<Badge> badgesItems;
     private Badge mCurrentBadge;
 
+    ColorFilter colorFilter;
+
     public BadgesAdapter(android.content.Context context, List<Badge> badges){
         this.context = context;
         this.badgesItems = (ArrayList<Badge>) badges;
 
+
+        int iColor = Color.parseColor("#ffffff");
+
+        int red = (iColor & 0xFF0000) / 0xFFFF;
+        int green = (iColor & 0xFF00) / 0xFF;
+        int blue = iColor & 0xFF;
+
+        float[] matrix = { 0, 0, 0, 0, red
+                , 0, 0, 0, 0, green
+                , 0, 0, 0, 0, blue
+                , 0, 0, 0, 1, 0 };
+        colorFilter = new ColorMatrixColorFilter(matrix);
     }
 
     @Override
@@ -57,7 +76,21 @@ public class BadgesAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_item_badges, null);
         }
 
+
         ImageView image = (ImageView) convertView.findViewById(R.id.badgeIconImageView);
+
+        if(mCurrentBadge.getId() <= 3){
+            image.setImageDrawable( context.getResources().getDrawable(R.drawable.ic_badgeparrainage) );
+        } else if(mCurrentBadge.getId() == 4){
+            image.setImageDrawable( context.getResources().getDrawable(R.drawable.ic_badgelike) );
+        }
+
+        if(mCurrentBadge.isUserBadge()){
+            Log.d(Constants.TAG, "badge selected ================");
+            image.setColorFilter(colorFilter);
+            convertView.setSelected(true);
+        }
+
 
         TextView title = (TextView) convertView.findViewById(R.id.badgeTitleTextView);
         TextView description = (TextView) convertView.findViewById(R.id.badgeDescriptionTextView);
@@ -66,7 +99,7 @@ public class BadgesAdapter extends BaseAdapter {
         title.setText(mCurrentBadge.getNom());
         description.setText(mCurrentBadge.getDescription());
 
-        chance.setText(Integer.toString(mCurrentBadge.getCredit()));
+        chance.setText( "+" +  Integer.toString(mCurrentBadge.getCredit()) + " chances !");
 
         return convertView;
     }

@@ -12,5 +12,7 @@
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         android:divider="@null"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="0dp"
+        android:paddingLeft="@dimen/badge_padding_horizontal"
+        android:paddingRight="@dimen/badge_padding_horizontal" />
 </RelativeLayout>
