@@ -446,7 +446,7 @@ public class HomeActivity extends FragmentActivity
 
         showDialog("Connexion à Midipile");
 
-        midipileService.postLogin(email, password, new Callback<User>() {
+        midipileService.postLogin(email, password, MidipileUtilities.getUniquePsuedoID(), new Callback<User>() {
             @Override
             public void success(User u, Response response) {
                 hideDialog();

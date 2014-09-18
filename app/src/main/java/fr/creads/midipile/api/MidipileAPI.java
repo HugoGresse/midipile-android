@@ -1,7 +1,6 @@
 package fr.creads.midipile.api;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import fr.creads.midipile.objects.Badge;
@@ -32,6 +31,7 @@ public interface MidipileAPI {
     @POST(Constants.URL_LOGIN)
     public void postLogin(@Field("email") String email,
                           @Field("password") String password,
+                          @Field("id_device") String id_device,
                           Callback<User> callback);
 
 
