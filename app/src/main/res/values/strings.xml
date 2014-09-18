@@ -68,6 +68,7 @@
     <string name="deal_value_prefix">Valeur unitaire du lot : </string>
     <string name="deal_value_suffix"> LOTS à gagner</string>
     <string name="deal_participate_button">Je participe</string>
+    <string name="deal_participate_success">Participation enregistré !</string>
 
     <array name="deal_fragment_tabs">
         <item>La marque</item>

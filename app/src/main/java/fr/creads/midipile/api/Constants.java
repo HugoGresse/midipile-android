@@ -11,6 +11,7 @@ public class Constants {
     public static final String API_SECRET = "9,(3~[][<'{+5#}";
 
     public static final String URL_LASTDEALS = "/deals";
+    public static final String URL_DEAL_PLAY = "/deals/{id}/play";
     public static final String URL_BADGES = "/badges";
     public static final String URL_REGISTER = "/users";
     public static final String URL_LOGIN = "/users/login";

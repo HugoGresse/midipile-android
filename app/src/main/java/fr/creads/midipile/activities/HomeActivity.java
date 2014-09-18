@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.johnpersano.supertoasts.SuperActivityToast;
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -942,7 +945,7 @@ public class HomeActivity extends FragmentActivity
                             .setMessage(R.string.dialog_network_error)
                             .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    loadBadgesList();
+                                    refreshUserChance();
                                 }
                             })
                             .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
@@ -987,7 +990,94 @@ public class HomeActivity extends FragmentActivity
                             .setMessage(R.string.dialog_network_error)
                             .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    loadBadgesList();
+                                    refreshUser();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                if (error.getResponse().getStatus() == 403) {
+                    logoutInvisibleUser();
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void onParticipateClick(Deal deal) {
+
+        if(null != user){
+            // user logged
+            if(null == user && user.getXwsseHeader().isEmpty()) {
+                return;
+            }
+
+            // check adress filled and enough chance
+            if(user.getRue().isEmpty() || user.getCode_postal().isEmpty() || user.getVille().isEmpty() ){
+
+            } else if(user.getChance() <= 0){
+                Toast.makeText(getApplicationContext(), "Vous n'avez plus de chance.", Toast.LENGTH_SHORT).show();
+            } else {
+                postParticipation(deal);
+            }
+
+
+        } else {
+            // loginRegister fragment set on position 8
+            changeFragment( new LoginRegisterFragment(), 8);
+        }
+    }
+
+    public void postParticipation(Deal deal){
+
+        showDialog("Participation en cours");
+
+        midipileService.postPlayDeal(user.getXwsseHeader(), deal.getId(), new Callback<Map<String, String>>() {
+
+            @Override
+            public void success(Map<String, String> mapData, Response response) {
+                hideDialog();
+
+                getResources().getColor(R.color.midipiletheme_color)
+
+                try {
+
+                    SuperActivityToast successSuperToast = new SuperActivityToast(HomeActivity.this);
+                    successSuperToast.setDuration(SuperToast.Duration.EXTRA_LONG);
+                    successSuperToast.setBackground( R.drawable.toast_success );
+                    successSuperToast.setText( getResources().getString(R.string.deal_participate_success) );
+                    successSuperToast.setTextColor(Color.WHITE);
+                    successSuperToast.setTouchToDismiss(true);
+                    successSuperToast.setAnimations(SuperToast.Animations.FLYIN);
+                    successSuperToast.show();
+
+                } catch (Exception e){
+                    Log.d(Constants.TAG, "Erreur lors de la participation : 200 " + e.getMessage());
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                hideDialog();
+
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_user_refresh_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    postParticipation(getSelectedDeal());
                                 }
                             })
                             .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
@@ -1001,24 +1091,15 @@ public class HomeActivity extends FragmentActivity
                 }
 
                 if(error.getResponse().getStatus() == 403){
+                    Toast.makeText(getApplicationContext(), "Veuillez vous reconnecter à Midipile.", Toast.LENGTH_SHORT).show();
                     logoutInvisibleUser();
                 }
+
+                Log.i("fr.creads.midipile", error.getUrl());
+                Log.i("fr.creads.midipile", error.toString());
             }
         });
-    }
 
-
-    @Override
-    public void onParticipateClick(Deal deal) {
-
-        if(null != user){
-            // user logged // send particpation
-            Toast.makeText(getApplicationContext(), "Participation en cours", Toast.LENGTH_SHORT).show();
-
-        } else {
-            // loginRegister fragment set on position 8
-            changeFragment( new LoginRegisterFragment(), 8);
-        }
     }
 
 
