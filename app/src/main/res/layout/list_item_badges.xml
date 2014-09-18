@@ -2,7 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:paddingBottom="@dimen/badge_padding_vertical">
+    android:paddingBottom="@dimen/badge_padding_vertical"
+    android:paddingLeft="@dimen/badge_padding_horizontal"
+    android:paddingRight="@dimen/badge_padding_horizontal">
 
     <ImageView
         android:layout_width="50dp"
@@ -12,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:src="@drawable/ic_badgeapp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/list_background_badge"
         android:paddingTop="7dp"
         android:paddingBottom="7dp" />

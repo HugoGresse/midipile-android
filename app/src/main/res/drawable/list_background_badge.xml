@@ -2,9 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!--  Active tab -->
     <item
-        android:state_selected="true"
-        android:state_focused="false"
-        android:state_pressed="false"
+        android:state_activated="true"
         android:drawable="@drawable/list_background_badge_selected" />
     <!--  Inactive tab -->
     <item
@@ -12,13 +10,5 @@
         android:state_focused="false"
         android:state_pressed="false"
         android:drawable="@drawable/list_background_badge_default" />
-    <!--  Pressed tab -->
-    <item
-        android:state_pressed="true"
-        android:drawable="@drawable/list_background_badge_default" />
-    <!--  Selected tab (using d-pad) -->
-    <item android:state_focused="true"
-        android:state_selected="true"
-        android:state_pressed="false"
-        android:drawable="@drawable/list_background_badge_default" />
+
 </selector>

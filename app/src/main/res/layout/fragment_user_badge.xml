@@ -3,6 +3,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/user_badge_title"
+        android:id="@+id/mainTitleTextView"
+        android:layout_alignParentTop="true"
+        android:textSize="@dimen/user_form_title_sp"
+        android:textColor="@color/midipile_black"
+        android:layout_marginLeft="@dimen/badge_padding_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp" />
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,6 +25,7 @@
         android:headerDividersEnabled="false"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:paddingLeft="@dimen/badge_padding_horizontal"
-        android:paddingRight="@dimen/badge_padding_horizontal" />
+        android:choiceMode="multipleChoice"
+        android:layout_below="@+id/mainTitleTextView"
+        android:clickable="false" />
 </RelativeLayout>

@@ -114,7 +114,6 @@ public class HomeActivity extends FragmentActivity
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getActionBar().hide();
 
-        super.onCreate(savedInstanceState);
 
         mSimpleFacebook = SimpleFacebook.getInstance(this);
 
@@ -141,6 +140,8 @@ public class HomeActivity extends FragmentActivity
         loadLastDeals();
 
         user = getUser();
+
+        super.onCreate(savedInstanceState);
     }
 
     @Override

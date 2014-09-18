@@ -5,19 +5,20 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrixColorFilter;
-import android.util.Log;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.creads.midipile.R;
-import fr.creads.midipile.api.Constants;
+import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.objects.Badge;
 
 /**
@@ -27,13 +28,14 @@ import fr.creads.midipile.objects.Badge;
 public class BadgesAdapter extends BaseAdapter {
 
     private Context context;
-    LayoutInflater inflater; // inflater pour charger le XML pour l'item
+    private LayoutInflater inflater; // inflater pour charger le XML pour l'item
     private ArrayList<Badge> badgesItems;
     private Badge mCurrentBadge;
 
-    ColorFilter colorFilter;
+    private ColorFilter colorFilter;
+    private Typeface latoTypeface;
 
-    public BadgesAdapter(android.content.Context context, List<Badge> badges){
+    public BadgesAdapter(Activity context, List<Badge> badges){
         this.context = context;
         this.badgesItems = (ArrayList<Badge>) badges;
 
@@ -49,6 +51,8 @@ public class BadgesAdapter extends BaseAdapter {
                 , 0, 0, 0, 0, blue
                 , 0, 0, 0, 1, 0 };
         colorFilter = new ColorMatrixColorFilter(matrix);
+
+        latoTypeface =((HomeActivity) context).getLatoTypeface();
     }
 
     @Override
@@ -62,6 +66,12 @@ public class BadgesAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    // disable item selection
+    @Override
+    public boolean isEnabled(int position){
+        return false;
     }
 
     @Override
@@ -86,9 +96,8 @@ public class BadgesAdapter extends BaseAdapter {
         }
 
         if(mCurrentBadge.isUserBadge()){
-            Log.d(Constants.TAG, "badge selected ================");
+            ((ListView)parent).setItemChecked(position, true);
             image.setColorFilter(colorFilter);
-            convertView.setSelected(true);
         }
 
 
@@ -96,9 +105,12 @@ public class BadgesAdapter extends BaseAdapter {
         TextView description = (TextView) convertView.findViewById(R.id.badgeDescriptionTextView);
         TextView chance = (TextView) convertView.findViewById(R.id.badgeChanceTextView);
 
+        title.setTypeface(latoTypeface);
+        description.setTypeface(latoTypeface);
+        chance.setTypeface(latoTypeface);
+
         title.setText(mCurrentBadge.getNom());
         description.setText(mCurrentBadge.getDescription());
-
         chance.setText( "+" +  Integer.toString(mCurrentBadge.getCredit()) + " chances !");
 
         return convertView;
