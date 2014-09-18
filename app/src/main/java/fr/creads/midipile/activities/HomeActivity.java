@@ -140,7 +140,7 @@ public class HomeActivity extends FragmentActivity
         user = getUser();
 
         if( null != user){
-            refreshUserChance();
+            refreshUser();
         }
 
         super.onCreate(savedInstanceState);
@@ -745,14 +745,18 @@ public class HomeActivity extends FragmentActivity
     private void updateUser(User u){
         user = u;
         setSharedUser(user);
-        mNavigationDrawerFragment.displayUser(user);
+        if( null != mNavigationDrawerFragment){
+            mNavigationDrawerFragment.displayUser(user);
+        }
     }
-    
+
     private void updateUser(User u, List<Header> headers){
         user = u;
         user.setXwsseHeader(getResponseXwsseHeaders(headers));
         setSharedUser(user);
-        mNavigationDrawerFragment.displayUser(user);
+        if( null != mNavigationDrawerFragment){
+            mNavigationDrawerFragment.displayUser(user);
+        }
     }
 
     public User getUser(){
@@ -898,8 +902,15 @@ public class HomeActivity extends FragmentActivity
         user = null;
         mNavigationDrawerFragment.hideUser();
         Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
-
         changeFragment(new HomeFragment(), 1);
+    }
+    public void logoutInvisibleUser(){
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        sp.edit().remove(USER_SHAREDPREF).apply();
+        user = null;
+        if(null != mNavigationDrawerFragment){
+            mNavigationDrawerFragment.hideUser();
+        }
     }
 
     public void refreshUserChance(){
@@ -944,12 +955,57 @@ public class HomeActivity extends FragmentActivity
                     alertDialog.show();
                 }
 
+                if(error.getResponse().getStatus() == 403){
+                    logoutInvisibleUser();
+                }
+
                 Log.i("fr.creads.midipile", error.toString());
             }
         });
     }
 
+    public void refreshUser(){
+        if(null == user && user.getXwsseHeader().isEmpty()) {
+            return;
+        }
 
+        midipileService.getLoggedUser(user.getXwsseHeader(), new Callback<User>() {
+
+            @Override
+            public void success(User u, Response response) {
+                Log.d(Constants.TAG, user.getRue());
+                updateUser(u, response.getHeaders());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_user_refresh_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    loadBadgesList();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                if(error.getResponse().getStatus() == 403){
+                    logoutInvisibleUser();
+                }
+            }
+        });
+    }
 
 
     @Override
