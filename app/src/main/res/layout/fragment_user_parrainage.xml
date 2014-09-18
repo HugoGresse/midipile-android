@@ -59,7 +59,8 @@
                 android:id="@+id/filleulsTitleTextVIew"
                 android:layout_below="@+id/parrainageCodeTextView"
                 android:textColor="@color/midipile_black"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                android:textSize="@dimen/user_form_title_sp" />
 
             <TextView
                 android:layout_width="wrap_content"

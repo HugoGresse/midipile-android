@@ -13,9 +13,12 @@ import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.List;
+
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.api.Constants;
+import fr.creads.midipile.objects.User;
 
 /**
  * Author : Hugo Gresse
@@ -52,6 +55,7 @@ public class UserParrainageFragment extends Fragment {
 
         parrainageCodeTextView.setText(userParrainageCode);
 
+
         shareCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +74,14 @@ public class UserParrainageFragment extends Fragment {
         });
 
 
+        List<User> filleuls =  ((HomeActivity)getActivity()).getUser().getFilleuls();
+        String filleulsString = "";
+
+        for(User u : filleuls){
+            filleulsString += u.getPrenom() + " " + u.getNom() + "\n";
+        }
+
+        filleulsTextView.setText(filleulsString);
     }
 
     public static void setInsets(Activity context, View view) {
