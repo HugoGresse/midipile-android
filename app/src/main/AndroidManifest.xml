@@ -58,6 +58,11 @@
             android:label="@string/app_name" >
         </activity>
 
+
+        <receiver android:name=".broadcastreceiver.ParticipateNotificationBroadcastReceiver" >
+
+        </receiver>
+
     </application>
 
 </manifest>

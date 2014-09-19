@@ -1,8 +1,11 @@
 package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,12 +42,15 @@ import com.sromku.simple.fb.listeners.OnProfileListener;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
+import fr.creads.midipile.broadcastreceiver.ParticipateNotificationBroadcastReceiver;
 import fr.creads.midipile.fragments.DealFragment;
 import fr.creads.midipile.fragments.DealProductFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
@@ -81,6 +87,8 @@ public class HomeActivity extends FragmentActivity
             UserAdressFragment.OnUserUpdateListener{
 
     private static final String USER_SHAREDPREF = "userlogged";
+    private static final int ONEDAY_NOTIFICATION_ALARM = 1;
+    private static final int FIVEDAY_NOTIFICATION_ALARM = 2;
 
     private MidipileAPI midipileService;
 
@@ -908,6 +916,8 @@ public class HomeActivity extends FragmentActivity
         Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
         changeFragment(new HomeFragment(), 1);
     }
+
+
     public void logoutInvisibleUser(){
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
         sp.edit().remove(USER_SHAREDPREF).apply();
@@ -917,6 +927,9 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    /**
+     *
+     */
     public void refreshUserChance(){
 
         if(null == user && user.getXwsseHeader().isEmpty()) {
@@ -957,9 +970,7 @@ public class HomeActivity extends FragmentActivity
                             .create();
 
                     alertDialog.show();
-                }
-
-                if(error.getResponse().getStatus() == 403){
+                }else if(error.getResponse().getStatus() == 403){
                     logoutInvisibleUser();
                 }
 
@@ -968,6 +979,9 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+    /**
+     * Refresh user data : make api call and save result in the activity. Also refresh navigation drawer
+     */
     public void refreshUser(){
         if(null == user && user.getXwsseHeader().isEmpty()) {
             return;
@@ -977,7 +991,6 @@ public class HomeActivity extends FragmentActivity
 
             @Override
             public void success(User u, Response response) {
-                Log.d(Constants.TAG, user.getRue());
                 updateUser(u, response.getHeaders());
             }
 
@@ -1002,16 +1015,17 @@ public class HomeActivity extends FragmentActivity
                             .create();
 
                     alertDialog.show();
-                }
-
-                if (error.getResponse().getStatus() == 403) {
+                } else if (error.getResponse().getStatus() == 403) {
                     logoutInvisibleUser();
                 }
             }
         });
     }
 
-
+    /**
+     * Called when user click on an participation button from any framgent
+     * @param deal
+     */
     @Override
     public void onParticipateClick(Deal deal) {
 
@@ -1037,6 +1051,12 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    /**
+     * Post the deal participation to the API
+     * On success : set toast and display popup to choose the app to open if any
+     *
+     * @param deal
+     */
     public void postParticipation(Deal deal){
 
 
@@ -1072,7 +1092,6 @@ public class HomeActivity extends FragmentActivity
 
 
                 if( !getSelectedDeal().getPlayStore().isEmpty()){
-
                     String message = getResources().getString(R.string.deal_participate_share_message) + " " + getSelectedDeal().getSociete() + " ?";
 
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
@@ -1096,9 +1115,10 @@ public class HomeActivity extends FragmentActivity
                             .create();
 
                     alertDialog.show();
-
-
                 }
+
+                // set alarm few days after the participation
+                startNotificationAlarmManager();
 
             }
 
@@ -1125,9 +1145,7 @@ public class HomeActivity extends FragmentActivity
                             .create();
 
                     alertDialog.show();
-                }
-
-                if(error.getResponse().getStatus() == 403){
+                } else if(error.getResponse().getStatus() == 403){
                     Toast.makeText(getApplicationContext(), "Veuillez vous reconnecter à Midipile.", Toast.LENGTH_SHORT).show();
                     logoutInvisibleUser();
                 }
@@ -1139,11 +1157,72 @@ public class HomeActivity extends FragmentActivity
 
     }
 
+    /**
+     * Set notification to be open in the next 1 day and 5 days after the participation
+     * Called after success full participation, alarm is reset if two participation succesivly
+     */
+    public void startNotificationAlarmManager(){
+
+        int howMuchDayAfter = 1;
+        int secondNotificationDayAfter = 5;
+
+        Calendar currentCalendar = new GregorianCalendar();
+
+        Calendar dayCalendar = new GregorianCalendar();
+        dayCalendar.add(Calendar.DAY_OF_YEAR, currentCalendar.get(Calendar.DAY_OF_YEAR));
+        dayCalendar.set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR));
+        dayCalendar.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY));
+        dayCalendar.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE));
+        dayCalendar.set(Calendar.SECOND, currentCalendar.get(Calendar.SECOND));
+        dayCalendar.set(Calendar.DATE, currentCalendar.get(Calendar.DATE)  + howMuchDayAfter );
+        dayCalendar.set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH));
+
+        int dayOfWeek = dayCalendar.get(Calendar.DAY_OF_WEEK);
+
+        Intent newIntent = new Intent(getApplicationContext() , ParticipateNotificationBroadcastReceiver.class);
+        PendingIntent pendingIntent1  = PendingIntent.getBroadcast(this, ONEDAY_NOTIFICATION_ALARM, newIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager am1 = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        am1.set(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), pendingIntent1);
+
+
+        //Log.d(Constants.TAG, "AlarmManagerTest: : " + dayCalendar.get(Calendar.DATE) + "-"
+        //        + (dayCalendar.get(Calendar.MONTH) + 1)+ "-" + dayCalendar.get(Calendar.YEAR) + " "
+        //        + dayCalendar.get(Calendar.HOUR_OF_DAY) + ":" + dayCalendar.get(Calendar.MINUTE) + ":"
+        //        + dayCalendar.get(Calendar.SECOND) + "." + dayCalendar.get(Calendar.MILLISECOND));
 
 
 
 
 
+        Calendar dayCalendar2 = new GregorianCalendar();
+        dayCalendar2.add(Calendar.DAY_OF_YEAR, currentCalendar.get(Calendar.DAY_OF_YEAR));
+        dayCalendar2.set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR));
+        dayCalendar2.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY));
+        dayCalendar2.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE));
+        dayCalendar2.set(Calendar.SECOND, currentCalendar.get(Calendar.SECOND));
+        dayCalendar2.set(Calendar.DATE, currentCalendar.get(Calendar.DATE)  + secondNotificationDayAfter );
+        dayCalendar2.set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH));
+
+        int dayOfWeek2 = dayCalendar2.get(Calendar.DAY_OF_WEEK);
+
+        if(dayOfWeek2 == Calendar.SATURDAY){
+            dayCalendar2.set(Calendar.DATE, dayCalendar2.get(Calendar.DATE) +2);
+        } else if(dayOfWeek2 == Calendar.SUNDAY){
+            dayCalendar2.set(Calendar.DATE, dayCalendar2.get(Calendar.DATE) +1);
+        }
+
+        Intent newIntent2 = new Intent(getApplicationContext() , ParticipateNotificationBroadcastReceiver.class);
+        PendingIntent pendingIntent2  = PendingIntent.getBroadcast(this, FIVEDAY_NOTIFICATION_ALARM, newIntent2, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager am2 = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        am2.set(AlarmManager.RTC_WAKEUP, dayCalendar2.getTimeInMillis(), pendingIntent2);
+
+
+    }
+
+
+    /**
+     * Load list of badge. One loaded, notify UserFragment which called UserBadgeFragment
+     */
     public void loadBadgesList(){
 
         if(null != badges && !badges.isEmpty()){
@@ -1195,6 +1274,10 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+    /**
+     * Get the list of badges
+     * @return List<Badge>, empty list if no badge
+     */
     public List<Badge> getBadges(){
         if(null == badges) {
             return new ArrayList<Badge>();

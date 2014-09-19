@@ -3,6 +3,9 @@
 
     <string name="app_name">Midipile</string>
 
+    <string name="app_notification_title">Utilisez votre chance quotidienne !</string>
+    <string name="app_notification_message">Nous vous avons dénichés de nouveaux produits tendances. Venez les découvrir et tenter de les remporter ! </string>
+
     <!-- fb app id -->
     <string name="app_id">308179055936670</string>
 
@@ -70,9 +73,9 @@
     <string name="deal_open_button">Découvrir</string>
     <string name="deal_discover_title">Présentation de l\'offre</string>
     <string name="deal_value_prefix">Valeur unitaire du lot : </string>
-    <string name="deal_value_suffix"> LOTS à gagner</string>
+    <string name="deal_value_suffix"> LOT(S) à gagner</string>
     <string name="deal_participate_button">Je participe</string>
-    <string name="deal_participate_success">Participation enregistré !</string>
+    <string name="deal_participate_success">Participation enregistrée !</string>
     <string name="deal_participate_share_message">Voulez vous ouvrir l\'application de </string>
 
     <array name="deal_fragment_tabs">
