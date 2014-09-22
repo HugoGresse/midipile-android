@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +29,7 @@ import java.util.List;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
+import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.objects.Deal;
 
@@ -60,10 +62,15 @@ public class DealFragment extends Fragment
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+
+        deal = getArguments().getParcelable("deal");
+        Log.d(Constants.TAG, deal.toString());
+
         actionBar = myContext.getActionBar();
         this.setHasOptionsMenu(true);
 
         mTabsTitles = getResources().getStringArray(R.array.deal_fragment_tabs);
+
 
     }
 
@@ -88,7 +95,6 @@ public class DealFragment extends Fragment
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        deal = getArguments().getParcelable("deal");
 
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
