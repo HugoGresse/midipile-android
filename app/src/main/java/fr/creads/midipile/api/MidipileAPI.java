@@ -13,6 +13,7 @@ import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.PUT;
+import retrofit.http.Path;
 
 /**
  * Author : Hugo Gresse
@@ -25,6 +26,17 @@ public interface MidipileAPI {
 
     @GET(Constants.URL_BADGES)
     public void getBadges(Callback<ArrayList<Badge>> callback);
+
+    @GET(Constants.URL_USER_ME)
+    public void getLoggedUser(
+            @Header("x-wsse") String xwsse,
+            Callback<User> callback);
+
+    @GET(Constants.URL_USER_ME_CHANCE)
+    public void getChances(
+            @Header("x-wsse") String xwsse,
+            Callback<Map<String, String>> callback);
+
 
 
     @FormUrlEncoded
@@ -81,6 +93,12 @@ public interface MidipileAPI {
     @POST(Constants.URL_FORGETPASSWORD)
     public void postForgetPassword(@Field("email") String email,
                           Callback<Map<String, String>> callback);
+
+    @POST(Constants.URL_DEAL_PLAY)
+    public void postPlayDeal(
+            @Header("x-wsse") String xwsse,
+            @Path("id") int id,
+            Callback<Map<String, String>> callback);
 
 
 

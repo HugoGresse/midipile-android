@@ -1,12 +1,17 @@
 package fr.creads.midipile.activities;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +27,8 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.johnpersano.supertoasts.SuperActivityToast;
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,12 +42,15 @@ import com.sromku.simple.fb.listeners.OnProfileListener;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
+import fr.creads.midipile.broadcastreceiver.ParticipateNotificationBroadcastReceiver;
 import fr.creads.midipile.fragments.DealFragment;
 import fr.creads.midipile.fragments.DealProductFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
@@ -77,6 +87,8 @@ public class HomeActivity extends FragmentActivity
             UserAdressFragment.OnUserUpdateListener{
 
     private static final String USER_SHAREDPREF = "userlogged";
+    private static final int ONEDAY_NOTIFICATION_ALARM = 1;
+    private static final int FIVEDAY_NOTIFICATION_ALARM = 2;
 
     private MidipileAPI midipileService;
 
@@ -131,8 +143,6 @@ public class HomeActivity extends FragmentActivity
                 .build();
         midipileService = restAdapter.create(MidipileAPI.class);
 
-
-
         setContentView(R.layout.fragment_splashscren);
 
         enableSystemBarTint();
@@ -140,6 +150,10 @@ public class HomeActivity extends FragmentActivity
         loadLastDeals();
 
         user = getUser();
+
+        if( null != user){
+            refreshUser();
+        }
 
         super.onCreate(savedInstanceState);
     }
@@ -207,7 +221,6 @@ public class HomeActivity extends FragmentActivity
 
         // display user in nav drawer
         if(null != user){
-            Log.d(Constants.TAG, "display user");
             mNavigationDrawerFragment.displayUser(user);
         }
     }
@@ -741,11 +754,21 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    private void updateUser(User u){
+        user = u;
+        setSharedUser(user);
+        if( null != mNavigationDrawerFragment){
+            mNavigationDrawerFragment.displayUser(user);
+        }
+    }
+
     private void updateUser(User u, List<Header> headers){
         user = u;
         user.setXwsseHeader(getResponseXwsseHeaders(headers));
         setSharedUser(user);
-        mNavigationDrawerFragment.displayUser(user);
+        if( null != mNavigationDrawerFragment){
+            mNavigationDrawerFragment.displayUser(user);
+        }
     }
 
     public User getUser(){
@@ -762,8 +785,6 @@ public class HomeActivity extends FragmentActivity
             Type type = new TypeToken<User>() {}.getType();
             user = (User) new Gson().fromJson(userString, type);
         }
-
-        Log.d(Constants.TAG, Integer.toString(user.getChance()));
 
         return user;
     }
@@ -823,8 +844,6 @@ public class HomeActivity extends FragmentActivity
 
     @Override
     public void onUserSave(final Map<String, String> userData) {
-        Log.d(Constants.TAG, "onuserSave listener homeActivity");
-
         showDialog("Enregistrement de vos informations");
 
         midipileService.putUser(
@@ -872,7 +891,6 @@ public class HomeActivity extends FragmentActivity
                 } else {
                     String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
 
-                    Log.d(Constants.TAG, json.toString());
                     try {
                         Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
                         }.getType());
@@ -896,21 +914,136 @@ public class HomeActivity extends FragmentActivity
         user = null;
         mNavigationDrawerFragment.hideUser();
         Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
-
         changeFragment(new HomeFragment(), 1);
     }
 
 
+    public void logoutInvisibleUser(){
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        sp.edit().remove(USER_SHAREDPREF).apply();
+        user = null;
+        if(null != mNavigationDrawerFragment){
+            mNavigationDrawerFragment.hideUser();
+        }
+    }
 
+    /**
+     *
+     */
+    public void refreshUserChance(){
 
+        if(null == user && user.getXwsseHeader().isEmpty()) {
+            return;
+        }
 
+        midipileService.getChances(user.getXwsseHeader(), new Callback<Map<String, String>>() {
 
+            @Override
+            public void success(Map<String, String> stringStringMap, Response response) {
+
+                try {
+                    user.setChance(stringStringMap.get("chance"));
+                    updateUser(user);
+                } catch (Exception e){
+                    Log.e(Constants.TAG, "Error while getting chance from refrech chance");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_user_refresh_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    refreshUserChance();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }else if(error.getResponse().getStatus() == 403){
+                    logoutInvisibleUser();
+                }
+
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
+    }
+
+    /**
+     * Refresh user data : make api call and save result in the activity. Also refresh navigation drawer
+     */
+    public void refreshUser(){
+        if(null == user && user.getXwsseHeader().isEmpty()) {
+            return;
+        }
+
+        midipileService.getLoggedUser(user.getXwsseHeader(), new Callback<User>() {
+
+            @Override
+            public void success(User u, Response response) {
+                updateUser(u, response.getHeaders());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_user_refresh_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    refreshUser();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                } else if (error.getResponse().getStatus() == 403) {
+                    logoutInvisibleUser();
+                }
+            }
+        });
+    }
+
+    /**
+     * Called when user click on an participation button from any framgent
+     * @param deal
+     */
     @Override
     public void onParticipateClick(Deal deal) {
 
         if(null != user){
-            // user logged // send particpation
-            Toast.makeText(getApplicationContext(), "Participation en cours", Toast.LENGTH_SHORT).show();
+            // user logged
+            if(null == user && user.getXwsseHeader().isEmpty()) {
+                return;
+            }
+
+            // check adress filled and enough chance
+            if(user.getRue().isEmpty() || user.getCode_postal().isEmpty() || user.getVille().isEmpty() ){
+
+            } else if(user.getChance() <= 0){
+                Toast.makeText(getApplicationContext(), "Vous n'avez plus de chance.", Toast.LENGTH_SHORT).show();
+            } else {
+                postParticipation(deal);
+            }
+
 
         } else {
             // loginRegister fragment set on position 8
@@ -918,11 +1051,178 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    /**
+     * Post the deal participation to the API
+     * On success : set toast and display popup to choose the app to open if any
+     *
+     * @param deal
+     */
+    public void postParticipation(Deal deal){
+
+
+        showDialog("Participation en cours");
+
+        midipileService.postPlayDeal(user.getXwsseHeader(), deal.getId(), new Callback<Map<String, String>>() {
+
+            @Override
+            public void success(Map<String, String> mapData, Response response) {
+                hideDialog();
+
+                try {
+
+                    SuperActivityToast successSuperToast = new SuperActivityToast(HomeActivity.this);
+                    successSuperToast.setDuration(SuperToast.Duration.EXTRA_LONG);
+                    successSuperToast.setBackground( R.drawable.toast_success );
+                    successSuperToast.setText( getResources().getString(R.string.deal_participate_success) );
+                    successSuperToast.setTextColor(Color.WHITE);
+                    successSuperToast.setTouchToDismiss(true);
+                    successSuperToast.setAnimations(SuperToast.Animations.FLYIN);
+                    successSuperToast.show();
+
+                } catch (Exception e){
+                    Log.d(Constants.TAG, "Erreur lors de la participation : 200 " + e.getMessage());
+                }
+
+                try {
+                    user.setChance(mapData.get("chance"));
+                    updateUser(user);
+                } catch (Exception e){
+                    Log.e(Constants.TAG, "Error while getting chance after participating");
+                }
+
+
+                if( !getSelectedDeal().getPlayStore().isEmpty()){
+                    String message = getResources().getString(R.string.deal_participate_share_message) + " " + getSelectedDeal().getSociete() + " ?";
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setMessage(message)
+                            .setPositiveButton(R.string.dialog_deal_participate_share_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    try {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getSelectedDeal().getPlayStore())));
+                                    } catch (android.content.ActivityNotFoundException anfe) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getSelectedDeal().getPlayStore())));
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_deal_participate_share_cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                // set alarm few days after the participation
+                startNotificationAlarmManager();
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                hideDialog();
+
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_user_refresh_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    postParticipation(getSelectedDeal());
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                } else if(error.getResponse().getStatus() == 403){
+                    Toast.makeText(getApplicationContext(), "Veuillez vous reconnecter à Midipile.", Toast.LENGTH_SHORT).show();
+                    logoutInvisibleUser();
+                }
+
+                Log.i("fr.creads.midipile", error.getUrl());
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
+
+    }
+
+    /**
+     * Set notification to be open in the next 1 day and 5 days after the participation
+     * Called after success full participation, alarm is reset if two participation succesivly
+     */
+    public void startNotificationAlarmManager(){
+
+        int howMuchDayAfter = 1;
+        int secondNotificationDayAfter = 5;
+
+        Calendar currentCalendar = new GregorianCalendar();
+
+        Calendar dayCalendar = new GregorianCalendar();
+        dayCalendar.add(Calendar.DAY_OF_YEAR, currentCalendar.get(Calendar.DAY_OF_YEAR));
+        dayCalendar.set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR));
+        dayCalendar.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY));
+        dayCalendar.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE));
+        dayCalendar.set(Calendar.SECOND, currentCalendar.get(Calendar.SECOND));
+        dayCalendar.set(Calendar.DATE, currentCalendar.get(Calendar.DATE)  + howMuchDayAfter );
+        dayCalendar.set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH));
+
+        int dayOfWeek = dayCalendar.get(Calendar.DAY_OF_WEEK);
+
+        Intent newIntent = new Intent(getApplicationContext() , ParticipateNotificationBroadcastReceiver.class);
+        PendingIntent pendingIntent1  = PendingIntent.getBroadcast(this, ONEDAY_NOTIFICATION_ALARM, newIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager am1 = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        am1.set(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), pendingIntent1);
+
+
+        //Log.d(Constants.TAG, "AlarmManagerTest: : " + dayCalendar.get(Calendar.DATE) + "-"
+        //        + (dayCalendar.get(Calendar.MONTH) + 1)+ "-" + dayCalendar.get(Calendar.YEAR) + " "
+        //        + dayCalendar.get(Calendar.HOUR_OF_DAY) + ":" + dayCalendar.get(Calendar.MINUTE) + ":"
+        //        + dayCalendar.get(Calendar.SECOND) + "." + dayCalendar.get(Calendar.MILLISECOND));
 
 
 
 
 
+        Calendar dayCalendar2 = new GregorianCalendar();
+        dayCalendar2.add(Calendar.DAY_OF_YEAR, currentCalendar.get(Calendar.DAY_OF_YEAR));
+        dayCalendar2.set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR));
+        dayCalendar2.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY));
+        dayCalendar2.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE));
+        dayCalendar2.set(Calendar.SECOND, currentCalendar.get(Calendar.SECOND));
+        dayCalendar2.set(Calendar.DATE, currentCalendar.get(Calendar.DATE)  + secondNotificationDayAfter );
+        dayCalendar2.set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH));
+
+        int dayOfWeek2 = dayCalendar2.get(Calendar.DAY_OF_WEEK);
+
+        if(dayOfWeek2 == Calendar.SATURDAY){
+            dayCalendar2.set(Calendar.DATE, dayCalendar2.get(Calendar.DATE) +2);
+        } else if(dayOfWeek2 == Calendar.SUNDAY){
+            dayCalendar2.set(Calendar.DATE, dayCalendar2.get(Calendar.DATE) +1);
+        }
+
+        Intent newIntent2 = new Intent(getApplicationContext() , ParticipateNotificationBroadcastReceiver.class);
+        PendingIntent pendingIntent2  = PendingIntent.getBroadcast(this, FIVEDAY_NOTIFICATION_ALARM, newIntent2, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager am2 = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        am2.set(AlarmManager.RTC_WAKEUP, dayCalendar2.getTimeInMillis(), pendingIntent2);
+
+
+    }
+
+
+    /**
+     * Load list of badge. One loaded, notify UserFragment which called UserBadgeFragment
+     */
     public void loadBadgesList(){
 
         if(null != badges && !badges.isEmpty()){
@@ -974,6 +1274,10 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+    /**
+     * Get the list of badges
+     * @return List<Badge>, empty list if no badge
+     */
     public List<Badge> getBadges(){
         if(null == badges) {
             return new ArrayList<Badge>();

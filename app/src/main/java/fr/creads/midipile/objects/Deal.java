@@ -3,6 +3,8 @@ package fr.creads.midipile.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -27,6 +29,8 @@ public class Deal implements Parcelable {
     private String twitter;
     private String pinterest;
     private String appStore;
+
+    @SerializedName("play_store")
     private String playStore;
 
     private String logo;

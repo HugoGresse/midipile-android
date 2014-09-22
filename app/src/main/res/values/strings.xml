@@ -3,6 +3,9 @@
 
     <string name="app_name">Midipile</string>
 
+    <string name="app_notification_title">Utilisez votre chance quotidienne !</string>
+    <string name="app_notification_message">Nous vous avons dénichés de nouveaux produits tendances. Venez les découvrir et tenter de les remporter ! </string>
+
     <!-- fb app id -->
     <string name="app_id">308179055936670</string>
 
@@ -18,6 +21,7 @@
 
     <string name="dialog_user_title">Connexion à Midipile</string>
     <string name="dialog_user_text">Impossible de vous connectez. Vérifiez votre email et mot de passe.</string>
+    <string name="dialog_user_refresh_title">Impossible mettre à jour vos données.</string>
 
     <string name="dialog_register_title">Impossible de vous inscrire.</string>
 
@@ -30,6 +34,10 @@
     <string name="dialog_forgetpassword">Pour récupérer votre mot de passe, entrer votre adresse email.</string>
     <string name="dialog_forgetpassword_ok">Envoyer</string>
     <string name="dialog_forgetpassword_no">Annuler</string>
+
+
+    <string name="dialog_deal_participate_share_ok">Oui</string>
+    <string name="dialog_deal_participate_share_cancel">Non</string>
 
 
     !-- Nav Drawer Menu Items -->
@@ -65,8 +73,10 @@
     <string name="deal_open_button">Découvrir</string>
     <string name="deal_discover_title">Présentation de l\'offre</string>
     <string name="deal_value_prefix">Valeur unitaire du lot : </string>
-    <string name="deal_value_suffix"> LOTS à gagner</string>
+    <string name="deal_value_suffix"> LOT(S) à gagner</string>
     <string name="deal_participate_button">Je participe</string>
+    <string name="deal_participate_success">Participation enregistrée !</string>
+    <string name="deal_participate_share_message">Voulez vous ouvrir l\'application de </string>
 
     <array name="deal_fragment_tabs">
         <item>La marque</item>

@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -75,6 +76,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
     private boolean headerUserDisplayed = false;
 
+    private RelativeLayout headerNavDrawerContainer;
     private TextView userNameTextView;
     private TextView userChanceTextView;
 
@@ -127,7 +129,16 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        mDrawerListView.setAdapter(new NavigationDrawerAdapter(getActionBar().getThemedContext(), mDrawerItems));
+        // add headerView before setAdapter (for android <4.4 and set inner container to GONE
+        headerView =  inflater.inflate(R.layout.navigation_drawer_header, null, false);
+        headerView.setTag("navigationHeaderView");
+        headerNavDrawerContainer = (RelativeLayout) headerView.findViewById(R.id.headerNavDrawerContainer);
+        headerNavDrawerContainer.setVisibility(View.GONE);
+        userNameTextView = (TextView) headerView.findViewById(R.id.userNameTextView);
+        userChanceTextView = (TextView) headerView.findViewById(R.id.userChanceTextView);
+        mDrawerListView.addHeaderView(headerView);
+        mCurrentSelectedPosition = 1;
+
 
         footerView =  ((LayoutInflater)getActionBar().getThemedContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
@@ -135,6 +146,9 @@ public class NavigationDrawerFragment extends Fragment {
 
         // Adding button to listview at footer
         mDrawerListView.addFooterView(footerView);
+
+
+        mDrawerListView.setAdapter(new NavigationDrawerAdapter(getActionBar().getThemedContext(), mDrawerItems));
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
@@ -334,25 +348,16 @@ public class NavigationDrawerFragment extends Fragment {
         if(headerUserDisplayed) {
             userNameTextView.setText(user.getPrenom() + " " + user.getNom());
             userChanceTextView.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
+
+            headerNavDrawerContainer.setVisibility(View.VISIBLE);
         } else {
-            headerView =  ((LayoutInflater)getActionBar().getThemedContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.navigation_drawer_header, null, false);
-
-
-            headerView.setTag("navigationHeaderView");
-
-            userNameTextView = (TextView) headerView.findViewById(R.id.userNameTextView);
-            userChanceTextView = (TextView) headerView.findViewById(R.id.userChanceTextView);
 
             userNameTextView.setText(user.getPrenom() + " " + user.getNom());
             userChanceTextView.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
-
-            mDrawerListView.addHeaderView(headerView);
-
+            mCurrentSelectedPosition = 1;
             headerUserDisplayed = true;
 
-            mCurrentSelectedPosition = 1;
+            headerNavDrawerContainer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -360,6 +365,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void hideUser(){
         mDrawerListView.removeHeaderView(mDrawerListView.findViewWithTag("navigationHeaderView"));
         headerUserDisplayed = false;
+
     }
 
 }

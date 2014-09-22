@@ -111,6 +111,15 @@ public class User implements Parcelable {
             mUser.nom = source.readString();
             mUser.prenom = source.readString();
             mUser.email = source.readString();
+            mUser.rue = source.readString();
+            mUser.rue_bis = source.readString();
+            mUser.ville = source.readString();
+            mUser.newsletter = source.readString();
+            mUser.code_postal = source.readString();
+            mUser.mobile = source.readString();
+            mUser.chance = source.readString();
+            mUser.fid = source.readString();
+            mUser.credit = source.readString();
             return mUser;
         }
         @Override
