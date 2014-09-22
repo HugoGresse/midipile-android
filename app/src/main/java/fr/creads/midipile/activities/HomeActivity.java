@@ -948,6 +948,8 @@ public class HomeActivity extends FragmentActivity
         if(null != mNavigationDrawerFragment){
             mNavigationDrawerFragment.hideUser();
         }
+
+        whishlist = null;
     }
 
     /**

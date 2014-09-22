@@ -52,9 +52,13 @@ public class WhishlistFragment extends Fragment{
     }
 
     public void setAdapters(ArrayList<Deal> deals){
-        dealsList = deals;
 
-        whishList.setAdapter(new WhishlistAdapter(getActivity().getApplicationContext(), dealsList));
+        if(deals != null && deals.isEmpty()){
+
+        } else {
+            dealsList = deals;
+            whishList.setAdapter(new WhishlistAdapter(getActivity().getApplicationContext(), dealsList));
+        }
     }
 
     public static void setInsets(Activity context, View view) {

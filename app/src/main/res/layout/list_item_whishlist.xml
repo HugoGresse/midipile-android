@@ -26,7 +26,8 @@
         android:layout_height="28dp"
         android:layout_alignLeft="@+id/dealImageView"
         android:background="@color/deal_title_background"
-        android:layout_below="@+id/dealImageView">
+        android:layout_below="@+id/dealImageView"
+        android:id="@+id/whishlistTitleContainer">
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,6 +58,57 @@
             android:textSize="@dimen/whishlist_scroll_button_text"
             android:gravity="center"
             android:paddingLeft="8dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/whishlistTitleContainer"
+        android:background="@color/deal_title_background"
+        android:paddingBottom="@dimen/whishlist_link_margin_horizontal">
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/centerSpace" />
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deal_map_website"
+                android:id="@+id/button1"
+                android:background="@drawable/border_button"
+                android:paddingLeft="@dimen/deal_detail_padding_mapbutton_horizontal"
+                android:paddingRight="@dimen/deal_detail_padding_mapbutton_horizontal"
+                android:textAllCaps="true"
+                android:layout_column="0"
+                android:layout_marginLeft="@dimen/whishlist_link_margin_horizontal"
+                android:layout_marginTop="@dimen/whishlist_link_margin_horizontal"
+                android:layout_row="0"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/centerSpace"
+            android:textColor="@color/midipile_black" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deal_map_website"
+                android:id="@+id/button2"
+                android:background="@drawable/border_button"
+                android:paddingLeft="@dimen/deal_detail_padding_mapbutton_horizontal"
+                android:paddingRight="@dimen/deal_detail_padding_mapbutton_horizontal"
+                android:textAllCaps="true"
+                android:layout_column="1"
+                android:layout_marginTop="@dimen/whishlist_link_margin_horizontal"
+                android:layout_row="0"
+                android:layout_toRightOf="@+id/centerSpace"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="@dimen/whishlist_link_margin_horizontal"
+                android:textColor="@color/midipile_black" />
+
     </RelativeLayout>
 
 </RelativeLayout>

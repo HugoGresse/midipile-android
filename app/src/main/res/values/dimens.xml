@@ -32,5 +32,7 @@
 
 
     <dimen name="whishlist_scroll_button_text">12sp</dimen>
+    <dimen name="whishlist_link_margin_horizontal">20dp</dimen>
+
 
 </resources>

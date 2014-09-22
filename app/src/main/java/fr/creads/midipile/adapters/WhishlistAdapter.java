@@ -2,10 +2,13 @@ package fr.creads.midipile.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,10 +76,57 @@ public class WhishlistAdapter extends BaseAdapter {
         }
 
         TextView txtName = (TextView) convertView.findViewById(R.id.dealTitle);
+        Button openButton = (Button) convertView.findViewById(R.id.dealButtonOpen);
+
+
+        Button button1 = (Button) convertView.findViewById(R.id.button1);
+        Button button2 = (Button) convertView.findViewById(R.id.button2);
+
 
         txtName.setText(mCurrentDeal.getNom());
 
+
+        openButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        int buttonCount = 0;
+
+        if( !mCurrentDeal.getWebsite().isEmpty()){
+            button1.setText(R.string.deal_map_website);
+            buttonCount = 1;
+        }
+
+        if( !mCurrentDeal.getEshop().isEmpty()){
+            button2.setText(R.string.deal_map_eshop);
+            buttonCount = 2;
+        }
+
+        if(buttonCount == 1){
+            button2.setVisibility(View.GONE);
+        }
+
+        button1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+//                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrentDeal.getWebsite())));
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrentDeal.getEshop())));
+            }
+        });
+
         return convertView;
     }
+
+
 
 }
