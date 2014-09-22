@@ -151,10 +151,6 @@ public class HomeActivity extends FragmentActivity
 
         user = getUser();
 
-        if( null != user){
-            refreshUser();
-        }
-
         super.onCreate(savedInstanceState);
     }
 
@@ -364,6 +360,10 @@ public class HomeActivity extends FragmentActivity
 
                 if(null == mNavigationDrawerFragment){
                     afterOnCreate();
+
+                    if( null != user){
+                        refreshUser();
+                    }
                 }
 
                 deals = (ArrayList<Deal>) d.getDeals();
@@ -377,24 +377,31 @@ public class HomeActivity extends FragmentActivity
             public void failure(RetrofitError error) {
                 afterOnCreate();
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+                if(error.isNetworkError()){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
 
-                alertDialogBuilder.setTitle(R.string.dialog_network_error_title);
-                alertDialogBuilder.setMessage(R.string.dialog_network_error);
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_network_error_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    loadLastDeals();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
 
-                alertDialogBuilder.setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        loadLastDeals();
-                    }
-                });
-
-                alertDialogBuilder.setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        dialog.cancel();
-                    }
-                });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                    alertDialog.show();
+                } else {
+                    SuperActivityToast successSuperToast = new SuperActivityToast(HomeActivity.this);
+                    successSuperToast.setDuration(SuperToast.Duration.EXTRA_LONG);
+                    successSuperToast.setText( getResources().getString(R.string.toast_server_error) );
+                    successSuperToast.show();
+                }
 
                 Log.i("fr.creads.midipile", error.toString());
             }

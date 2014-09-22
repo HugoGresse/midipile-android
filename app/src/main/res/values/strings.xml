@@ -36,6 +36,9 @@
     <string name="dialog_forgetpassword_no">Annuler</string>
 
 
+    <string name="toast_server_error">Une erreur est survenue</string>
+
+
     <string name="dialog_deal_participate_share_ok">Oui</string>
     <string name="dialog_deal_participate_share_cancel">Non</string>
 
