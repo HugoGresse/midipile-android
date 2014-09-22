@@ -149,7 +149,8 @@ public class DealPlaceFragment extends Fragment
 
             map.addMarker(new MarkerOptions()
                             .position(pdv.getLatLng())
-                            .title(pdv.getIntitule() + "\n" + pdv.getAdresse())
+                            .title(pdv.getIntitule())
+                            .snippet(pdv.getAdresse())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
             );
         }
