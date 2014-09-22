@@ -30,7 +30,7 @@ import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
 import fr.creads.midipile.api.Constants;
-import fr.creads.midipile.listeners.OnDataLoadedListener;
+import fr.creads.midipile.listeners.OnDealsLoadedListener;
 import fr.creads.midipile.objects.Deal;
 
 /**
@@ -38,7 +38,7 @@ import fr.creads.midipile.objects.Deal;
  * Date : 03/09/14
  */
 public class DealFragment extends Fragment
-        implements TabHost.OnTabChangeListener, OnDataLoadedListener {
+        implements TabHost.OnTabChangeListener, OnDealsLoadedListener {
 
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;

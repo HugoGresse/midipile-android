@@ -30,4 +30,7 @@
     <dimen name="badge_title_size">12sp</dimen>
     <dimen name="badge_chance_size">12sp</dimen>
 
+
+    <dimen name="whishlist_scroll_button_text">12sp</dimen>
+
 </resources>

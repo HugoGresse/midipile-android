@@ -25,6 +25,7 @@ import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
+import fr.creads.midipile.listeners.OnDealsLoadedListener;
 import fr.creads.midipile.objects.Deal;
 
 /**
@@ -32,7 +33,7 @@ import fr.creads.midipile.objects.Deal;
  * Date : 27/08/14
  */
 public class HomeFragment extends Fragment
-        implements TabHost.OnTabChangeListener, OnDataLoadedListener{
+        implements TabHost.OnTabChangeListener, OnDealsLoadedListener, OnDataLoadedListener {
 
     private HomeActivity homeActivity;
     private FragmentActivity myContext;
@@ -84,6 +85,12 @@ public class HomeFragment extends Fragment
         homeActivity = (HomeActivity) activity;
     }
 
+    @Override
+    public void onDataLoaded() {
+        ((WhishlistFragment)mAdapter.getItem(1)).setAdapters(
+                (ArrayList<Deal> )((HomeActivity)getActivity()).getWhishlist()
+        );
+    }
 
     private void setupAdapter(View rootView){
 
@@ -169,4 +176,5 @@ public class HomeFragment extends Fragment
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
     }
+
 }
