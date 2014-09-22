@@ -146,7 +146,7 @@ public class DealProductFragment extends Fragment {
             for (String url : deal.getImages()){
                 ImageView imageView = new ImageView(getActivity());
                 imageView.setAdjustViewBounds(true);
-                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageLoader.displayImage(url, imageView, imageLoaderDisplayOptions);
                 productViewFlipper.addView(imageView);
             }
