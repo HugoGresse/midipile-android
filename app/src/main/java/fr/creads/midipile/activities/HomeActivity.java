@@ -199,6 +199,7 @@ public class HomeActivity extends FragmentActivity
         if(homeFragmentAlreadyCreated) return;
 
         getActionBar().show();
+        getActionBar().setTitle(null);
 
         setContentView(R.layout.activity_home);
 
