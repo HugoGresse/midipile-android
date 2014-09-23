@@ -126,14 +126,17 @@ public class WhishlistAdapter extends BaseAdapter {
         button1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrentDeal.getWebsite())));
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrentDeal.getWebsite()));
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(myIntent);
             }
         });
         button2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrentDeal.getEshop())));
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrentDeal.getEshop()));
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(myIntent);
             }
         });
 

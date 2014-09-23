@@ -80,38 +80,36 @@
             android:id="@+id/centerSpace" />
 
         <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/deal_map_website"
-                android:id="@+id/button1"
-                android:background="@drawable/border_button"
-                android:paddingLeft="@dimen/deal_detail_padding_mapbutton_horizontal"
-                android:paddingRight="@dimen/deal_detail_padding_mapbutton_horizontal"
-                android:textAllCaps="true"
-                android:layout_column="0"
-                android:layout_marginLeft="@dimen/whishlist_link_margin_horizontal"
-                android:layout_marginTop="@dimen/whishlist_link_margin_horizontal"
-                android:layout_row="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_map_website"
+            android:id="@+id/button1"
+            android:background="@drawable/border_button"
+            android:paddingLeft="@dimen/deal_detail_padding_mapbutton_horizontal"
+            android:paddingRight="@dimen/deal_detail_padding_mapbutton_horizontal"
+            android:textAllCaps="true"
+            android:layout_marginLeft="@dimen/whishlist_link_margin_horizontal"
+            android:layout_marginTop="@dimen/whishlist_link_margin_horizontal"
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/centerSpace"
-            android:textColor="@color/midipile_black" />
+            android:textColor="@color/midipile_black"
+            android:animateLayoutChanges="true" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/deal_map_website"
-                android:id="@+id/button2"
-                android:background="@drawable/border_button"
-                android:paddingLeft="@dimen/deal_detail_padding_mapbutton_horizontal"
-                android:paddingRight="@dimen/deal_detail_padding_mapbutton_horizontal"
-                android:textAllCaps="true"
-                android:layout_column="1"
-                android:layout_marginTop="@dimen/whishlist_link_margin_horizontal"
-                android:layout_row="0"
-                android:layout_toRightOf="@+id/centerSpace"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="@dimen/whishlist_link_margin_horizontal"
-                android:textColor="@color/midipile_black" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_map_website"
+            android:id="@+id/button2"
+            android:background="@drawable/border_button"
+            android:paddingLeft="@dimen/deal_detail_padding_mapbutton_horizontal"
+            android:paddingRight="@dimen/deal_detail_padding_mapbutton_horizontal"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/whishlist_link_margin_horizontal"
+            android:layout_toRightOf="@+id/centerSpace"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/whishlist_link_margin_horizontal"
+            android:textColor="@color/midipile_black"
+            android:animateLayoutChanges="true" />
 
     </RelativeLayout>
 
