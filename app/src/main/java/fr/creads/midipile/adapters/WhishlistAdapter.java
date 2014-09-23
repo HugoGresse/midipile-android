@@ -116,6 +116,7 @@ public class WhishlistAdapter extends BaseAdapter {
 
         if( !mCurrentDeal.getEshop().isEmpty()){
             button2.setText(R.string.deal_map_eshop);
+            button2.setVisibility(View.VISIBLE);
             buttonCount = 2;
         }
 

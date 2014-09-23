@@ -179,15 +179,18 @@ public class HomeActivity extends FragmentActivity
                 changeFragment( new UserFragment(), position);
                 break;
             case 0:
-                changeFragment( new HomeFragment(), position);
-                break;
-            case 1:
                 Bundle args=new Bundle();
-                args.putBoolean("whishlist", true);
+                args.putInt("whishlist", 0);
                 Fragment homeFrag = new HomeFragment();
                 homeFrag.setArguments(args);
-
                 changeFragment(homeFrag, position);
+                break;
+            case 1:
+                Bundle args2=new Bundle();
+                args2.putInt("whishlist", 1);
+                Fragment homeFrag2 = new HomeFragment();
+                homeFrag2.setArguments(args2);
+                changeFragment(homeFrag2, position);
                 break;
             case 2:
                 changeFragment( new LastWinnerFragment(), position);
@@ -281,7 +284,12 @@ public class HomeActivity extends FragmentActivity
                 transaction.commit();
                 Log.d(Constants.TAG, "addToBackTack");
             } else {
-                Log.d(Constants.TAG, "Remove from back stack");
+                Log.d(Constants.TAG, "nothing to do");
+                // set Whishlist tab if fragment is show
+                if(frag instanceof HomeFragment && frag.getArguments() != null){
+                    HomeFragment tempFrag = (HomeFragment) manager.findFragmentByTag(fragmentTag);
+                    tempFrag.setPosition(frag.getArguments().getInt("whishlist"));
+                }
             }
         } catch(IllegalStateException exception){
             Log.e(Constants.TAG, "Unable to commit fragment, could be activity as been killed in background. " + exception.toString());
