@@ -6,28 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/textView" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/user_login_button"
-            android:id="@+id/button"
-            android:background="@color/midipiletheme_color"
-            android:textColor="@android:color/white"
-            android:textAllCaps="true" />
-
-    </RelativeLayout>
-
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -37,4 +15,35 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:animateLayoutChanges="true" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_marginLeft="@dimen/deal_detail_padding_horizontal"
+        android:layout_marginRight="@dimen/deal_detail_padding_horizontal"
+        android:id="@+id/emptyWhishlistRelativeLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/whishlist_empty"
+            android:id="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/user_login_button"
+            android:id="@+id/loginButton"
+            android:background="@color/midipiletheme_color"
+            android:textColor="@android:color/white"
+            android:textAllCaps="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="15dp" />
+
+    </RelativeLayout>
 </RelativeLayout>

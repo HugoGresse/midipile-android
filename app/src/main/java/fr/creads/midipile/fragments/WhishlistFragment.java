@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -25,6 +27,8 @@ import fr.creads.midipile.objects.Deal;
 public class WhishlistFragment extends Fragment{
 
 
+    private RelativeLayout emptyWhishlistRelativeLayout;
+    private Button loginButton;
     private ListView whishList;
 
     private ArrayList<Deal> dealsList;
@@ -37,6 +41,8 @@ public class WhishlistFragment extends Fragment{
 
 
         whishList = (ListView) rootView.findViewById(R.id.listWhishlist);
+        emptyWhishlistRelativeLayout = (RelativeLayout) rootView.findViewById(R.id.emptyWhishlistRelativeLayout);
+        loginButton = (Button) rootView.findViewById(R.id.loginButton);
         setInsets(getActivity(), whishList);
 
         return rootView;
@@ -49,13 +55,20 @@ public class WhishlistFragment extends Fragment{
             setAdapters((ArrayList<Deal>) ((HomeActivity)getActivity()).getWhishlist());
         }
 
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity)getActivity()).openLogin();
+            }
+        });
     }
 
     public void setAdapters(ArrayList<Deal> deals){
 
         if(deals != null && deals.isEmpty()){
-
+            emptyWhishlistRelativeLayout.setVisibility(View.VISIBLE);
         } else {
+            emptyWhishlistRelativeLayout.setVisibility(View.GONE);
             dealsList = deals;
             whishList.setAdapter(new WhishlistAdapter(getActivity().getApplicationContext(), dealsList));
         }

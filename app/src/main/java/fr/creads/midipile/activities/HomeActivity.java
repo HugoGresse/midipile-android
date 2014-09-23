@@ -1061,6 +1061,14 @@ public class HomeActivity extends FragmentActivity
     }
 
     /**
+     * Open login page
+     */
+    public void openLogin(){
+        // loginRegister fragment set on position 8
+        changeFragment( new LoginRegisterFragment(), 8);
+    }
+
+    /**
      * Called when user click on an participation button from any framgent
      * @param deal
      */
