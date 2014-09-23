@@ -55,12 +55,12 @@ import fr.creads.midipile.fragments.DealFragment;
 import fr.creads.midipile.fragments.DealProductFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
 import fr.creads.midipile.fragments.HomeFragment;
-import fr.creads.midipile.fragments.LastWinnerFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
 import fr.creads.midipile.fragments.UserAdressFragment;
 import fr.creads.midipile.fragments.UserFragment;
+import fr.creads.midipile.fragments.WinnersFragment;
 import fr.creads.midipile.listeners.OnBadgesLoadedListener;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.listeners.OnDealsLoadedListener;
@@ -107,6 +107,11 @@ public class HomeActivity extends FragmentActivity
      * Deals user participated to
      */
     private List<Deal> whishlist;
+
+    /**
+     * Deals ended with winners
+     */
+    private List<Deal> winnersDeals;
 
     private SimpleFacebook mSimpleFacebook;
 
@@ -193,7 +198,7 @@ public class HomeActivity extends FragmentActivity
                 changeFragment(homeFrag2, position);
                 break;
             case 2:
-                changeFragment( new LastWinnerFragment(), position);
+                changeFragment( new WinnersFragment(), position);
                 break;
             case 3:
                 break;
@@ -1367,7 +1372,7 @@ public class HomeActivity extends FragmentActivity
                             .setMessage(R.string.dialog_network_error)
                             .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    loadBadgesList();
+                                    loadWhishList();
                                 }
                             })
                             .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
@@ -1387,9 +1392,79 @@ public class HomeActivity extends FragmentActivity
 
     /**
      * Get the whishlist which is a list of deal
-     * @return List<Deal>, empty list if no deal
+     * @return List<Deal>
      */
     public List<Deal> getWhishlist(){
         return whishlist;
+    }
+
+
+    /**
+     * Call midipile service to load the last 40 deals with winners
+     * Call onDataLoadedListener for telling WinnersFragments that data is loaded
+     */
+    public void loadWinnersList(){
+
+        if(null == winnersDeals){
+            winnersDeals = new ArrayList<Deal>();
+        }
+
+        midipileService.getWinnersDeals(new Callback<Deals>() {
+
+            @Override
+            public void success(Deals deals, Response response) {
+
+                winnersDeals.addAll(deals.getDeals());
+
+                WinnersFragment winnersFragment = (WinnersFragment) getSupportFragmentManager().findFragmentByTag(WinnersFragment.class.getName());
+
+                if (!(winnersFragment instanceof OnDataLoadedListener)) {
+                    throw new IllegalStateException(
+                            "Fragment must implement the OnDataLoadedListener for Winners.");
+                } else {
+                    OnDataLoadedListener mLoadedWinnersCallbacks = (OnDataLoadedListener) winnersFragment;
+                    mLoadedWinnersCallbacks.onDataLoaded();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_network_error_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    loadWinnersList();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                } else {
+                    SuperActivityToast successSuperToast = new SuperActivityToast(HomeActivity.this);
+                    successSuperToast.setDuration(SuperToast.Duration.EXTRA_LONG);
+                    successSuperToast.setText( getResources().getString(R.string.toast_server_error_winners) );
+                    successSuperToast.show();
+                }
+
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
+    }
+
+    /**
+     * Get the winners deals list
+     * @return List<Deal>
+     */
+    public List<Deal> getWinnersDeals(){
+        return winnersDeals;
     }
 }

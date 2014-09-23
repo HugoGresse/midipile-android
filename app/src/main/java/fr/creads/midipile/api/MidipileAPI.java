@@ -24,8 +24,11 @@ import retrofit.http.Query;
  */
 public interface MidipileAPI {
 
-    @GET(Constants.URL_LASTDEALS)
+    @GET(Constants.URL_DEALS)
     public void getLastDeals(Callback<Deals> callback);
+
+    @GET(Constants.URL_DEALS + "?active=false")
+    public void getWinnersDeals(Callback<Deals> callback);
 
     @GET(Constants.URL_BADGES)
     public void getBadges(Callback<ArrayList<Badge>> callback);
@@ -110,6 +113,5 @@ public interface MidipileAPI {
             @Query("from") int from,
             @Query("length") int length,
             Callback<List<Deal>> callback);
-
 
 }
