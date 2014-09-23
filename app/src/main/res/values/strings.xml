@@ -37,6 +37,7 @@
 
 
     <string name="toast_server_error">Une erreur est survenue</string>
+    <string name="toast_server_error_winners">Une erreur est survenue lors de la récupération des derniers gagnants</string>
 
 
     <string name="dialog_deal_participate_share_ok">Oui</string>
@@ -95,8 +96,10 @@
     <string name="whishlist_empty">Connectez-vous pour voir votre whishlist</string>
     <string name="whishlist_scroll_button">En savoir +</string>
 
-
-
+    <string name="winner_name">gagnant</string>
+    <string name="winners_name">gagnants</string>
+    <string name="winners_of">Résultat du </string>
+    <string name="winners_more">Et d\'autres</string>
 
     <string name="user_login">Connexion</string>
     <string name="user_register">Inscription</string>
