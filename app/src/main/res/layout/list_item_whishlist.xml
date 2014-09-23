@@ -8,7 +8,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
-    android:paddingBottom="@dimen/list_deal_padding_top">
+    android:paddingBottom="@dimen/list_deal_padding_top"
+    android:animateLayoutChanges="true">
 
     <ImageView
         android:layout_width="match_parent"
@@ -27,7 +28,8 @@
         android:layout_alignLeft="@+id/dealImageView"
         android:background="@color/deal_title_background"
         android:layout_below="@+id/dealImageView"
-        android:id="@+id/whishlistTitleContainer">
+        android:id="@+id/whishlistTitleContainer"
+        android:animateLayoutChanges="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,7 +69,9 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/whishlistTitleContainer"
         android:background="@color/deal_title_background"
-        android:paddingBottom="@dimen/whishlist_link_margin_horizontal">
+        android:paddingBottom="@dimen/whishlist_link_margin_horizontal"
+        android:id="@+id/linkContainerLayout"
+        android:animateLayoutChanges="true">
 
         <Space
             android:layout_width="20dp"

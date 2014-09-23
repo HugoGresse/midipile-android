@@ -34,5 +34,6 @@
         android:clipToPadding="false"
         android:id="@+id/listWhishlist"
         android:divider="@null"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="0dp"
+        android:animateLayoutChanges="true" />
 </LinearLayout>

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -75,23 +76,35 @@ public class WhishlistAdapter extends BaseAdapter {
             imageLoader.displayImage(url, image, imageLoaderDisplayOptions);
         }
 
+
+        final RelativeLayout linkContainer = (RelativeLayout) convertView.findViewById(R.id.linkContainerLayout);
+
         TextView txtName = (TextView) convertView.findViewById(R.id.dealTitle);
-        Button openButton = (Button) convertView.findViewById(R.id.dealButtonOpen);
-
-
+        final Button openButton = (Button) convertView.findViewById(R.id.dealButtonOpen);
         Button button1 = (Button) convertView.findViewById(R.id.button1);
         Button button2 = (Button) convertView.findViewById(R.id.button2);
 
 
         txtName.setText(mCurrentDeal.getNom());
 
+        linkContainer.setVisibility(View.GONE);
 
         openButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
+
+                if(linkContainer.getVisibility() == View.VISIBLE){
+                    linkContainer.setVisibility(View.GONE);
+                    openButton.setActivated(false);
+
+                } else {
+                    linkContainer.setVisibility(View.VISIBLE);
+                    openButton.setActivated(true);
+                }
             }
+
         });
 
         int buttonCount = 0;
