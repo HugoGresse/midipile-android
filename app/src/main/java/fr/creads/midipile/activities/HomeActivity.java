@@ -63,6 +63,7 @@ import fr.creads.midipile.fragments.UserAdressFragment;
 import fr.creads.midipile.fragments.UserFragment;
 import fr.creads.midipile.listeners.OnBadgesLoadedListener;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
+import fr.creads.midipile.listeners.OnDealsLoadedListener;
 import fr.creads.midipile.navigationdrawer.NavigationDrawerFragment;
 import fr.creads.midipile.objects.Badge;
 import fr.creads.midipile.objects.Deal;
@@ -102,6 +103,10 @@ public class HomeActivity extends FragmentActivity
      */
     private User user;
 
+    /**
+     * Deals user participated to
+     */
+    private List<Deal> whishlist;
 
     private SimpleFacebook mSimpleFacebook;
 
@@ -112,7 +117,7 @@ public class HomeActivity extends FragmentActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    private OnDataLoadedListener mLoadedCallbacks;
+    private OnDealsLoadedListener mLoadedCallbacks;
     private OnBadgesLoadedListener mBadgesLoadedCallbacks;
 
     private boolean homeFragmentAlreadyCreated = false;
@@ -174,10 +179,18 @@ public class HomeActivity extends FragmentActivity
                 changeFragment( new UserFragment(), position);
                 break;
             case 0:
-                changeFragment( new HomeFragment(), position);
+                Bundle args=new Bundle();
+                args.putInt("whishlist", 0);
+                Fragment homeFrag = new HomeFragment();
+                homeFrag.setArguments(args);
+                changeFragment(homeFrag, position);
                 break;
             case 1:
-                changeFragment( new LoginRegisterFragment(), position);
+                Bundle args2=new Bundle();
+                args2.putInt("whishlist", 1);
+                Fragment homeFrag2 = new HomeFragment();
+                homeFrag2.setArguments(args2);
+                changeFragment(homeFrag2, position);
                 break;
             case 2:
                 changeFragment( new LastWinnerFragment(), position);
@@ -220,6 +233,15 @@ public class HomeActivity extends FragmentActivity
         if(null != user){
             mNavigationDrawerFragment.displayUser(user);
         }
+
+
+
+        if( null != user){
+            refreshUser();
+
+            loadWhishList();
+        }
+
     }
 
     /**
@@ -238,12 +260,12 @@ public class HomeActivity extends FragmentActivity
      */
     private void changeFragment(Fragment frag, int position, int enter, int exit, int pop_enter, int pop_exit, boolean addToBackStack){
         // Fragment must implement the callback.
-        if (!(frag instanceof OnDataLoadedListener)) {
+        if (!(frag instanceof OnDealsLoadedListener)) {
             Log.e(Constants.TAG, "Fragment must implement the onDataLoadedListener.");
             // throw new IllegalStateException(
             // "Fragment must implement the onDataLoadedListener.");
         } else {
-            mLoadedCallbacks = (OnDataLoadedListener) frag;
+            mLoadedCallbacks = (OnDealsLoadedListener) frag;
         }
 
         String backStateName =  frag.getClass().getName();
@@ -262,7 +284,12 @@ public class HomeActivity extends FragmentActivity
                 transaction.commit();
                 Log.d(Constants.TAG, "addToBackTack");
             } else {
-                Log.d(Constants.TAG, "Remove from back stack");
+                Log.d(Constants.TAG, "nothing to do");
+                // set Whishlist tab if fragment is show
+                if(frag instanceof HomeFragment && frag.getArguments() != null){
+                    HomeFragment tempFrag = (HomeFragment) manager.findFragmentByTag(fragmentTag);
+                    tempFrag.setPosition(frag.getArguments().getInt("whishlist"));
+                }
             }
         } catch(IllegalStateException exception){
             Log.e(Constants.TAG, "Unable to commit fragment, could be activity as been killed in background. " + exception.toString());
@@ -361,10 +388,6 @@ public class HomeActivity extends FragmentActivity
 
                 if(null == mNavigationDrawerFragment){
                     afterOnCreate();
-
-                    if( null != user){
-                        refreshUser();
-                    }
                 }
 
                 deals = (ArrayList<Deal>) d.getDeals();
@@ -933,6 +956,8 @@ public class HomeActivity extends FragmentActivity
         if(null != mNavigationDrawerFragment){
             mNavigationDrawerFragment.hideUser();
         }
+
+        whishlist = null;
     }
 
     /**
@@ -1228,6 +1253,8 @@ public class HomeActivity extends FragmentActivity
     }
 
 
+
+
     /**
      * Load list of badge. One loaded, notify UserFragment which called UserBadgeFragment
      */
@@ -1293,5 +1320,76 @@ public class HomeActivity extends FragmentActivity
             return badges;
         }
 
+    }
+
+
+    public void loadWhishList(){
+        loadWhishList(0, 0);
+    }
+    public void loadWhishList(int from, int length){
+
+        if(null == whishlist){
+            whishlist = new ArrayList<Deal>();
+        }
+
+        if(from == 0){
+            from = 0;
+        }
+        if(length == 0){
+            length = 0;
+        }
+
+        midipileService.getWhishlist(user.getXwsseHeader(), from, length, new Callback<List<Deal>>() {
+
+            @Override
+            public void success(List<Deal> deals, Response response) {
+
+                whishlist.addAll(deals);
+
+                HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+
+                if (!(homeFragment instanceof OnDataLoadedListener)) {
+                    throw new IllegalStateException(
+                            "Fragment must implement the OnDataLoadedListener.");
+                } else {
+                    OnDataLoadedListener mLoadedWhishlistCallbacks = (OnDataLoadedListener) homeFragment;
+                    mLoadedWhishlistCallbacks.onDataLoaded();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_network_error_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    loadBadgesList();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                Log.i("fr.creads.midipile", error.toString());
+            }
+        });
+    }
+
+    /**
+     * Get the whishlist which is a list of deal
+     * @return List<Deal>, empty list if no deal
+     */
+    public List<Deal> getWhishlist(){
+        return whishlist;
     }
 }

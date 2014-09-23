@@ -1,9 +1,11 @@
 package fr.creads.midipile.api;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import fr.creads.midipile.objects.Badge;
+import fr.creads.midipile.objects.Deal;
 import fr.creads.midipile.objects.Deals;
 import fr.creads.midipile.objects.User;
 import retrofit.Callback;
@@ -14,6 +16,7 @@ import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 /**
  * Author : Hugo Gresse
@@ -100,6 +103,13 @@ public interface MidipileAPI {
             @Path("id") int id,
             Callback<Map<String, String>> callback);
 
+
+    @GET(Constants.URL_USER_ME_DEALS)
+    public void getWhishlist(
+            @Header("x-wsse") String xwsse,
+            @Query("from") int from,
+            @Query("length") int length,
+            Callback<List<Deal>> callback);
 
 
 }

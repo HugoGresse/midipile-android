@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,9 @@ import java.util.List;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
+import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
+import fr.creads.midipile.listeners.OnDealsLoadedListener;
 import fr.creads.midipile.objects.Deal;
 
 /**
@@ -32,7 +35,7 @@ import fr.creads.midipile.objects.Deal;
  * Date : 27/08/14
  */
 public class HomeFragment extends Fragment
-        implements TabHost.OnTabChangeListener, OnDataLoadedListener{
+        implements TabHost.OnTabChangeListener, OnDealsLoadedListener, OnDataLoadedListener {
 
     private HomeActivity homeActivity;
     private FragmentActivity myContext;
@@ -84,6 +87,12 @@ public class HomeFragment extends Fragment
         homeActivity = (HomeActivity) activity;
     }
 
+    @Override
+    public void onDataLoaded() {
+        ((WhishlistFragment)mAdapter.getItem(1)).setAdapters(
+                (ArrayList<Deal> )((HomeActivity)getActivity()).getWhishlist()
+        );
+    }
 
     private void setupAdapter(View rootView){
 
@@ -162,11 +171,19 @@ public class HomeFragment extends Fragment
 
     }
 
-
     public static void setInsets(Activity context, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
     }
+
+    public void setPosition(int pos){
+        if(null != tabHost && null != mPager){
+            Log.d(Constants.TAG, "Set whishlist tab");
+            tabHost.setCurrentTab(pos);
+            mPager.setCurrentItem(pos);
+        }
+    }
+
 }
