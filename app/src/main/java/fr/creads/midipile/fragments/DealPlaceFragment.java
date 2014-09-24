@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.api.Constants;
@@ -35,6 +36,8 @@ import fr.creads.midipile.objects.PointOfSale;
  */
 public class DealPlaceFragment extends Fragment
         implements MidipileSupportMapFragment.onGoogleMapLoadedListener{
+
+    private static final String SCREEN_NAME = DealFragment.SCREEN_NAME + "place/";
 
     private Deal deal;
 
@@ -122,6 +125,12 @@ public class DealPlaceFragment extends Fragment
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getWebsite())));
             }
         });
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME + deal.getNom());
     }
 
     public static void setInsets(Activity context, GoogleMap mMap2) {

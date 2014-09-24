@@ -4,6 +4,9 @@ import android.app.Application;
 import android.os.Environment;
 
 import com.facebook.SessionDefaultAudience;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -22,6 +25,9 @@ import java.io.File;
  */
 public class MidipileApplication extends Application {
 
+
+    // Google Analytics Property ID (tracking code)
+    private static final String PROPERTY_ID = "UA-32127107-6";
 
     @Override
     public void onCreate() {
@@ -53,5 +59,22 @@ public class MidipileApplication extends Application {
                 .setAskForAllPermissionsAtOnce(true)
                 .build();
         SimpleFacebook.setConfiguration(configuration);
+    }
+
+
+    /**
+     * Send screen name tracking
+     * @param screenName
+     */
+    public void sendScreenTracking(String screenName){
+        // Get tracker.
+        Tracker t = GoogleAnalytics.getInstance(this).newTracker(PROPERTY_ID);
+
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        t.setScreenName(screenName);
+
+        // Send a screen view.
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 }

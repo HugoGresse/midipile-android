@@ -15,6 +15,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.BadgesAdapter;
@@ -25,6 +26,8 @@ import fr.creads.midipile.objects.Badge;
  * Date : 16/09/14
  */
 public class UserBadgeFragment extends Fragment{
+
+    private static final String SCREEN_NAME = UserFragment.SCREEN_NAME + "Badges";
 
     private View headerView;
     private ListView badgeListView;
@@ -58,6 +61,12 @@ public class UserBadgeFragment extends Fragment{
             setBadgeAdapter(badges);
         }
         return rootView;
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

@@ -58,7 +58,7 @@ import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
-import fr.creads.midipile.fragments.UserAdressFragment;
+import fr.creads.midipile.fragments.UserProfilFragment;
 import fr.creads.midipile.fragments.UserFragment;
 import fr.creads.midipile.fragments.WinnersFragment;
 import fr.creads.midipile.listeners.OnBadgesLoadedListener;
@@ -85,7 +85,7 @@ public class HomeActivity extends FragmentActivity
             DealProductFragment.onButtonParticipateClickListener,
             LoginRegisterLoginFragment.onButtonClickListener,
             LoginRegisterRegisterFragment.onRegisterButtonClickListener,
-            UserAdressFragment.OnUserUpdateListener{
+            UserProfilFragment.OnUserUpdateListener{
 
     private static final String USER_SHAREDPREF = "userlogged";
     private static final int ONEDAY_NOTIFICATION_ALARM = 1;

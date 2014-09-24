@@ -14,6 +14,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.DealsAdapter;
@@ -25,19 +26,14 @@ import fr.creads.midipile.objects.Deal;
  */
 public class DealsDayFragment extends Fragment  {
 
+    private static final String SCREEN_NAME = "Offres du jour";
+
     private ListView dealsListView;
 
     private onDealsSelectedListener mDealsSelectedCallback;
 
     public interface onDealsSelectedListener {
         public void onDealsSelected(int dealId);
-    }
-
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -76,13 +72,12 @@ public class DealsDayFragment extends Fragment  {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
-
-
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public void setDealsAdapters(ArrayList<Deal> deals){

@@ -15,6 +15,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.WhishlistAdapter;
@@ -26,13 +27,13 @@ import fr.creads.midipile.objects.Deal;
  */
 public class WhishlistFragment extends Fragment{
 
+    private static final String SCREEN_NAME = "Whishlist";
 
     private RelativeLayout emptyWhishlistRelativeLayout;
     private Button loginButton;
     private ListView whishList;
 
     private ArrayList<Deal> dealsList;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +47,12 @@ public class WhishlistFragment extends Fragment{
         setInsets(getActivity(), whishList);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

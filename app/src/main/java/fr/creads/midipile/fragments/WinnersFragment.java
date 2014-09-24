@@ -14,6 +14,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.WinnersAdapter;
@@ -25,6 +26,8 @@ import fr.creads.midipile.objects.Deal;
  * Date : 23/09/14
  */
 public class WinnersFragment extends Fragment implements OnDataLoadedListener {
+
+    private static final String SCREEN_NAME = "Winners";
 
     private ListView winnersListView;
     private ProgressBar myProgressBar;
@@ -49,6 +52,12 @@ public class WinnersFragment extends Fragment implements OnDataLoadedListener {
         setInsets(getActivity(), winnersListView);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

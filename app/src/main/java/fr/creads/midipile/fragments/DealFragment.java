@@ -40,6 +40,8 @@ import fr.creads.midipile.objects.Deal;
 public class DealFragment extends Fragment
         implements TabHost.OnTabChangeListener, OnDealsLoadedListener {
 
+    protected static final String SCREEN_NAME = "offre/";
+
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;
 

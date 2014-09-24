@@ -38,6 +38,7 @@ public class UserFragment extends Fragment implements
         TabHost.OnTabChangeListener,
         OnBadgesLoadedListener {
 
+    protected static final String SCREEN_NAME = "user/";
 
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;
@@ -151,7 +152,7 @@ public class UserFragment extends Fragment implements
     private List<Fragment> createFragments() {
         List<Fragment> list = new ArrayList<Fragment>();
         list.add(Fragment.instantiate(myContext, UserBadgeFragment.class.getName()));
-        list.add(Fragment.instantiate(myContext, UserAdressFragment.class.getName()));
+        list.add(Fragment.instantiate(myContext, UserProfilFragment.class.getName()));
         list.add(Fragment.instantiate(myContext, UserParrainageFragment.class.getName()));
         return list;
     }

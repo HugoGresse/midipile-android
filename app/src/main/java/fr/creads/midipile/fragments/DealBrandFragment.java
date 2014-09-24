@@ -23,6 +23,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.regex.Pattern;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.objects.Deal;
@@ -33,9 +34,10 @@ import fr.creads.midipile.objects.Deal;
  */
 public class DealBrandFragment extends Fragment {
 
+    private static final String SCREEN_NAME = DealFragment.SCREEN_NAME + "brand/";
+
     ImageLoader imageLoader;
     DisplayImageOptions imageLoaderDisplayOptions;
-
 
     private Deal deal;
 
@@ -82,6 +84,12 @@ public class DealBrandFragment extends Fragment {
         setInsets(getActivity(), brandScrollView);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME + deal.getNom());
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

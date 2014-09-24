@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.objects.Deal;
@@ -37,6 +38,8 @@ import fr.creads.midipile.objects.Deal;
  * Date : 03/09/14
  */
 public class DealProductFragment extends Fragment {
+
+    private static final String SCREEN_NAME = DealFragment.SCREEN_NAME + "product/";
 
     ImageLoader imageLoader;
     DisplayImageOptions imageLoaderDisplayOptions;
@@ -112,6 +115,12 @@ public class DealProductFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME + deal.getNom());
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

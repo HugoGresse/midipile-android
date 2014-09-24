@@ -18,6 +18,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.objects.User;
@@ -26,7 +27,9 @@ import fr.creads.midipile.objects.User;
  * Author : Hugo Gresse
  * Date : 16/09/14
  */
-public class UserAdressFragment extends Fragment {
+public class UserProfilFragment extends Fragment {
+
+    private static final String SCREEN_NAME = UserFragment.SCREEN_NAME + "Profil";
 
     private OnUserUpdateListener mUserUpdateCallback;
 
@@ -130,6 +133,12 @@ public class UserAdressFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public static void setInsets(Activity context, View view) {

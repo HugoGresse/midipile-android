@@ -15,6 +15,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.api.Constants;
@@ -25,6 +26,8 @@ import fr.creads.midipile.objects.User;
  * Date : 16/09/14
  */
 public class UserParrainageFragment extends Fragment {
+
+    private static final String SCREEN_NAME = UserFragment.SCREEN_NAME + "Parrainage";
 
     private ImageButton shareCodeButton;
     private TextView parrainageCodeTextView;
@@ -46,6 +49,12 @@ public class UserParrainageFragment extends Fragment {
         filleulsTextView = (TextView) rootView.findViewById(R.id.filleulsListTextView);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

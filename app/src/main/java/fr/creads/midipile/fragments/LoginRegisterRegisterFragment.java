@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 
@@ -26,9 +27,11 @@ import fr.creads.midipile.activities.HomeActivity;
  */
 public class LoginRegisterRegisterFragment extends Fragment{
 
+
+    private static final String SCREEN_NAME = "Register";
+
     ImageLoader imageLoader;
     DisplayImageOptions imageLoaderDisplayOptions;
-
 
     private EditText lastnameEditText;
     private EditText firstnameEditText;
@@ -116,6 +119,12 @@ public class LoginRegisterRegisterFragment extends Fragment{
             throw new ClassCastException(activity.toString()
                     + " must implement onRegisterButtonClickListener");
         }
+    }
+
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
 
