@@ -119,6 +119,13 @@ public class DealBrandFragment extends Fragment {
             fbButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    // send click event tracking
+                    ((MidipileApplication)getActivity().getApplication()).sendEventTracking(
+                            R.string.tracker_deal_category,
+                            R.string.tracker_deal_action_brand_fb,
+                            deal.getNom());
+
                     String facebookUrl = deal.getFacebook();
                     try {
                         int versionCode = getActivity().getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
@@ -147,6 +154,14 @@ public class DealBrandFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = null;
+
+                    // send click event tracking
+                    ((MidipileApplication)getActivity().getApplication()).sendEventTracking(
+                            R.string.tracker_deal_category,
+                            R.string.tracker_deal_action_brand_tw,
+                            deal.getNom());
+
+
 //                    try {
 //                        Matcher matcher = pattern.matcher(deal.getTwitter());
 //                        while (matcher.find()) {
@@ -172,6 +187,13 @@ public class DealBrandFragment extends Fragment {
             webButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    // send click event tracking
+                    ((MidipileApplication)getActivity().getApplication()).sendEventTracking(
+                            R.string.tracker_deal_category,
+                            R.string.tracker_deal_action_brand_web,
+                            deal.getNom());
+
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getWebsite())));
                 }
             });

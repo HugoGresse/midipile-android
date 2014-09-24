@@ -116,12 +116,27 @@ public class DealPlaceFragment extends Fragment
         eshop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // send event participate
+                ((MidipileApplication)getActivity().getApplication()).sendEventTracking(
+                        R.string.tracker_deal_category,
+                        R.string.tracker_deal_action_brand_eshop,
+                        deal.getNom());
+
+
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getEshop())));
             }
         });
         website.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // send event participate
+                ((MidipileApplication)getActivity().getApplication()).sendEventTracking(
+                        R.string.tracker_deal_category,
+                        R.string.tracker_deal_action_brand_web,
+                        deal.getNom());
+
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getWebsite())));
             }
         });

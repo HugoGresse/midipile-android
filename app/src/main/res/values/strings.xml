@@ -151,4 +151,20 @@
 
 
 
+    <string name="tracker_deal_category">Deal</string>
+    <string name="tracker_user_category">User</string>
+    <string name="tracker_whishlist_category">Whishlist</string>
+    <string name="tracker_winners_category">Winners</string>
+    <string name="tracker_deal_action_participate">Participate</string>
+    <string name="tracker_deal_action_brand_fb">Click Brand Facebook</string>
+    <string name="tracker_deal_action_brand_tw">Click Brand Twitter</string>
+    <string name="tracker_deal_action_brand_web">Click Brand Website</string>
+    <string name="tracker_deal_action_brand_eshop">Click Brand Eshop</string>
+    <string name="tracker_user_action_login">Login email</string>
+    <string name="tracker_user_action_login_facebook">Login Facebook</string>
+    <string name="tracker_user_action_register">Register email</string>
+    <string name="tracker_whishlist_action_readmore">Read more</string>
+    <string name="tracker_winners_action_showname">Show name</string>
+
+
 </resources>

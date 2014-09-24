@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.objects.Deal;
@@ -141,6 +142,13 @@ public class WinnersAdapter extends BaseAdapter {
 
                 } else {
                     winnersInfoRelativeLayout.setVisibility(View.VISIBLE);
+
+
+                    // send read more event tracking
+                    ((MidipileApplication)context).sendEventTracking(
+                            R.string.tracker_winners_category,
+                            R.string.tracker_winners_action_showname,
+                            mCurrentDeal.getNom());
                 }
             }
 

@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.objects.Deal;
 
@@ -94,7 +95,6 @@ public class WhishlistAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-
                 if(linkContainer.getVisibility() == View.VISIBLE){
                     linkContainer.setVisibility(View.GONE);
                     openButton.setActivated(false);
@@ -102,6 +102,12 @@ public class WhishlistAdapter extends BaseAdapter {
                 } else {
                     linkContainer.setVisibility(View.VISIBLE);
                     openButton.setActivated(true);
+
+                    // send read more event tracking
+                    ((MidipileApplication)context).sendEventTracking(
+                            R.string.tracker_whishlist_category,
+                            R.string.tracker_whishlist_action_readmore,
+                            mCurrentDeal.getNom());
                 }
             }
 

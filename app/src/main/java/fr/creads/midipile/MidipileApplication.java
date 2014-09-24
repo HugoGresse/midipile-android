@@ -77,4 +77,16 @@ public class MidipileApplication extends Application {
         // Send a screen view.
         t.send(new HitBuilders.AppViewBuilder().build());
     }
+
+    public void sendEventTracking(int categoryId, int actionId, String label){
+        // Get tracker.
+        Tracker t = GoogleAnalytics.getInstance(this).newTracker(PROPERTY_ID);
+
+        // Build and send an Event.
+        t.send(new HitBuilders.EventBuilder()
+                .setCategory(getString(categoryId))
+                .setAction(getString(actionId))
+                .setLabel(label)
+                .build());
+    }
 }

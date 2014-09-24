@@ -47,6 +47,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
@@ -498,6 +499,13 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(User u, Response response) {
                 hideDialog();
+
+                // send login tracking event
+                ((MidipileApplication)getApplication()).sendEventTracking(
+                        R.string.tracker_user_category,
+                        R.string.tracker_user_action_login,
+                        u.getEmail());
+
                 setUser(u, response.getHeaders());
             }
 
@@ -678,6 +686,13 @@ public class HomeActivity extends FragmentActivity
         midipileService.postLoginFacebook(email, fid, fid, firstname, lastname, "1", "android", MidipileUtilities.getUniquePsuedoID(), new Callback<User>() {
             @Override
             public void success(User u, Response response) {
+
+                // send login/register fb tracking event
+                ((MidipileApplication)getApplication()).sendEventTracking(
+                        R.string.tracker_user_category,
+                        R.string.tracker_user_action_login_facebook,
+                        u.getEmail());
+
                 setUser(u, response.getHeaders());
                 hideDialog();
             }
@@ -1111,6 +1126,12 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(Map<String, String> mapData, Response response) {
                 hideDialog();
+
+                // send event participate
+                ((MidipileApplication)getApplication()).sendEventTracking(
+                        R.string.tracker_deal_category,
+                        R.string.tracker_deal_action_participate,
+                        getSelectedDeal().getNom());
 
                 try {
 
