@@ -239,14 +239,6 @@ public class HomeActivity extends FragmentActivity
             mNavigationDrawerFragment.displayUser(user);
         }
 
-
-
-        if( null != user){
-            refreshUser();
-
-            loadWhishList();
-        }
-
     }
 
     /**
@@ -393,6 +385,12 @@ public class HomeActivity extends FragmentActivity
 
                 if(null == mNavigationDrawerFragment){
                     afterOnCreate();
+
+                    if( null != user){
+                        refreshUser();
+                        loadWhishList();
+                    }
+
                 }
 
                 deals = (ArrayList<Deal>) d.getDeals();
@@ -1405,6 +1403,8 @@ public class HomeActivity extends FragmentActivity
     public List<Deal> getWhishlist(){
         return whishlist;
     }
+
+
 
 
     /**
