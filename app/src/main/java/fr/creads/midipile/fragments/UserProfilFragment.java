@@ -26,7 +26,7 @@ import fr.creads.midipile.objects.User;
  * Author : Hugo Gresse
  * Date : 16/09/14
  */
-public class UserAdressFragment extends Fragment {
+public class UserProfilFragment extends Fragment {
 
     private OnUserUpdateListener mUserUpdateCallback;
 

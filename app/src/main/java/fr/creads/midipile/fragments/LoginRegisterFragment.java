@@ -21,6 +21,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
@@ -30,6 +31,9 @@ import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
  * Date : 08/09/14
  */
 public class LoginRegisterFragment extends Fragment implements TabHost.OnTabChangeListener {
+
+    private static final String SCREEN_NAME_LOGIN = "Login";
+    private static final String SCREEN_NAME_REGISTER = "Register";
 
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;
@@ -113,7 +117,9 @@ public class LoginRegisterFragment extends Fragment implements TabHost.OnTabChan
         mPager = (ViewPager)rootView.findViewById(R.id.loginregisterpager);
         mPager.setAdapter(mAdapter);
 
-        // set currentItem to product
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_LOGIN);
+
+        // set currentItem
         // mPager.setCurrentItem(1);
         //tabHost.setCurrentTab(1);
 
@@ -124,6 +130,12 @@ public class LoginRegisterFragment extends Fragment implements TabHost.OnTabChan
                         // When swiping between pages, select the corresponding tab.
                         mPager.setCurrentItem(position);
                         tabHost.setCurrentTab(position);
+
+                        if(position == 0){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_LOGIN);
+                        } else {
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_REGISTER);
+                        }
                     }
                 }
         );

@@ -24,6 +24,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
@@ -38,6 +39,10 @@ public class UserFragment extends Fragment implements
         TabHost.OnTabChangeListener,
         OnBadgesLoadedListener {
 
+    private static final String SCREEN_NAME = "user/";
+    private static final String SCREEN_NAME_BADGE = SCREEN_NAME + "Badges";
+    private static final String SCREEN_NAME_PROFIL = SCREEN_NAME + "Profil";
+    private static final String SCREEN_NAME_PARRAINAGE = SCREEN_NAME + "Parrainage";
 
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;
@@ -71,6 +76,7 @@ public class UserFragment extends Fragment implements
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.fragmentUserLayout);
         setInsets(this.getActivity(), layout);
     }
@@ -134,6 +140,7 @@ public class UserFragment extends Fragment implements
         // set currentItem to product
         mPager.setCurrentItem(1);
         tabHost.setCurrentTab(1);
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PROFIL);
 
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -142,6 +149,14 @@ public class UserFragment extends Fragment implements
                         // When swiping between pages, select the corresponding tab.
                         mPager.setCurrentItem(position);
                         tabHost.setCurrentTab(position);
+
+                        if(position == 0){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_BADGE);
+                        } else if(position == 1){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PROFIL);
+                        } else {
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PARRAINAGE);
+                        }
                     }
                 }
         );
@@ -151,7 +166,7 @@ public class UserFragment extends Fragment implements
     private List<Fragment> createFragments() {
         List<Fragment> list = new ArrayList<Fragment>();
         list.add(Fragment.instantiate(myContext, UserBadgeFragment.class.getName()));
-        list.add(Fragment.instantiate(myContext, UserAdressFragment.class.getName()));
+        list.add(Fragment.instantiate(myContext, UserProfilFragment.class.getName()));
         list.add(Fragment.instantiate(myContext, UserParrainageFragment.class.getName()));
         return list;
     }

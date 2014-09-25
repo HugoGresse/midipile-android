@@ -80,6 +80,7 @@ public class LoginRegisterLoginFragment extends Fragment{
         return rootView;
     }
 
+
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -106,11 +107,6 @@ public class LoginRegisterLoginFragment extends Fragment{
             throw new ClassCastException(activity.toString()
                     + " must implement onButtonClickListener");
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     public static void setInsets(Activity context, View view) {

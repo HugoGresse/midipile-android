@@ -71,7 +71,7 @@ public class NavigationDrawerFragment extends Fragment {
     private String[] mNavMenuTitles;
     private TypedArray mNavMenuIcons;
 
-    private int mCurrentSelectedPosition = 0;
+    private int mCurrentSelectedPosition = 1;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private boolean headerUserDisplayed = false;
@@ -138,7 +138,6 @@ public class NavigationDrawerFragment extends Fragment {
         userChanceTextView = (TextView) headerView.findViewById(R.id.userChanceTextView);
         mDrawerListView.addHeaderView(headerView);
         mCurrentSelectedPosition = 1;
-
 
         footerView =  ((LayoutInflater)getActionBar().getThemedContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
@@ -248,13 +247,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (mCallbacks != null) {
-
-            if(headerUserDisplayed){
-                mCallbacks.onNavigationDrawerItemSelected(position-1);
-            } else {
-                mCallbacks.onNavigationDrawerItemSelected(position);
-            }
-
+            mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
 
@@ -354,7 +347,6 @@ public class NavigationDrawerFragment extends Fragment {
 
             userNameTextView.setText(user.getPrenom() + " " + user.getNom());
             userChanceTextView.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
-            mCurrentSelectedPosition = 1;
             headerUserDisplayed = true;
 
             headerNavDrawerContainer.setVisibility(View.VISIBLE);
@@ -363,9 +355,8 @@ public class NavigationDrawerFragment extends Fragment {
 
 
     public void hideUser(){
-        mDrawerListView.removeHeaderView(mDrawerListView.findViewWithTag("navigationHeaderView"));
+        headerNavDrawerContainer.setVisibility(View.GONE);
         headerUserDisplayed = false;
-
     }
 
 }

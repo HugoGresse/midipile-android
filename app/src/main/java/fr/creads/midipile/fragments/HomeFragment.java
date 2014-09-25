@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,10 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
-import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.listeners.OnDealsLoadedListener;
 import fr.creads.midipile.objects.Deal;
@@ -36,6 +35,9 @@ import fr.creads.midipile.objects.Deal;
  */
 public class HomeFragment extends Fragment
         implements TabHost.OnTabChangeListener, OnDealsLoadedListener, OnDataLoadedListener {
+
+    private static final String SCREEN_NAME1 = "Offres du jour";
+    private static final String SCREEN_NAME2 = "Whishlist";
 
     private HomeActivity homeActivity;
     private FragmentActivity myContext;
@@ -88,6 +90,11 @@ public class HomeFragment extends Fragment
     }
 
     @Override
+    public void onResume (){
+        super.onResume();
+    }
+
+    @Override
     public void onDataLoaded() {
         ((WhishlistFragment)mAdapter.getItem(1)).setAdapters(
                 (ArrayList<Deal> )((HomeActivity)getActivity()).getWhishlist()
@@ -121,7 +128,6 @@ public class HomeFragment extends Fragment
         mPager = (ViewPager)rootView.findViewById(R.id.homepager);
         mPager.setAdapter(mAdapter);
 
-
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
@@ -129,9 +135,17 @@ public class HomeFragment extends Fragment
                         // When swiping between pages, select the corresponding tab.
                         mPager.setCurrentItem(position);
                         tabHost.setCurrentTab(position);
+
+                        if(position == 0){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME1);
+                        } else {
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME2);
+                        }
                     }
                 }
         );
+
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME1);
 
     }
 
@@ -180,7 +194,6 @@ public class HomeFragment extends Fragment
 
     public void setPosition(int pos){
         if(null != tabHost && null != mPager){
-            Log.d(Constants.TAG, "Set whishlist tab");
             tabHost.setCurrentTab(pos);
             mPager.setCurrentItem(pos);
         }

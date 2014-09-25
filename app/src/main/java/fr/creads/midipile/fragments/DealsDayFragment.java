@@ -33,13 +33,6 @@ public class DealsDayFragment extends Fragment  {
         public void onDealsSelected(int dealId);
     }
 
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,13 +69,6 @@ public class DealsDayFragment extends Fragment  {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
-
-
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     public void setDealsAdapters(ArrayList<Deal> deals){

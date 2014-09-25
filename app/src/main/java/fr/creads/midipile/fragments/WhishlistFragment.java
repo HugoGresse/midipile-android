@@ -26,13 +26,13 @@ import fr.creads.midipile.objects.Deal;
  */
 public class WhishlistFragment extends Fragment{
 
+    private static final String SCREEN_NAME = "Whishlist";
 
     private RelativeLayout emptyWhishlistRelativeLayout;
     private Button loginButton;
     private ListView whishList;
 
     private ArrayList<Deal> dealsList;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

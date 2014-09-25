@@ -47,6 +47,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
@@ -58,7 +59,7 @@ import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
-import fr.creads.midipile.fragments.UserAdressFragment;
+import fr.creads.midipile.fragments.UserProfilFragment;
 import fr.creads.midipile.fragments.UserFragment;
 import fr.creads.midipile.fragments.WinnersFragment;
 import fr.creads.midipile.listeners.OnBadgesLoadedListener;
@@ -85,7 +86,7 @@ public class HomeActivity extends FragmentActivity
             DealProductFragment.onButtonParticipateClickListener,
             LoginRegisterLoginFragment.onButtonClickListener,
             LoginRegisterRegisterFragment.onRegisterButtonClickListener,
-            UserAdressFragment.OnUserUpdateListener{
+            UserProfilFragment.OnUserUpdateListener{
 
     private static final String USER_SHAREDPREF = "userlogged";
     private static final int ONEDAY_NOTIFICATION_ALARM = 1;
@@ -179,28 +180,28 @@ public class HomeActivity extends FragmentActivity
     public void onNavigationDrawerItemSelected(int position) {
 
         switch (position) {
-            case -1:
+            case 0:
                 // click on user profil
                 changeFragment( new UserFragment(), position);
                 break;
-            case 0:
+            case 1:
                 Bundle args=new Bundle();
                 args.putInt("whishlist", 0);
                 Fragment homeFrag = new HomeFragment();
                 homeFrag.setArguments(args);
                 changeFragment(homeFrag, position);
                 break;
-            case 1:
+            case 2:
                 Bundle args2=new Bundle();
                 args2.putInt("whishlist", 1);
                 Fragment homeFrag2 = new HomeFragment();
                 homeFrag2.setArguments(args2);
                 changeFragment(homeFrag2, position);
                 break;
-            case 2:
+            case 3:
                 changeFragment( new WinnersFragment(), position);
                 break;
-            case 3:
+            case 4:
                 break;
         }
     }
@@ -237,14 +238,6 @@ public class HomeActivity extends FragmentActivity
         // display user in nav drawer
         if(null != user){
             mNavigationDrawerFragment.displayUser(user);
-        }
-
-
-
-        if( null != user){
-            refreshUser();
-
-            loadWhishList();
         }
 
     }
@@ -345,6 +338,16 @@ public class HomeActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        int fragments = getSupportFragmentManager().getBackStackEntryCount();
+        if (fragments <= 1) {
+            // kill app since cannont fo anymore back
+            finish();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     protected void showDialog() {
         if (mProgressDialog == null) {
@@ -393,6 +396,12 @@ public class HomeActivity extends FragmentActivity
 
                 if(null == mNavigationDrawerFragment){
                     afterOnCreate();
+
+                    if( null != user){
+                        refreshUser();
+                        loadWhishList();
+                    }
+
                 }
 
                 deals = (ArrayList<Deal>) d.getDeals();
@@ -500,6 +509,13 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(User u, Response response) {
                 hideDialog();
+
+                // send login tracking event
+                ((MidipileApplication)getApplication()).sendEventTracking(
+                        R.string.tracker_user_category,
+                        R.string.tracker_user_action_login,
+                        Integer.toString(u.getId()));
+
                 setUser(u, response.getHeaders());
             }
 
@@ -680,6 +696,13 @@ public class HomeActivity extends FragmentActivity
         midipileService.postLoginFacebook(email, fid, fid, firstname, lastname, "1", "android", MidipileUtilities.getUniquePsuedoID(), new Callback<User>() {
             @Override
             public void success(User u, Response response) {
+
+                // send login/register fb tracking event
+                ((MidipileApplication)getApplication()).sendEventTracking(
+                        R.string.tracker_user_category,
+                        R.string.tracker_user_action_login_facebook,
+                        Integer.toString(u.getId()));
+
                 setUser(u, response.getHeaders());
                 hideDialog();
             }
@@ -1114,6 +1137,12 @@ public class HomeActivity extends FragmentActivity
             public void success(Map<String, String> mapData, Response response) {
                 hideDialog();
 
+                // send event participate
+                ((MidipileApplication)getApplication()).sendEventTracking(
+                        R.string.tracker_deal_category,
+                        R.string.tracker_deal_action_participate,
+                        getSelectedDeal().getNom());
+
                 try {
 
                     SuperActivityToast successSuperToast = new SuperActivityToast(HomeActivity.this);
@@ -1362,8 +1391,7 @@ public class HomeActivity extends FragmentActivity
                 HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
 
                 if (!(homeFragment instanceof OnDataLoadedListener)) {
-                    throw new IllegalStateException(
-                            "Fragment must implement the OnDataLoadedListener.");
+                    Log.d(Constants.TAG, "Fragment must implement the OnDataLoadedListener for Whishlist.");
                 } else {
                     OnDataLoadedListener mLoadedWhishlistCallbacks = (OnDataLoadedListener) homeFragment;
                     mLoadedWhishlistCallbacks.onDataLoaded();
@@ -1407,6 +1435,8 @@ public class HomeActivity extends FragmentActivity
     }
 
 
+
+
     /**
      * Call midipile service to load the last 40 deals with winners
      * Call onDataLoadedListener for telling WinnersFragments that data is loaded
@@ -1427,8 +1457,7 @@ public class HomeActivity extends FragmentActivity
                 WinnersFragment winnersFragment = (WinnersFragment) getSupportFragmentManager().findFragmentByTag(WinnersFragment.class.getName());
 
                 if (!(winnersFragment instanceof OnDataLoadedListener)) {
-                    throw new IllegalStateException(
-                            "Fragment must implement the OnDataLoadedListener for Winners.");
+                    Log.d(Constants.TAG, "Fragment must implement the OnDataLoadedListener  for Winners.");
                 } else {
                     OnDataLoadedListener mLoadedWinnersCallbacks = (OnDataLoadedListener) winnersFragment;
                     mLoadedWinnersCallbacks.onDataLoaded();

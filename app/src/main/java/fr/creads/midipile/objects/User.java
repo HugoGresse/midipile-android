@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class User implements Parcelable {
 
+    private Integer id;
     private String email;
     private String civilite;
     private String nom;
@@ -49,6 +50,7 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
+        parcel.writeInt(id);
         parcel.writeString(email);
         parcel.writeString(civilite);
         parcel.writeString(nom);
@@ -73,6 +75,7 @@ public class User implements Parcelable {
     public User(){}
 
     public User(Parcel in) {
+        id = in.readInt();
         email = in.readString();
         nom = in.readString();
         prenom = in.readString();
@@ -108,6 +111,7 @@ public class User implements Parcelable {
     public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {
         public User createFromParcel(Parcel source) {
             User mUser = new User();
+            mUser.id = source.readInt();
             mUser.nom = source.readString();
             mUser.prenom = source.readString();
             mUser.email = source.readString();
@@ -128,6 +132,13 @@ public class User implements Parcelable {
         }
     };
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;

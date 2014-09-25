@@ -29,7 +29,6 @@ public class LoginRegisterRegisterFragment extends Fragment{
     ImageLoader imageLoader;
     DisplayImageOptions imageLoaderDisplayOptions;
 
-
     private EditText lastnameEditText;
     private EditText firstnameEditText;
     private EditText emailEditText;
@@ -117,7 +116,6 @@ public class LoginRegisterRegisterFragment extends Fragment{
                     + " must implement onRegisterButtonClickListener");
         }
     }
-
 
     private void setButtonListener(){
         loginButton.setOnClickListener(new View.OnClickListener() {
