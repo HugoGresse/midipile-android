@@ -504,7 +504,7 @@ public class HomeActivity extends FragmentActivity
                 ((MidipileApplication)getApplication()).sendEventTracking(
                         R.string.tracker_user_category,
                         R.string.tracker_user_action_login,
-                        u.getEmail());
+                        Integer.toString(u.getId()));
 
                 setUser(u, response.getHeaders());
             }
@@ -691,7 +691,7 @@ public class HomeActivity extends FragmentActivity
                 ((MidipileApplication)getApplication()).sendEventTracking(
                         R.string.tracker_user_category,
                         R.string.tracker_user_action_login_facebook,
-                        u.getEmail());
+                        Integer.toString(u.getId()));
 
                 setUser(u, response.getHeaders());
                 hideDialog();
