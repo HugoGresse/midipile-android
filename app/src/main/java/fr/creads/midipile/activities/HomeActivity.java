@@ -338,6 +338,16 @@ public class HomeActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        int fragments = getSupportFragmentManager().getBackStackEntryCount();
+        if (fragments <= 1) {
+            // kill app since cannont fo anymore back
+            finish();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     protected void showDialog() {
         if (mProgressDialog == null) {
@@ -1381,8 +1391,7 @@ public class HomeActivity extends FragmentActivity
                 HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
 
                 if (!(homeFragment instanceof OnDataLoadedListener)) {
-                    throw new IllegalStateException(
-                            "Fragment must implement the OnDataLoadedListener.");
+                    Log.d(Constants.TAG, "Fragment must implement the OnDataLoadedListener for Whishlist.");
                 } else {
                     OnDataLoadedListener mLoadedWhishlistCallbacks = (OnDataLoadedListener) homeFragment;
                     mLoadedWhishlistCallbacks.onDataLoaded();
@@ -1448,8 +1457,7 @@ public class HomeActivity extends FragmentActivity
                 WinnersFragment winnersFragment = (WinnersFragment) getSupportFragmentManager().findFragmentByTag(WinnersFragment.class.getName());
 
                 if (!(winnersFragment instanceof OnDataLoadedListener)) {
-                    throw new IllegalStateException(
-                            "Fragment must implement the OnDataLoadedListener for Winners.");
+                    Log.d(Constants.TAG, "Fragment must implement the OnDataLoadedListener  for Winners.");
                 } else {
                     OnDataLoadedListener mLoadedWinnersCallbacks = (OnDataLoadedListener) winnersFragment;
                     mLoadedWinnersCallbacks.onDataLoaded();
