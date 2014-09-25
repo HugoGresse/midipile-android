@@ -15,7 +15,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
-import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.WhishlistAdapter;
@@ -52,7 +51,7 @@ public class WhishlistFragment extends Fragment{
     @Override
     public void onResume (){
         super.onResume();
-        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
+        //((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

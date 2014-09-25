@@ -14,7 +14,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
-import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.DealsAdapter;
@@ -25,8 +24,6 @@ import fr.creads.midipile.objects.Deal;
  * Date : 27/08/14
  */
 public class DealsDayFragment extends Fragment  {
-
-    private static final String SCREEN_NAME = "Offres du jour";
 
     private ListView dealsListView;
 
@@ -77,7 +74,7 @@ public class DealsDayFragment extends Fragment  {
     @Override
     public void onResume (){
         super.onResume();
-        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
+        //((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public void setDealsAdapters(ArrayList<Deal> deals){
