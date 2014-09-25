@@ -26,6 +26,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
@@ -41,6 +42,9 @@ public class DealFragment extends Fragment
         implements TabHost.OnTabChangeListener, OnDealsLoadedListener {
 
     protected static final String SCREEN_NAME = "offre/";
+    private static final String SCREEN_NAME_BRAND = SCREEN_NAME + "brand/";
+    private static final String SCREEN_NAME_PRODUCT = SCREEN_NAME + "product/";
+    private static final String SCREEN_NAME_PLACE = SCREEN_NAME + "place/";
 
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;
@@ -176,6 +180,7 @@ public class DealFragment extends Fragment
         // set currentItem to product
         mPager.setCurrentItem(1);
         tabHost.setCurrentTab(1);
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PRODUCT + deal.getNom());
 
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -184,6 +189,14 @@ public class DealFragment extends Fragment
                         // When swiping between pages, select the corresponding tab.
                         mPager.setCurrentItem(position);
                         tabHost.setCurrentTab(position);
+
+                        if(position == 0){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_BRAND + deal.getNom());
+                        } else if(position == 1){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PRODUCT + deal.getNom());
+                        } else {
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PLACE + deal.getNom());
+                        }
                     }
                 }
         );

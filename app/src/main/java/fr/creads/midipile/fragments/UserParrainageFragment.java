@@ -27,8 +27,6 @@ import fr.creads.midipile.objects.User;
  */
 public class UserParrainageFragment extends Fragment {
 
-    private static final String SCREEN_NAME = UserFragment.SCREEN_NAME + "Parrainage";
-
     private ImageButton shareCodeButton;
     private TextView parrainageCodeTextView;
     private TextView filleulsTextView;
@@ -49,12 +47,6 @@ public class UserParrainageFragment extends Fragment {
         filleulsTextView = (TextView) rootView.findViewById(R.id.filleulsListTextView);
 
         return rootView;
-    }
-
-    @Override
-    public void onResume (){
-        super.onResume();
-        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

@@ -30,7 +30,6 @@ import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
 import fr.creads.midipile.listeners.OnBadgesLoadedListener;
 import fr.creads.midipile.objects.Badge;
-import fr.creads.midipile.objects.Deal;
 
 /**
  * Author : Hugo Gresse
@@ -40,17 +39,15 @@ public class UserFragment extends Fragment implements
         TabHost.OnTabChangeListener,
         OnBadgesLoadedListener {
 
-    protected static final String SCREEN_NAME = "user/";
-    private static final String SCREEN_NAME_BRAND = SCREEN_NAME + "brand/";
-    private static final String SCREEN_NAME_PRODUCT = SCREEN_NAME + "product/";
-    private static final String SCREEN_NAME_PLACE = SCREEN_NAME + "place/";
+    private static final String SCREEN_NAME = "user/";
+    private static final String SCREEN_NAME_BADGE = SCREEN_NAME + "Badges";
+    private static final String SCREEN_NAME_PROFIL = SCREEN_NAME + "Profil";
+    private static final String SCREEN_NAME_PARRAINAGE = SCREEN_NAME + "Parrainage";
 
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;
 
     private FragmentActivity myContext;
-
-    private Deal deal;
 
     private TabHost tabHost;
     private TabFragmentPagerAdapter mAdapter;
@@ -79,8 +76,6 @@ public class UserFragment extends Fragment implements
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        deal = ((HomeActivity)getActivity()).getSelectedDeal();
 
         RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.fragmentUserLayout);
         setInsets(this.getActivity(), layout);
@@ -145,7 +140,7 @@ public class UserFragment extends Fragment implements
         // set currentItem to product
         mPager.setCurrentItem(1);
         tabHost.setCurrentTab(1);
-        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PRODUCT + deal.getNom());
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PROFIL);
 
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -156,11 +151,11 @@ public class UserFragment extends Fragment implements
                         tabHost.setCurrentTab(position);
 
                         if(position == 0){
-                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_BRAND + deal.getNom());
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_BADGE);
                         } else if(position == 1){
-                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PRODUCT + deal.getNom());
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PROFIL);
                         } else {
-                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PLACE + deal.getNom());
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PARRAINAGE);
                         }
                     }
                 }
