@@ -47,7 +47,7 @@
     !-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item >Offres du jour</item>
-        <item >Whishlist</item>
+        <item >Wishlist</item>
         <item >Derniers gagnants</item>
         <item >Parrainage</item>
     </string-array>
@@ -70,7 +70,7 @@
 
     <array name="home_fragment_tabs">
         <item>Offres du jour</item>
-        <item>Whish List</item>
+        <item>Wish List</item>
     </array>
 
     <string name="deal_blank_title">Titre de l\'offre</string>
@@ -93,7 +93,7 @@
     <string name="deal_map_website">Site Web</string>
 
 
-    <string name="whishlist_empty">Connectez-vous pour voir votre whishlist</string>
+    <string name="whishlist_empty">Connectez-vous pour voir votre wishlist</string>
     <string name="whishlist_scroll_button">En savoir +</string>
 
     <string name="winner_name">gagnant</string>
@@ -153,7 +153,7 @@
 
     <string name="tracker_deal_category">Deal</string>
     <string name="tracker_user_category">User</string>
-    <string name="tracker_whishlist_category">Whishlist</string>
+    <string name="tracker_whishlist_category">Wishlist</string>
     <string name="tracker_winners_category">Winners</string>
     <string name="tracker_deal_action_participate">Participate</string>
     <string name="tracker_deal_action_brand_fb">Click Brand Facebook</string>
