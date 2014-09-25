@@ -20,7 +20,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 
@@ -29,8 +28,6 @@ import fr.creads.midipile.activities.HomeActivity;
  * Date : 08/09/14
  */
 public class LoginRegisterLoginFragment extends Fragment{
-
-    private static final String SCREEN_NAME = "Login";
 
     ImageLoader imageLoader;
     DisplayImageOptions imageLoaderDisplayOptions;
@@ -110,12 +107,6 @@ public class LoginRegisterLoginFragment extends Fragment{
             throw new ClassCastException(activity.toString()
                     + " must implement onButtonClickListener");
         }
-    }
-
-    @Override
-    public void onResume (){
-        super.onResume();
-        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
     }
 
     public static void setInsets(Activity context, View view) {
