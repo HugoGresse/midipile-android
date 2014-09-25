@@ -34,8 +34,6 @@ import fr.creads.midipile.objects.Deal;
  */
 public class DealBrandFragment extends Fragment {
 
-    private static final String SCREEN_NAME = DealFragment.SCREEN_NAME + "brand/";
-
     ImageLoader imageLoader;
     DisplayImageOptions imageLoaderDisplayOptions;
 
@@ -84,12 +82,6 @@ public class DealBrandFragment extends Fragment {
         setInsets(getActivity(), brandScrollView);
 
         return rootView;
-    }
-
-    @Override
-    public void onResume (){
-        super.onResume();
-        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME + deal.getNom());
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

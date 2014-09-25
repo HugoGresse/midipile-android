@@ -24,11 +24,13 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
 import fr.creads.midipile.listeners.OnBadgesLoadedListener;
 import fr.creads.midipile.objects.Badge;
+import fr.creads.midipile.objects.Deal;
 
 /**
  * Author : Hugo Gresse
@@ -39,11 +41,16 @@ public class UserFragment extends Fragment implements
         OnBadgesLoadedListener {
 
     protected static final String SCREEN_NAME = "user/";
+    private static final String SCREEN_NAME_BRAND = SCREEN_NAME + "brand/";
+    private static final String SCREEN_NAME_PRODUCT = SCREEN_NAME + "product/";
+    private static final String SCREEN_NAME_PLACE = SCREEN_NAME + "place/";
 
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;
 
     private FragmentActivity myContext;
+
+    private Deal deal;
 
     private TabHost tabHost;
     private TabFragmentPagerAdapter mAdapter;
@@ -72,6 +79,9 @@ public class UserFragment extends Fragment implements
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        deal = ((HomeActivity)getActivity()).getSelectedDeal();
+
         RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.fragmentUserLayout);
         setInsets(this.getActivity(), layout);
     }
@@ -135,6 +145,7 @@ public class UserFragment extends Fragment implements
         // set currentItem to product
         mPager.setCurrentItem(1);
         tabHost.setCurrentTab(1);
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PRODUCT + deal.getNom());
 
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -143,6 +154,14 @@ public class UserFragment extends Fragment implements
                         // When swiping between pages, select the corresponding tab.
                         mPager.setCurrentItem(position);
                         tabHost.setCurrentTab(position);
+
+                        if(position == 0){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_BRAND + deal.getNom());
+                        } else if(position == 1){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PRODUCT + deal.getNom());
+                        } else {
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PLACE + deal.getNom());
+                        }
                     }
                 }
         );

@@ -48,12 +48,6 @@ public class WhishlistFragment extends Fragment{
         return rootView;
     }
 
-    @Override
-    public void onResume (){
-        super.onResume();
-        //((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
-    }
-
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 

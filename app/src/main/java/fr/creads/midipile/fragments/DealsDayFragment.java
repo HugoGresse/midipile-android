@@ -71,12 +71,6 @@ public class DealsDayFragment extends Fragment  {
         }
     }
 
-    @Override
-    public void onResume (){
-        super.onResume();
-        //((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
-    }
-
     public void setDealsAdapters(ArrayList<Deal> deals){
         dealsListView.setAdapter(new DealsAdapter(getActivity().getApplicationContext(), deals));
     }

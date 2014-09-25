@@ -37,8 +37,6 @@ import fr.creads.midipile.objects.PointOfSale;
 public class DealPlaceFragment extends Fragment
         implements MidipileSupportMapFragment.onGoogleMapLoadedListener{
 
-    private static final String SCREEN_NAME = DealFragment.SCREEN_NAME + "place/";
-
     private Deal deal;
 
     private View rootView;
@@ -140,12 +138,6 @@ public class DealPlaceFragment extends Fragment
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getWebsite())));
             }
         });
-    }
-
-    @Override
-    public void onResume (){
-        super.onResume();
-        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME + deal.getNom());
     }
 
     public static void setInsets(Activity context, GoogleMap mMap2) {
