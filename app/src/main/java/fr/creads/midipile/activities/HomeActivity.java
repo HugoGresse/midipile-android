@@ -180,28 +180,28 @@ public class HomeActivity extends FragmentActivity
     public void onNavigationDrawerItemSelected(int position) {
 
         switch (position) {
-            case -1:
+            case 0:
                 // click on user profil
                 changeFragment( new UserFragment(), position);
                 break;
-            case 0:
+            case 1:
                 Bundle args=new Bundle();
                 args.putInt("whishlist", 0);
                 Fragment homeFrag = new HomeFragment();
                 homeFrag.setArguments(args);
                 changeFragment(homeFrag, position);
                 break;
-            case 1:
+            case 2:
                 Bundle args2=new Bundle();
                 args2.putInt("whishlist", 1);
                 Fragment homeFrag2 = new HomeFragment();
                 homeFrag2.setArguments(args2);
                 changeFragment(homeFrag2, position);
                 break;
-            case 2:
+            case 3:
                 changeFragment( new WinnersFragment(), position);
                 break;
-            case 3:
+            case 4:
                 break;
         }
     }
