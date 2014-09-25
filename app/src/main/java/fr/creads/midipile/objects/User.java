@@ -173,6 +173,9 @@ public class User implements Parcelable {
     }
 
     public String getRue() {
+        if(rue == null) {
+            return "";
+        }
         return rue;
     }
 
@@ -189,6 +192,9 @@ public class User implements Parcelable {
     }
 
     public String getVille() {
+        if(ville == null){
+            return "";
+        }
         return ville;
     }
 
@@ -205,6 +211,9 @@ public class User implements Parcelable {
     }
 
     public String getCode_postal() {
+        if(code_postal == null){
+            return "";
+        }
         return code_postal;
     }
 

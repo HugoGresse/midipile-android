@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.util.OnClickWrapper;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -59,8 +61,8 @@ import fr.creads.midipile.fragments.HomeFragment;
 import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
-import fr.creads.midipile.fragments.UserProfilFragment;
 import fr.creads.midipile.fragments.UserFragment;
+import fr.creads.midipile.fragments.UserProfilFragment;
 import fr.creads.midipile.fragments.WinnersFragment;
 import fr.creads.midipile.listeners.OnBadgesLoadedListener;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
@@ -1098,17 +1100,35 @@ public class HomeActivity extends FragmentActivity
     @Override
     public void onParticipateClick(Deal deal) {
 
+
         if(null != user){
             // user logged
-            if(null == user && user.getXwsseHeader().isEmpty()) {
+            if(user.getXwsseHeader().isEmpty()) {
                 return;
             }
 
             // check adress filled and enough chance
             if(user.getRue().isEmpty() || user.getCode_postal().isEmpty() || user.getVille().isEmpty() ){
 
+
+                OnClickWrapper onClickNoAdressWrapper = new OnClickWrapper("noAdressParticipation", new SuperToast.OnClickListener() {
+                    @Override
+                    public void onClick(View view, Parcelable token) {
+                        /* On click event */
+                        // loginRegister fragment set on position 8
+                        changeFragment( new UserFragment(), 0);
+                    }
+                });
+
+                SuperActivityToast superActivityToast = new SuperActivityToast(this, SuperToast.Type.BUTTON);
+                superActivityToast.setDuration(SuperToast.Duration.EXTRA_LONG);
+                superActivityToast.setButtonIcon(SuperToast.Icon.Dark.EDIT, "COMPLÉTER");
+                superActivityToast.setText(getString(R.string.deal_need_user_adress));
+                superActivityToast.setOnClickWrapper(onClickNoAdressWrapper);
+                superActivityToast.show();
+
             } else if(user.getChance() <= 0){
-                Toast.makeText(getApplicationContext(), "Vous n'avez plus de chance.", Toast.LENGTH_SHORT).show();
+                SuperActivityToast.create(this, "Vous n'avez plus de chance.", SuperToast.Duration.LONG).show();
             } else {
                 postParticipation(deal);
             }
@@ -1118,6 +1138,8 @@ public class HomeActivity extends FragmentActivity
             // loginRegister fragment set on position 8
             changeFragment( new LoginRegisterFragment(), 8);
         }
+
+
     }
 
     /**
@@ -1167,7 +1189,9 @@ public class HomeActivity extends FragmentActivity
 
 
                 if( !getSelectedDeal().getPlayStore().isEmpty()){
-                    String message = getResources().getString(R.string.deal_participate_share_message) + " " + getSelectedDeal().getSociete() + " ?";
+                    String message = getResources().getString(R.string.deal_participate_share_message) +
+                            " " + getSelectedDeal().getSociete() +
+                            " " + getString(R.string.deal_participate_share_message_suffix) + " ?";
 
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
 
