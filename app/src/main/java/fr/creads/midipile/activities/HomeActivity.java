@@ -98,6 +98,7 @@ public class HomeActivity extends FragmentActivity
 
     private ArrayList<Deal> deals;
     private int dealPosition;
+    private Fragment redirectFrag;
 
     private List<Badge> badges;
 
@@ -116,10 +117,10 @@ public class HomeActivity extends FragmentActivity
      */
     private List<Deal> winnersDeals;
 
-    private SimpleFacebook mSimpleFacebook;
 
     private ProgressDialog mProgressDialog;
 
+    private SimpleFacebook mSimpleFacebook;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -204,6 +205,23 @@ public class HomeActivity extends FragmentActivity
                 changeFragment( new WinnersFragment(), position);
                 break;
             case 4:
+
+                Bundle argUserFrag = new Bundle();
+                argUserFrag.putInt("parrainage", 2);
+
+                if(user == null){
+                    // user not connected, cannot go to parrainage
+                    SuperActivityToast.create(HomeActivity.this, getString(R.string.toast_need_connection), SuperToast.Duration.LONG).show();
+
+                    redirectFrag = new UserFragment();
+                    redirectFrag.setArguments(argUserFrag);
+
+                    changeFragment( new LoginRegisterFragment(), 0);
+                } else {
+                    Fragment userFragParrainage = new UserFragment();
+                    userFragParrainage.setArguments(argUserFrag);
+                    changeFragment(userFragParrainage, position);
+                }
                 break;
         }
     }
@@ -289,6 +307,10 @@ public class HomeActivity extends FragmentActivity
                 if(frag instanceof HomeFragment && frag.getArguments() != null){
                     HomeFragment tempFrag = (HomeFragment) manager.findFragmentByTag(fragmentTag);
                     tempFrag.setPosition(frag.getArguments().getInt("whishlist"));
+                } else if(frag instanceof UserFragment && frag.getArguments() != null){
+                    // set UserFrag position
+                    UserFragment tempFrag = (UserFragment) manager.findFragmentByTag(fragmentTag);
+                    tempFrag.setPosition(frag.getArguments().getInt("parrainage"));
                 }
             }
         } catch(IllegalStateException exception){
@@ -810,7 +832,11 @@ public class HomeActivity extends FragmentActivity
         setSharedUser(user);
         mNavigationDrawerFragment.displayUser(u);
 
-        if(null != getSelectedDeal()){
+        if(redirectFrag != null){
+            Log.d(Constants.TAG, "redirect to frag");
+            changeFragment(redirectFrag, 0);
+            redirectFrag = null;
+        } else if(null != getSelectedDeal()){
             onDealsSelected(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
         }
     }

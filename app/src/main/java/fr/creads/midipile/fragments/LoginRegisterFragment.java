@@ -166,6 +166,12 @@ public class LoginRegisterFragment extends Fragment implements TabHost.OnTabChan
         }
     }
 
+    public void setPosition(int pos){
+        if(null != tabHost && null != mPager){
+            tabHost.setCurrentTab(pos);
+            mPager.setCurrentItem(pos);
+        }
+    }
 
     public static void setInsets(Activity context, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;

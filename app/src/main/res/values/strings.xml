@@ -38,6 +38,7 @@
 
     <string name="toast_server_error">Une erreur est survenue</string>
     <string name="toast_server_error_winners">Une erreur est survenue lors de la récupération des derniers gagnants</string>
+    <string name="toast_need_connection">Vous devez vous connecter pour accéder au parrainage</string>
 
 
     <string name="dialog_deal_participate_share_ok">Oui</string>
@@ -80,7 +81,8 @@
     <string name="deal_value_suffix"> LOT(S) à gagner</string>
     <string name="deal_participate_button">Je participe</string>
     <string name="deal_participate_success">Participation enregistrée !</string>
-    <string name="deal_participate_share_message">Voulez vous ouvrir l\'application de </string>
+    <string name="deal_participate_share_message">Voulez vous accéder l\'application de </string>
+    <string name="deal_participate_share_message_suffix">sur le Play Store</string>
 
     <array name="deal_fragment_tabs">
         <item>La marque</item>
@@ -91,6 +93,7 @@
     <string name="deal_share_body">Chaque jour un nouveau produit à remporter</string>
     <string name="deal_map_eshop">E-shop</string>
     <string name="deal_map_website">Site Web</string>
+    <string name="deal_need_user_adress">Vous devez d\'abord compléter vos coordonnées afin que nous puissions procéder à l\'envoi de vos lots</string>
 
 
     <string name="whishlist_empty">Connectez-vous pour voir votre wishlist</string>
@@ -112,6 +115,8 @@
 
     <string name="user_placeholder_name">Nom</string>
     <string name="user_placeholder_prenom">Prénom</string>
+    <string name="user_placeholder_firstname_lastname">Nom prénom</string>
+    <string name="user_placeholder_message">Message</string>
     <string name="user_placeholder_email">Adresse email</string>
     <string name="user_placeholder_password">Mot de passe</string>
     <string name="user_placeholder_phone">Téléphone</string>
@@ -127,6 +132,7 @@
     <string name="user_logout_button">Déconnexion</string>
     <string name="user_register_button">M\'inscrire</string>
     <string name="user_save_button">Enregistrer</string>
+    <string name="user_send_button">Envoyer</string>
     <string name="user_login_separator">Ou</string>
     <string name="user_login_fb_helper">Se connecter via Facebook connect</string>
     <string name="user_register_fb_helper">M\'inscrire via Facebook connect</string>
@@ -165,6 +171,9 @@
     <string name="tracker_user_action_register">Register email</string>
     <string name="tracker_whishlist_action_readmore">Read more</string>
     <string name="tracker_winners_action_showname">Show name</string>
+
+
+    <string name="contact_title">Contactez-nous</string>
 
 
 </resources>
