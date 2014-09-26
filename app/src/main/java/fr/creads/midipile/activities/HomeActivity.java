@@ -999,6 +999,7 @@ public class HomeActivity extends FragmentActivity
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
         sp.edit().remove(USER_SHAREDPREF).apply();
         user = null;
+        whishlist = null;
         mNavigationDrawerFragment.hideUser();
         Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
         changeFragment(new HomeFragment(), 1);

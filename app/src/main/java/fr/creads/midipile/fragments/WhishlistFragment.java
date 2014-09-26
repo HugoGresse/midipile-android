@@ -48,6 +48,18 @@ public class WhishlistFragment extends Fragment{
         return rootView;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        if( ((HomeActivity)getActivity()).getWhishlist() == null){
+            emptyWhishlistRelativeLayout.setVisibility(View.VISIBLE);
+            setAdapters(new ArrayList<Deal>());
+        } else {
+            emptyWhishlistRelativeLayout.setVisibility(View.GONE);
+            setAdapters((ArrayList<Deal>) ((HomeActivity)getActivity()).getWhishlist());
+        }
+    }
+
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
