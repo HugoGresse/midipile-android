@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="/Users/developpeur/Documents/Midipile/midipile-android/facebook/src/main/assets" />
+        <source path="D:\Documents\Creads\Midipile\midipile-android\facebook\src\main\assets" />
     </dataSet>
     <dataSet config="release" >
-        <source path="/Users/developpeur/Documents/Midipile/midipile-android/facebook/src/release/assets" />
+        <source path="D:\Documents\Creads\Midipile\midipile-android\facebook\src\release\assets" />
     </dataSet>
 
 </merger>
