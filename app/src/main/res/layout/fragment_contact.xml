@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loginScrollView"
+        android:layout_centerHorizontal="true"
+        android:fitsSystemWindows="true"
+        android:clipToPadding="false"
+        android:layout_alignParentEnd="true">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/loginRelativeLayout"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <RelativeLayout
+                android:layout_width="@dimen/user_form_width"
+                android:layout_height="fill_parent"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contact_title"
+                    android:id="@+id/contactTitle"
+                    android:textSize="@dimen/user_form_title_sp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/user_text_color" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nameEditText"
+                    android:layout_centerHorizontal="true"
+                    android:singleLine="true"
+                    android:hint="@string/user_placeholder_firstname_lastname"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edittext_round"
+                    android:textSize="@dimen/user_form_edit_sp"
+                    android:textStyle="normal"
+                    android:textColorHint="@color/user_text_color_hint"
+                    android:inputType="textPersonName"
+                    android:layout_below="@+id/contactTitle" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:id="@+id/emailEditText"
+                    android:layout_centerHorizontal="true"
+                    android:singleLine="true"
+                    android:hint="@string/user_placeholder_email"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edittext_round"
+                    android:textSize="@dimen/user_form_edit_sp"
+                    android:textStyle="normal"
+                    android:textColorHint="@color/user_text_color_hint"
+                    android:layout_below="@+id/nameEditText" />
+
+
+
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/messageEditText"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/emailEditText"
+                    android:hint="@string/user_placeholder_message"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edittext_round"
+                    android:textSize="@dimen/user_form_edit_sp"
+                    android:textStyle="normal"
+                    android:textColorHint="@color/user_text_color_hint"
+                    android:inputType="textMultiLine"
+                    android:minHeight="70dp" />
+
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_send_button"
+                    android:id="@+id/sendButton"
+                    android:layout_centerHorizontal="true"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:background="@drawable/button_green"
+                    android:layout_below="@+id/messageEditText" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

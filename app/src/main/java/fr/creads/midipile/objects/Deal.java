@@ -3,6 +3,8 @@ package fr.creads.midipile.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -27,6 +29,8 @@ public class Deal implements Parcelable {
     private String twitter;
     private String pinterest;
     private String appStore;
+
+    @SerializedName("play_store")
     private String playStore;
 
     private String logo;
@@ -41,6 +45,8 @@ public class Deal implements Parcelable {
 
     private List<PointOfSale> pdv;
     private Integer numberOfPdv;
+
+    private List<User> winners;
 
     public Deal(){
 
@@ -73,6 +79,8 @@ public class Deal implements Parcelable {
         date_creation = in.readString();
         date_lancement = in.readString();
         date_fin = in.readString();
+
+        in.readTypedList(winners, User.CREATOR);
     }
 
     @Override
@@ -101,13 +109,14 @@ public class Deal implements Parcelable {
         parcel.writeInt(id);
         parcel.writeInt(quantite);
 
-
         parcel.writeString(fb_app_id);
         parcel.writeString(fb);
 
         parcel.writeFloat(valeur);
 
         parcel.writeStringList(images);
+
+        parcel.writeTypedList(winners);
     }
 
 
@@ -209,6 +218,22 @@ public class Deal implements Parcelable {
 
     public int getNumberOfPdv(){
         return numberOfPdv;
+    }
+
+    public List<User> getWinners() {
+        return winners;
+    }
+
+    public void setWinners(List<User> winners) {
+        this.winners = winners;
+    }
+
+    public int getWinnersCount(){
+        if(null != winners){
+            return winners.size();
+        } else {
+            return 0;
+        }
     }
 
     @Override

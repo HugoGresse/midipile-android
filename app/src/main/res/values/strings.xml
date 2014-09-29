@@ -2,22 +2,53 @@
 <resources>
 
     <string name="app_name">Midipile</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+
+    <string name="app_notification_title">Utilisez votre chance quotidienne !</string>
+    <string name="app_notification_message">Nous vous avons dénichés de nouveaux produits tendances. Venez les découvrir et tenter de les remporter ! </string>
+
+    <!-- fb app id -->
+    <string name="app_id">308179055936670</string>
+
     <string name="navigation_drawer_open">Ouvrir le menu</string>
     <string name="navigation_drawer_close">Fermer le menu</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Paramètres</string>
 
-    <string name="dialog_network_error">Impossible de charger les données. Vérifiez votre connexion au réseau.</string>
+    <string name="dialog_network_error_title">Impossible de charger les données.</string>
+    <string name="dialog_network_error">Vérifiez votre connexion au réseau.</string>
     <string name="dialog_network_error_ok">Réessayer</string>
     <string name="dialog_network_error_no">Annuler</string>
+
+    <string name="dialog_user_title">Connexion à Midipile</string>
+    <string name="dialog_user_text">Impossible de vous connectez. Vérifiez votre email et mot de passe.</string>
+    <string name="dialog_user_refresh_title">Impossible mettre à jour vos données.</string>
+
+    <string name="dialog_register_title">Impossible de vous inscrire.</string>
+
+    <string name="dialog_facebook_title">Connexion à Facebook</string>
+    <string name="dialog_facebook_nopermission">Vous n\'avez pas accepté les permissions de l\'application Facebook Midipile</string>
+    <string name="dialog_facebook_unabletogetprofil">Impossible de vous connectez avec Facebook</string>
+
+
+    <string name="dialog_forgetpassword_title">Mot de passe oublié.</string>
+    <string name="dialog_forgetpassword">Pour récupérer votre mot de passe, entrer votre adresse email.</string>
+    <string name="dialog_forgetpassword_ok">Envoyer</string>
+    <string name="dialog_forgetpassword_no">Annuler</string>
+
+
+    <string name="toast_server_error">Une erreur est survenue</string>
+    <string name="toast_server_error_winners">Une erreur est survenue lors de la récupération des derniers gagnants</string>
+    <string name="toast_need_connection">Vous devez vous connecter pour accéder au parrainage</string>
+
+
+    <string name="dialog_deal_participate_share_ok">Oui</string>
+    <string name="dialog_deal_participate_share_cancel">Non</string>
+
 
     !-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item >Offres du jour</item>
-        <item >Whishlist</item>
+        <item >Wishlist</item>
         <item >Derniers gagnants</item>
         <item >Parrainage</item>
     </string-array>
@@ -31,6 +62,7 @@
     </array>
 
 
+    <string name="nav_header_chance">chance(s)</string>
     <string name="nav_footer_copyright">Midipile ® Copyright 2014 - Tous droits réservés</string>
     <string name="nav_footer_contact">Contact</string>
     <string name="nav_footer_cgu">- CGU -</string>
@@ -39,15 +71,18 @@
 
     <array name="home_fragment_tabs">
         <item>Offres du jour</item>
-        <item>Whish List</item>
+        <item>Wish List</item>
     </array>
 
     <string name="deal_blank_title">Titre de l\'offre</string>
     <string name="deal_open_button">Découvrir</string>
     <string name="deal_discover_title">Présentation de l\'offre</string>
     <string name="deal_value_prefix">Valeur unitaire du lot : </string>
-    <string name="deal_value_suffix"> LOTS à gagner</string>
+    <string name="deal_value_suffix"> LOT(S) à gagner</string>
     <string name="deal_participate_button">Je participe</string>
+    <string name="deal_participate_success">Participation enregistrée !</string>
+    <string name="deal_participate_share_message">Voulez vous accéder l\'application de </string>
+    <string name="deal_participate_share_message_suffix">sur le Play Store</string>
 
     <array name="deal_fragment_tabs">
         <item>La marque</item>
@@ -55,9 +90,90 @@
         <item>Le trouver</item>
     </array>
 
-
     <string name="deal_share_body">Chaque jour un nouveau produit à remporter</string>
     <string name="deal_map_eshop">E-shop</string>
     <string name="deal_map_website">Site Web</string>
+    <string name="deal_need_user_adress">Vous devez d\'abord compléter vos coordonnées afin que nous puissions procéder à l\'envoi de vos lots</string>
+
+
+    <string name="whishlist_empty">Connectez-vous pour voir votre wishlist</string>
+    <string name="whishlist_scroll_button">En savoir +</string>
+
+    <string name="winner_name">gagnant</string>
+    <string name="winners_name">gagnants</string>
+    <string name="winners_of">Résultat du </string>
+    <string name="winners_more">Et d\'autres</string>
+
+    <string name="user_login">Connexion</string>
+    <string name="user_register">Inscription</string>
+
+    <array name="user_loginregister_tabs">
+        <item>Me connecter</item>
+        <item>M\'inscrire</item>
+    </array>
+
+
+    <string name="user_placeholder_name">Nom</string>
+    <string name="user_placeholder_prenom">Prénom</string>
+    <string name="user_placeholder_firstname_lastname">Nom prénom</string>
+    <string name="user_placeholder_message">Message</string>
+    <string name="user_placeholder_email">Adresse email</string>
+    <string name="user_placeholder_password">Mot de passe</string>
+    <string name="user_placeholder_phone">Téléphone</string>
+    <string name="user_placeholder_adress">Adresse de livraison</string>
+    <string name="user_placeholder_adress_more">Complément d\'adresse</string>
+    <string name="user_placeholder_postalcode">Code postal</string>
+    <string name="user_placeholder_city">Ville</string>
+    <string name="user_placeholder_country">Pays</string>
+    <string name="user_placeholder_newsletter">Recevoir nos offres quotidiennes</string>
+    <string name="user_placeholder_cgv">Accepter les conditions générales d\'utilisation*</string>
+    <string name="user_placeholder_password_forget">Mot de passe oublié ?</string>
+    <string name="user_login_button">Me connecter</string>
+    <string name="user_logout_button">Déconnexion</string>
+    <string name="user_register_button">M\'inscrire</string>
+    <string name="user_save_button">Enregistrer</string>
+    <string name="user_send_button">Envoyer</string>
+    <string name="user_login_separator">Ou</string>
+    <string name="user_login_fb_helper">Se connecter via Facebook connect</string>
+    <string name="user_register_fb_helper">M\'inscrire via Facebook connect</string>
+    <string name="user_login_fb_button">Utiliser Facebook connect</string>
+
+
+
+    <array name="user_tabs">
+        <item>Badges</item>
+        <item>Adresse</item>
+        <item>Parrainage</item>
+    </array>
+
+
+    <string name="user_adress_title">Mes coordonnées</string>
+    <string name="user_badge_title">Mes badges</string>
+    <string name="user_parrainage_title">Votre code de parrainage</string>
+    <string name="user_parrainage_filleuls">Vos filleuls :</string>
+    <string name="user_parrainage_filleuls_empty">Vous n\'avez pas de filleuls pour l\'instant</string>
+    <string name="user_parrainage_share">Un nouveau produit tendance à gagner ça te tente ? Rejoins moi sur Midipile ! Code parrainage : </string>
+    <string name="user_parrainage_share_title">Partagez votre code de parrainage</string>
+
+
+
+    <string name="tracker_deal_category">Deal</string>
+    <string name="tracker_user_category">User</string>
+    <string name="tracker_whishlist_category">Wishlist</string>
+    <string name="tracker_winners_category">Winners</string>
+    <string name="tracker_deal_action_participate">Participate</string>
+    <string name="tracker_deal_action_brand_fb">Click Brand Facebook</string>
+    <string name="tracker_deal_action_brand_tw">Click Brand Twitter</string>
+    <string name="tracker_deal_action_brand_web">Click Brand Website</string>
+    <string name="tracker_deal_action_brand_eshop">Click Brand Eshop</string>
+    <string name="tracker_user_action_login">Login email</string>
+    <string name="tracker_user_action_login_facebook">Login Facebook</string>
+    <string name="tracker_user_action_register">Register email</string>
+    <string name="tracker_whishlist_action_readmore">Read more</string>
+    <string name="tracker_winners_action_showname">Show name</string>
+
+
+    <string name="contact_title">Contactez-nous</string>
+
 
 </resources>

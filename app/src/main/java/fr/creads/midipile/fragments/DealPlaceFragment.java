@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.api.Constants;
@@ -113,12 +114,27 @@ public class DealPlaceFragment extends Fragment
         eshop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // send event participate
+                ((MidipileApplication)getActivity().getApplication()).sendEventTracking(
+                        R.string.tracker_deal_category,
+                        R.string.tracker_deal_action_brand_eshop,
+                        deal.getNom());
+
+
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getEshop())));
             }
         });
         website.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // send event participate
+                ((MidipileApplication)getActivity().getApplication()).sendEventTracking(
+                        R.string.tracker_deal_category,
+                        R.string.tracker_deal_action_brand_web,
+                        deal.getNom());
+
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(deal.getWebsite())));
             }
         });
@@ -135,6 +151,10 @@ public class DealPlaceFragment extends Fragment
     public void onGoogleMapCreated() {
         map = mapFragment.getMap();
 
+        if(null == map){
+            return;
+        }
+
         setInsets(getActivity(), map);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -145,7 +165,8 @@ public class DealPlaceFragment extends Fragment
 
             map.addMarker(new MarkerOptions()
                             .position(pdv.getLatLng())
-                            .title(pdv.getIntitule() + "\n" + pdv.getAdresse())
+                            .title(pdv.getIntitule())
+                            .snippet(pdv.getAdresse())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
             );
         }

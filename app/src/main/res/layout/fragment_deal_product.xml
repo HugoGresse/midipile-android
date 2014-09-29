@@ -92,7 +92,8 @@
                     android:layout_alignParentBottom="false"
                     android:layout_marginTop="@dimen/deal_detail_padding_vertical"
                     android:layout_below="@+id/dealValue"
-                    android:background="@android:color/white" />
+                    android:background="@android:color/white"
+                    android:scrollbars="none" />
 
                 <Button
                     android:layout_width="fill_parent"
@@ -102,7 +103,8 @@
                     android:id="@+id/participateButtonBottom"
                     android:background="@color/midipiletheme_color"
                     android:textColor="@android:color/white"
-                    android:textAllCaps="true" />
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="@dimen/deal_detail_padding_vertical" />
 
             </RelativeLayout>
 

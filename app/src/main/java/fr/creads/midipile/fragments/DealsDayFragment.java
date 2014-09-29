@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,18 +33,10 @@ public class DealsDayFragment extends Fragment  {
         public void onDealsSelected(int dealId);
     }
 
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.d("fr.creads.midipile", "dealsDay create view  ======");
         View rootView = inflater.inflate(R.layout.fragment_dealsday, container, false);
         dealsListView = (ListView) rootView.findViewById(R.id.listDealsDayView);
         setInsets(getActivity(), dealsListView);
@@ -78,13 +69,6 @@ public class DealsDayFragment extends Fragment  {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
-
-
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     public void setDealsAdapters(ArrayList<Deal> deals){

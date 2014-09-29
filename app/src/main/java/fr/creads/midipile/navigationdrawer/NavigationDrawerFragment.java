@@ -22,12 +22,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.objects.User;
 
 
 /**
@@ -62,14 +65,20 @@ public class NavigationDrawerFragment extends Fragment {
     private ListView mDrawerListView;
     private View mFragmentContainerView;
     private View footerView;
+    private View headerView;
 
     private ArrayList<NavDrawerItem> mDrawerItems;
     private String[] mNavMenuTitles;
     private TypedArray mNavMenuIcons;
 
-    private int mCurrentSelectedPosition = 0;
+    private int mCurrentSelectedPosition = 1;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private boolean headerUserDisplayed = false;
+
+    private RelativeLayout headerNavDrawerContainer;
+    private TextView userNameTextView;
+    private TextView userChanceTextView;
 
     public NavigationDrawerFragment() {
     }
@@ -120,7 +129,15 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        mDrawerListView.setAdapter(new NavigationDrawerAdapter(getActionBar().getThemedContext(), mDrawerItems));
+        // add headerView before setAdapter (for android <4.4 and set inner container to GONE
+        headerView =  inflater.inflate(R.layout.navigation_drawer_header, null, false);
+        headerView.setTag("navigationHeaderView");
+        headerNavDrawerContainer = (RelativeLayout) headerView.findViewById(R.id.headerNavDrawerContainer);
+        headerNavDrawerContainer.setVisibility(View.GONE);
+        userNameTextView = (TextView) headerView.findViewById(R.id.userNameTextView);
+        userChanceTextView = (TextView) headerView.findViewById(R.id.userChanceTextView);
+        mDrawerListView.addHeaderView(headerView);
+        mCurrentSelectedPosition = 1;
 
         footerView =  ((LayoutInflater)getActionBar().getThemedContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
@@ -128,6 +145,9 @@ public class NavigationDrawerFragment extends Fragment {
 
         // Adding button to listview at footer
         mDrawerListView.addFooterView(footerView);
+
+
+        mDrawerListView.setAdapter(new NavigationDrawerAdapter(getActionBar().getThemedContext(), mDrawerItems));
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
@@ -174,7 +194,7 @@ public class NavigationDrawerFragment extends Fragment {
                     return;
                 }
 
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                //getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
             @Override
@@ -215,13 +235,17 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void selectItem(int position) {
+
         mCurrentSelectedPosition = position;
+
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
+
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
+
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
@@ -261,7 +285,7 @@ public class NavigationDrawerFragment extends Fragment {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
         if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
+            //inflater.inflate(R.menu.global, menu);
             showGlobalContextActionBar();
         }
         super.onCreateOptionsMenu(menu, inflater);
@@ -300,12 +324,39 @@ public class NavigationDrawerFragment extends Fragment {
         void onNavigationDrawerItemSelected(int position);
     }
 
-
+    /**
+     * Set padding to the given view to work with translucent navigation bar
+     * @param context
+     * @param view
+     */
     public static void setInsets(Activity context, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
+    }
+
+    public void displayUser(User user){
+        // update view if user already displayed
+        if(headerUserDisplayed) {
+            userNameTextView.setText(user.getPrenom() + " " + user.getNom());
+            userChanceTextView.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
+
+            headerNavDrawerContainer.setVisibility(View.VISIBLE);
+        } else {
+
+            userNameTextView.setText(user.getPrenom() + " " + user.getNom());
+            userChanceTextView.setText( Integer.toString(user.getChance()) + " " + getResources().getString(R.string.nav_header_chance));
+            headerUserDisplayed = true;
+
+            headerNavDrawerContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    public void hideUser(){
+        headerNavDrawerContainer.setVisibility(View.GONE);
+        headerUserDisplayed = false;
     }
 
 }

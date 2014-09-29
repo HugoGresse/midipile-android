@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,10 +26,12 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
-import fr.creads.midipile.listeners.OnDataLoadedListener;
+import fr.creads.midipile.api.Constants;
+import fr.creads.midipile.listeners.OnDealsLoadedListener;
 import fr.creads.midipile.objects.Deal;
 
 /**
@@ -36,7 +39,12 @@ import fr.creads.midipile.objects.Deal;
  * Date : 03/09/14
  */
 public class DealFragment extends Fragment
-        implements TabHost.OnTabChangeListener, OnDataLoadedListener {
+        implements TabHost.OnTabChangeListener, OnDealsLoadedListener {
+
+    protected static final String SCREEN_NAME = "offre/";
+    private static final String SCREEN_NAME_BRAND = SCREEN_NAME + "brand/";
+    private static final String SCREEN_NAME_PRODUCT = SCREEN_NAME + "product/";
+    private static final String SCREEN_NAME_PLACE = SCREEN_NAME + "place/";
 
     private ActionBar actionBar;
     private ShareActionProvider mShareActionProvider;
@@ -60,10 +68,15 @@ public class DealFragment extends Fragment
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+
+        deal = getArguments().getParcelable("deal");
+        Log.d(Constants.TAG, deal.toString());
+
         actionBar = myContext.getActionBar();
         this.setHasOptionsMenu(true);
 
         mTabsTitles = getResources().getStringArray(R.array.deal_fragment_tabs);
+
 
     }
 
@@ -88,7 +101,6 @@ public class DealFragment extends Fragment
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        deal = getArguments().getParcelable("deal");
 
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
@@ -168,6 +180,7 @@ public class DealFragment extends Fragment
         // set currentItem to product
         mPager.setCurrentItem(1);
         tabHost.setCurrentTab(1);
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PRODUCT + deal.getNom());
 
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -176,6 +189,14 @@ public class DealFragment extends Fragment
                         // When swiping between pages, select the corresponding tab.
                         mPager.setCurrentItem(position);
                         tabHost.setCurrentTab(position);
+
+                        if(position == 0){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_BRAND + deal.getNom());
+                        } else if(position == 1){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PRODUCT + deal.getNom());
+                        } else {
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME_PLACE + deal.getNom());
+                        }
                     }
                 }
         );

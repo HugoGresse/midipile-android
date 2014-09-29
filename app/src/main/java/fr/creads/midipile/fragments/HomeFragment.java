@@ -21,10 +21,12 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
+import fr.creads.midipile.listeners.OnDealsLoadedListener;
 import fr.creads.midipile.objects.Deal;
 
 /**
@@ -32,7 +34,10 @@ import fr.creads.midipile.objects.Deal;
  * Date : 27/08/14
  */
 public class HomeFragment extends Fragment
-        implements TabHost.OnTabChangeListener, OnDataLoadedListener{
+        implements TabHost.OnTabChangeListener, OnDealsLoadedListener, OnDataLoadedListener {
+
+    private static final String SCREEN_NAME1 = "Offres du jour";
+    private static final String SCREEN_NAME2 = "Whishlist";
 
     private HomeActivity homeActivity;
     private FragmentActivity myContext;
@@ -84,6 +89,17 @@ public class HomeFragment extends Fragment
         homeActivity = (HomeActivity) activity;
     }
 
+    @Override
+    public void onResume (){
+        super.onResume();
+    }
+
+    @Override
+    public void onDataLoaded() {
+        ((WhishlistFragment)mAdapter.getItem(1)).setAdapters(
+                (ArrayList<Deal> )((HomeActivity)getActivity()).getWhishlist()
+        );
+    }
 
     private void setupAdapter(View rootView){
 
@@ -112,7 +128,6 @@ public class HomeFragment extends Fragment
         mPager = (ViewPager)rootView.findViewById(R.id.homepager);
         mPager.setAdapter(mAdapter);
 
-
         mPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
@@ -120,9 +135,17 @@ public class HomeFragment extends Fragment
                         // When swiping between pages, select the corresponding tab.
                         mPager.setCurrentItem(position);
                         tabHost.setCurrentTab(position);
+
+                        if(position == 0){
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME1);
+                        } else {
+                            ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME2);
+                        }
                     }
                 }
         );
+
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME1);
 
     }
 
@@ -162,11 +185,18 @@ public class HomeFragment extends Fragment
 
     }
 
-
     public static void setInsets(Activity context, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
         view.setPadding(0, config.getPixelInsetTop(true) , config.getPixelInsetRight(), 0);
     }
+
+    public void setPosition(int pos){
+        if(null != tabHost && null != mPager){
+            tabHost.setCurrentTab(pos);
+            mPager.setCurrentItem(pos);
+        }
+    }
+
 }

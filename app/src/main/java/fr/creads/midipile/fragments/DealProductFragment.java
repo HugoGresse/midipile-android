@@ -50,10 +50,17 @@ public class DealProductFragment extends Fragment {
     private TextView dealValueTextView;
     private ProgressBar progressBar;
     private Button participateButton;
+    private Button participateButtonBottom;
     private WebView detailWebView;
     private ScrollView productScrollView;
 
     private String valueText = "";
+
+    private onButtonParticipateClickListener mClickParticipateButtonListener;
+
+    public interface onButtonParticipateClickListener {
+        public void onParticipateClick(Deal deal);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -64,7 +71,18 @@ public class DealProductFragment extends Fragment {
                 .displayer(new FadeInBitmapDisplayer(500))
                 .cacheInMemory(true)
                 .build();
+    }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mClickParticipateButtonListener = (onButtonParticipateClickListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement onButtonParticipateClickListener");
+        }
     }
 
     @Override
@@ -81,6 +99,7 @@ public class DealProductFragment extends Fragment {
             productViewFlipper = (ViewFlipper) rootView.findViewById(R.id.productViewFlipper);
             progressBar = (ProgressBar) rootView.findViewById(R.id.dealProgressBar);
             participateButton = (Button) rootView.findViewById(R.id.participateButton);
+            participateButtonBottom = (Button) rootView.findViewById(R.id.participateButtonBottom);
             detailWebView = (WebView) rootView.findViewById(R.id.dealDetail);
             productScrollView = (ScrollView) rootView.findViewById(R.id.productScrollView);
 
@@ -127,7 +146,7 @@ public class DealProductFragment extends Fragment {
             for (String url : deal.getImages()){
                 ImageView imageView = new ImageView(getActivity());
                 imageView.setAdjustViewBounds(true);
-                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageLoader.displayImage(url, imageView, imageLoaderDisplayOptions);
                 productViewFlipper.addView(imageView);
             }
@@ -137,7 +156,18 @@ public class DealProductFragment extends Fragment {
             }
         }
 
-
+        participateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onParticipateClick();
+            }
+        });
+        participateButtonBottom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onParticipateClick();
+            }
+        });
     }
 
     public int getProgress(String dateLancement, String dateFin){
@@ -170,4 +200,7 @@ public class DealProductFragment extends Fragment {
         view.setPadding(0, 0, 0, config.getNavigationBarHeight());
     }
 
+    public void onParticipateClick(){
+        mClickParticipateButtonListener.onParticipateClick(deal);
+    }
 }

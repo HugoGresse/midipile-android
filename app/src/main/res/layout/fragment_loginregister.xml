@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity$PlaceholderFragment"
+    android:id="@+id/fragmentloginRegisterLayout">
+
+    <TabHost
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:animateLayoutChanges="true"
+        android:id="@+id/loginregister_tab_host">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"/>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <LinearLayout
+                    android:id="@+id/fakeTabContentLoginRegister"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal" />
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/loginregisterpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_below="@+id/loginregister_tab_host"
+        android:background="@android:color/white">
+    </android.support.v4.view.ViewPager>
+
+
+</RelativeLayout>
