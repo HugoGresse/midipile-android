@@ -183,8 +183,7 @@
                     android:textStyle="normal"
                     android:textColorLink="@color/user_text_color"
                     android:textColorHint="@color/user_text_color_hint"
-                    android:layout_below="@+id/userCityEditText"
-                    android:visibility="gone" />
+                    android:layout_below="@+id/userCityEditText" />
 
 
                 <Button
@@ -192,7 +191,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/user_save_button"
                     android:id="@+id/userSaveButton"
-                    android:layout_below="@+id/userPostalcodeEditText"
+                    android:layout_below="@+id/userPasswordEditText"
                     android:layout_centerHorizontal="true"
                     android:textAllCaps="true"
                     android:layout_marginBottom="20dp"
