@@ -26,6 +26,8 @@ import fr.creads.midipile.objects.User;
  */
 public class UserParrainageFragment extends Fragment {
 
+    public static final String PARRAINAGE_ARGS = "parrainage";
+
     private ImageButton shareCodeButton;
     private TextView parrainageCodeTextView;
     private TextView filleulsTextView;

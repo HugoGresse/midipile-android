@@ -189,14 +189,14 @@ public class HomeActivity extends FragmentActivity
                 break;
             case 1:
                 Bundle args=new Bundle();
-                args.putInt("whishlist", 0);
+                args.putInt(WishlistFragment.WISHLIST_ARGS, 0);
                 Fragment homeFrag = new HomeFragment();
                 homeFrag.setArguments(args);
                 changeFragment(homeFrag, position);
                 break;
             case 2:
                 Bundle args2=new Bundle();
-                args2.putInt("whishlist", 1);
+                args2.putInt(WishlistFragment.WISHLIST_ARGS, 1);
                 Fragment homeFrag2 = new HomeFragment();
                 homeFrag2.setArguments(args2);
                 changeFragment(homeFrag2, position);
@@ -207,7 +207,7 @@ public class HomeActivity extends FragmentActivity
             case 4:
 
                 Bundle argUserFrag = new Bundle();
-                argUserFrag.putInt("parrainage", 2);
+                argUserFrag.putInt(UserParrainageFragment.PARRAINAGE_ARGS, 2);
 
                 if(user == null){
                     // user not connected, cannot go to parrainage
@@ -306,11 +306,11 @@ public class HomeActivity extends FragmentActivity
                 // set Whishlist tab if fragment is show
                 if(frag instanceof HomeFragment && frag.getArguments() != null){
                     HomeFragment tempFrag = (HomeFragment) manager.findFragmentByTag(fragmentTag);
-                    tempFrag.setPosition(frag.getArguments().getInt("whishlist"));
+                    tempFrag.setPosition(frag.getArguments().getInt(WishlistFragment.WISHLIST_ARGS));
                 } else if(frag instanceof UserFragment && frag.getArguments() != null){
                     // set UserFrag position
                     UserFragment tempFrag = (UserFragment) manager.findFragmentByTag(fragmentTag);
-                    tempFrag.setPosition(frag.getArguments().getInt("parrainage"));
+                    tempFrag.setPosition(frag.getArguments().getInt(UserParrainageFragment.PARRAINAGE_ARGS));
                 }
             }
         } catch(IllegalStateException exception){

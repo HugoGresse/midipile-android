@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.WhishlistAdapter;
-import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.objects.Deal;
 
 /**
@@ -30,6 +28,8 @@ import fr.creads.midipile.objects.Deal;
 public class WishlistFragment extends Fragment{
 
     private static final String SCREEN_NAME = "Whishlist";
+
+    public static final String WISHLIST_ARGS = "whishlist";
 
     private RelativeLayout emptyWhishlistRelativeLayout;
     private Button loginButton;
