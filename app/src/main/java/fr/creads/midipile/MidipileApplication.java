@@ -33,7 +33,6 @@ public class MidipileApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-
         File cacheDir = new File(Environment.getExternalStorageDirectory(), "Midipile/Cache");
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showImageOnLoading(android.R.color.white)
@@ -49,7 +48,8 @@ public class MidipileApplication extends Application {
         Logger.DEBUG_WITH_STACKTRACE = true;
         // initialize facebook configuration
         Permission[] permissions = new Permission[] {
-                Permission.PUBLIC_PROFILE
+                Permission.PUBLIC_PROFILE,
+                Permission.EMAIL
         };
         SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
                 .setAppId(getString(R.string.app_id))

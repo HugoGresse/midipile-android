@@ -720,11 +720,19 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(User u, Response response) {
 
-                // send login/register fb tracking event
-                ((MidipileApplication)getApplication()).sendEventTracking(
-                        R.string.tracker_user_category,
-                        R.string.tracker_user_action_login_facebook,
-                        Integer.toString(u.getId()));
+                if(u.isFbLogin()){
+                    // send login fb tracking event
+                    ((MidipileApplication)getApplication()).sendEventTracking(
+                            R.string.tracker_user_category,
+                            R.string.tracker_user_action_login_facebook,
+                            Integer.toString(u.getId()));
+                } else {
+                    // send register fb tracking event
+                    ((MidipileApplication)getApplication()).sendEventTracking(
+                            R.string.tracker_user_category,
+                            R.string.tracker_user_action_register_facebook,
+                            Integer.toString(u.getId()));
+                }
 
                 setUser(u, response.getHeaders());
                 hideDialog();

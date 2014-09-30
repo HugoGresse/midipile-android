@@ -33,6 +33,7 @@ public class User implements Parcelable {
     private String newsletter;
 
     private String fid;
+    private String fbhelper;
 
     private String chance;
     private String credit;
@@ -66,6 +67,7 @@ public class User implements Parcelable {
         parcel.writeString(mobile);
         parcel.writeString(chance);
         parcel.writeString(fid);
+        parcel.writeString(fbhelper);
         parcel.writeString(credit);
 
         parcel.writeTypedList(badges);
@@ -91,6 +93,7 @@ public class User implements Parcelable {
         mobile = in.readString();
         chance = in.readString();
         fid = in.readString();
+        fbhelper = in.readString();
         credit = in.readString();
 
 
@@ -123,6 +126,7 @@ public class User implements Parcelable {
             mUser.mobile = source.readString();
             mUser.chance = source.readString();
             mUser.fid = source.readString();
+            mUser.fbhelper = source.readString();
             mUser.credit = source.readString();
             return mUser;
         }
@@ -301,4 +305,16 @@ public class User implements Parcelable {
     public void setFilleuls(List<User> filleuls) {
         this.filleuls = filleuls;
     }
+
+    public boolean isFbLogin() {
+        if(fbhelper != null && !fbhelper.isEmpty()){
+            if(fbhelper.equals("login")){
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
 }
