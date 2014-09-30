@@ -171,7 +171,6 @@ public class DealPlaceFragment extends Fragment
             );
         }
 
-        Log.d(Constants.TAG, Integer.toString(deal.getNumberOfPdv()));
         // center map on marker if any
         if(deal.getNumberOfPdv() > 0) {
             LatLngBounds bounds = builder.build();

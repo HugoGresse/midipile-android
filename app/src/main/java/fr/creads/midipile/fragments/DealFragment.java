@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +29,6 @@ import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.adapters.TabFragmentPagerAdapter;
-import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.listeners.OnDealsLoadedListener;
 import fr.creads.midipile.objects.Deal;
 
@@ -70,7 +68,6 @@ public class DealFragment extends Fragment
 
 
         deal = getArguments().getParcelable("deal");
-        Log.d(Constants.TAG, deal.toString());
 
         actionBar = myContext.getActionBar();
         this.setHasOptionsMenu(true);

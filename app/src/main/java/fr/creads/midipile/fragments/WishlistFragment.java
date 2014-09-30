@@ -43,8 +43,6 @@ public class WishlistFragment extends Fragment{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_whishlist, container, false);
 
-
-        Log.d(Constants.TAG, "onCreateView");
         whishList = (ListView) rootView.findViewById(R.id.listWhishlist);
         emptyWhishlistRelativeLayout = (RelativeLayout) rootView.findViewById(R.id.emptyWhishlistRelativeLayout);
         loaderProgressBar = (ProgressBar) rootView.findViewById(R.id.loaderProgressBar);

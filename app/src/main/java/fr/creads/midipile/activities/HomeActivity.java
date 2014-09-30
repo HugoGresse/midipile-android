@@ -300,9 +300,9 @@ public class HomeActivity extends FragmentActivity
                 transaction.replace(R.id.container, frag, frag.getClass().getName());
                 transaction.addToBackStack(backStateName);
                 transaction.commit();
-                Log.d(Constants.TAG, "addToBackTack");
+                Log.d(Constants.TAG, "Change Fragment : addToBackTack");
             } else {
-                Log.d(Constants.TAG, "nothing to do");
+                Log.d(Constants.TAG, "Change Fragment : nothing to do");
                 // set Whishlist tab if fragment is show
                 if(frag instanceof HomeFragment && frag.getArguments() != null){
                     HomeFragment tempFrag = (HomeFragment) manager.findFragmentByTag(fragmentTag);
@@ -702,7 +702,6 @@ public class HomeActivity extends FragmentActivity
                         response.getEmail(),
                         response.getFirstName(),
                         response.getLastName());
-
             }
         });
     }
@@ -756,7 +755,7 @@ public class HomeActivity extends FragmentActivity
 
                 alertDialog.show();
 
-                Log.i("fr.creads.midipile", error.toString());
+                Log.e("fr.creads.midipile", error.toString());
             }
         });
     }
@@ -954,6 +953,7 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void success(User u, Response response) {
                 Toast.makeText(getApplicationContext(), "Vos coordonnées ont été modifiées", Toast.LENGTH_LONG).show();
+
                 updateUser(u, response.getHeaders());
                 hideDialog();
             }
