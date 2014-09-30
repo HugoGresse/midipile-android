@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment
 
     @Override
     public void onDataLoaded() {
-        ((WhishlistFragment) mAdapter.getRegisteredFragment(1)).setAdapters(
+        ((WishlistFragment) mAdapter.getRegisteredFragment(1)).setAdapters(
                 (ArrayList<Deal>) ((HomeActivity) getActivity()).getWhishlist()
         );
     }
@@ -152,7 +152,7 @@ public class HomeFragment extends Fragment
     private List<Fragment> createFragments() {
         List<Fragment> list = new ArrayList<Fragment>();
         list.add(Fragment.instantiate(myContext, DealsDayFragment.class.getName()));
-        list.add(Fragment.instantiate(myContext, WhishlistFragment.class.getName()));
+        list.add(Fragment.instantiate(myContext, WishlistFragment.class.getName()));
 
         return list;
     }

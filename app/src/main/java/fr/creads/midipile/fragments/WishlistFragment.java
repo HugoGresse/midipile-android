@@ -27,7 +27,7 @@ import fr.creads.midipile.objects.Deal;
  * Author : Hugo Gresse
  * Date : 27/08/14
  */
-public class WhishlistFragment extends Fragment{
+public class WishlistFragment extends Fragment{
 
     private static final String SCREEN_NAME = "Whishlist";
 
