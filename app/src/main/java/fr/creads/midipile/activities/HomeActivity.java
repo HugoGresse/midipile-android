@@ -62,8 +62,10 @@ import fr.creads.midipile.fragments.LoginRegisterFragment;
 import fr.creads.midipile.fragments.LoginRegisterLoginFragment;
 import fr.creads.midipile.fragments.LoginRegisterRegisterFragment;
 import fr.creads.midipile.fragments.UserFragment;
+import fr.creads.midipile.fragments.UserParrainageFragment;
 import fr.creads.midipile.fragments.UserProfilFragment;
 import fr.creads.midipile.fragments.WinnersFragment;
+import fr.creads.midipile.fragments.WishlistFragment;
 import fr.creads.midipile.listeners.OnBadgesLoadedListener;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.listeners.OnDealsLoadedListener;
@@ -227,9 +229,6 @@ public class HomeActivity extends FragmentActivity
     }
 
 
-    private void changeFragment(Fragment frag, int position){
-        changeFragment(frag, position, R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
-    }
 
     /**
      * Init the acvitity and navigatio ndrawer after spalsh screen
@@ -260,6 +259,10 @@ public class HomeActivity extends FragmentActivity
             mNavigationDrawerFragment.displayUser(user);
         }
 
+    }
+
+    private void changeFragment(Fragment frag, int position){
+        changeFragment(frag, position, R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
     }
 
     /**
@@ -369,7 +372,31 @@ public class HomeActivity extends FragmentActivity
             // kill app since cannont fo anymore back
             finish();
         } else {
+            // let android manage back button and popping fragment
             super.onBackPressed();
+
+            // check fragment to change navDrawer
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.container);
+            Log.d(Constants.TAG, f.getClass().toString());
+
+            if (f instanceof UserFragment){
+                Log.d(Constants.TAG, "user frag");
+                if(2 == f.getArguments().getInt(UserParrainageFragment.PARRAINAGE_ARGS)){
+                    mNavigationDrawerFragment.selectItem(4);
+                } else {
+                    mNavigationDrawerFragment.selectItem(0);
+                }
+
+            } else if (f instanceof HomeFragment){
+                if(2 == f.getArguments().getInt(WishlistFragment.WISHLIST_ARGS)){
+                    mNavigationDrawerFragment.selectItem(2);
+                } else {
+                    mNavigationDrawerFragment.selectItem(1);
+                }
+            } else if (f instanceof WinnersFragment){
+                mNavigationDrawerFragment.selectItem(3);
+            }
+
         }
     }
 
