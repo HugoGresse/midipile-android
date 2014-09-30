@@ -423,7 +423,6 @@ public class HomeActivity extends FragmentActivity
 
                     if( null != user){
                         refreshUser();
-                        loadWhishList();
                     }
 
                 }
@@ -833,7 +832,6 @@ public class HomeActivity extends FragmentActivity
         mNavigationDrawerFragment.displayUser(u);
 
         if(redirectFrag != null){
-            Log.d(Constants.TAG, "redirect to frag");
             changeFragment(redirectFrag, 0);
             redirectFrag = null;
         } else if(null != getSelectedDeal()){
@@ -1110,6 +1108,15 @@ public class HomeActivity extends FragmentActivity
                 }
             }
         });
+    }
+
+    /**
+     * Open login page
+     */
+    public void openLogin(Fragment redirectToFrag){
+        redirectFrag = redirectToFrag;
+        // loginRegister fragment set on position 8
+        changeFragment( new LoginRegisterFragment(), 8);
     }
 
     /**
@@ -1417,26 +1424,15 @@ public class HomeActivity extends FragmentActivity
 
 
     public void loadWhishList(){
-        loadWhishList(0, 0);
-    }
-    public void loadWhishList(int from, int length){
 
         if(null == whishlist){
             whishlist = new ArrayList<Deal>();
         }
 
-        if(from == 0){
-            from = 0;
-        }
-        if(length == 0){
-            length = 0;
-        }
-
-        midipileService.getWhishlist(user.getXwsseHeader(), from, length, new Callback<List<Deal>>() {
+        midipileService.getWhishlist(user.getXwsseHeader(), 0, 0, new Callback<List<Deal>>() {
 
             @Override
             public void success(List<Deal> deals, Response response) {
-
                 whishlist.addAll(deals);
 
                 HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());

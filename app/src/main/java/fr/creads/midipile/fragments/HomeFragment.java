@@ -96,8 +96,8 @@ public class HomeFragment extends Fragment
 
     @Override
     public void onDataLoaded() {
-        ((WhishlistFragment)mAdapter.getItem(1)).setAdapters(
-                (ArrayList<Deal> )((HomeActivity)getActivity()).getWhishlist()
+        ((WhishlistFragment) mAdapter.getRegisteredFragment(1)).setAdapters(
+                (ArrayList<Deal>) ((HomeActivity) getActivity()).getWhishlist()
         );
     }
 
