@@ -28,6 +28,9 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.model.GraphObject;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.OnClickWrapper;
@@ -40,7 +43,12 @@ import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.listeners.OnLoginListener;
+import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.listeners.OnProfileListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -903,9 +911,134 @@ public class HomeActivity extends FragmentActivity
 
             Type type = new TypeToken<User>() {}.getType();
             user = (User) new Gson().fromJson(userString, type);
+
+            loggedFbAndCheckPermissionsForLikes();
+
         }
 
         return user;
+    }
+
+    public void loggedFbAndCheckPermissionsForLikes(){
+
+        // if user is already logged
+        if( !mSimpleFacebook.isLogin()){
+            mSimpleFacebook.login(new OnLoginListener() {
+                @Override
+                public void onLogin() {
+                    getUserLikes();
+                }
+
+                @Override
+                public void onNotAcceptingPermissions(Permission.Type type) {
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_facebook_title)
+                            .setMessage(R.string.dialog_facebook_nopermission)
+                            .setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    doFacebookLogin();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                @Override
+                public void onThinking() {
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                    hideDialog();
+                }
+
+                @Override
+                public void onFail(String s) {
+                    hideDialog();
+                }
+            });
+        } else {
+            Log.d(Constants.TAG, "asking permissions");
+
+            Permission[] permissions = new Permission[] {
+                    Permission.USER_LIKES
+            };
+
+            OnNewPermissionsListener onNewPermissionsListener = new OnNewPermissionsListener() {
+
+                @Override
+                public void onSuccess(String accessToken) {
+                    // updated access token
+                    getUserLikes();
+                }
+
+                @Override
+                public void onNotAcceptingPermissions(Permission.Type type) {
+                    SuperActivityToast.create(HomeActivity.this, getString(R.string.dialog_facebook_nopermission), SuperToast.Duration.LONG).show();
+                }
+
+                @Override
+                public void onThinking() {
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                }
+
+                @Override
+                public void onFail(String s) {
+                }
+            };
+
+            mSimpleFacebook.requestNewPermissions(permissions, false, onNewPermissionsListener);
+        }
+    }
+
+    public void getUserLikes(){
+
+        Log.d(Constants.TAG, "permission ok");
+        new Request(
+                mSimpleFacebook.getSession(),
+                "/me/likes",
+                null,
+                HttpMethod.GET,
+                new Request.Callback() {
+                    @Override
+                    public void onCompleted(com.facebook.Response response) {
+
+                        //Create the GraphObject from the response
+                        GraphObject responseGraphObject = response.getGraphObject();
+
+                        //Create the JSON object
+                        JSONObject json = responseGraphObject.getInnerJSONObject();
+
+                        try {
+                            JSONArray dataFbArray = json.getJSONArray("data");
+
+                            for(int i =0;i<dataFbArray.length();i++) {
+
+                                String pageId = dataFbArray.getJSONObject(i).getString("id");
+
+                                if(pageId.equals(Constants.FB_MIDIPILE_PAGE)){
+                                    return true;
+                                    break;
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).executeAsync();
     }
 
     public void showForgetPasswordDialog(){
