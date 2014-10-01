@@ -43,6 +43,14 @@ public interface MidipileAPI {
             @Header("x-wsse") String xwsse,
             Callback<Map<String, String>> callback);
 
+    @GET(Constants.URL_USER_ME_DEALS)
+    public void getWhishlist(
+            @Header("x-wsse") String xwsse,
+            @Query("from") int from,
+            @Query("length") int length,
+            Callback<List<Deal>> callback);
+
+
 
 
     @FormUrlEncoded
@@ -106,12 +114,13 @@ public interface MidipileAPI {
             @Path("id") int id,
             Callback<Map<String, String>> callback);
 
-
-    @GET(Constants.URL_USER_ME_DEALS)
-    public void getWhishlist(
+    @FormUrlEncoded
+    @POST(Constants.URL_USER_ME_BADGE)
+    public void postBadge(
             @Header("x-wsse") String xwsse,
-            @Query("from") int from,
-            @Query("length") int length,
-            Callback<List<Deal>> callback);
+            @Field("badges") String badge,
+            Callback<User> callback);
+
+
 
 }

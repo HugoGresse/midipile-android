@@ -6,7 +6,7 @@ package fr.creads.midipile.api;
  */
 public class Constants {
 
-    public static final String URL_API = "http://mysterious-platypus-3079.vagrantshare.com/1";
+    public static final String URL_API = "http://carefree-silver-1255.vagrantshare.com/1";
     public static final String URL_SITE = "http://www.midipile.com";
     public static final String API_SECRET = "9,(3~[][<'{+5#}";
     public static final String FB_MIDIPILE_PAGE = "124301070992491";
@@ -21,6 +21,7 @@ public class Constants {
     public static final String URL_USER_ME = "/users/me";
     public static final String URL_USER_ME_CHANCE = "/users/me/chance";
     public static final String URL_USER_ME_DEALS = "/users/me/deals";
+    public static final String URL_USER_ME_BADGE = "/users/me/badges";
 
     public static final String TAG = "fr.creads.midipile";
 }
