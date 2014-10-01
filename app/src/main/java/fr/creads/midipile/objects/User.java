@@ -317,4 +317,7 @@ public class User implements Parcelable {
         return false;
     }
 
+    public void addBadges(Badge b){
+        this.badges.add(b);
+    }
 }

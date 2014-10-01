@@ -34,6 +34,8 @@ public class UserBadgeFragment extends Fragment{
     private List<Badge> badges;
     private List<Badge> userBadges;
 
+    private BadgesAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -48,7 +50,6 @@ public class UserBadgeFragment extends Fragment{
                              Bundle savedInstanceState) {
 
         badges =  ((HomeActivity)getActivity()).getBadges();
-        userBadges = ((HomeActivity)getActivity()).getUser().getBadges();
 
         View rootView = inflater.inflate(R.layout.fragment_user_badge, container, false);
         badgeListView = (ListView) rootView.findViewById(R.id.badgeListView);
@@ -73,8 +74,9 @@ public class UserBadgeFragment extends Fragment{
     }
 
     public void setBadgeAdapter(List<Badge> badges){
-        if(null != badgeListView){
+        userBadges = ((HomeActivity)getActivity()).getUser().getBadges();
 
+        if(null != badgeListView && !badges.isEmpty()){
             // set user selected badge to true
             for (int i = 0; i < userBadges.size(); i++) {
                 Badge elementOne = userBadges.get(i);
@@ -83,8 +85,15 @@ public class UserBadgeFragment extends Fragment{
                 }
             }
 
-            badgeListView.setAdapter(new BadgesAdapter(getActivity(), badges));
-            badgeListView.setSelector(new ColorDrawable(0));
+            this.badges = badges;
+
+            if(badgeListView.getAdapter() != null){
+                adapter.notifyDataSetChanged();
+            } else {
+                adapter = new BadgesAdapter(getActivity(), badges);
+                badgeListView.setAdapter(adapter);
+                badgeListView.setSelector(new ColorDrawable(0));
+            }
         }
     }
 

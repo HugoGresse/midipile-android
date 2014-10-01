@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -28,6 +29,9 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.model.GraphObject;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.OnClickWrapper;
@@ -40,7 +44,12 @@ import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.listeners.OnLoginListener;
+import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.listeners.OnProfileListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -1038,7 +1047,6 @@ public class HomeActivity extends FragmentActivity
         changeFragment(new HomeFragment(), 1);
     }
 
-
     public void logoutInvisibleUser(){
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
         sp.edit().remove(USER_SHAREDPREF).apply();
@@ -1387,6 +1395,154 @@ public class HomeActivity extends FragmentActivity
 
     }
 
+    /**
+     * Prepare for getting facebook user's like
+     * Check facebook connection, open new windows permission if neeeded and finally call getUserLikes
+     */
+    public void logFbAndCheckPermissionsForLikes(){
+        // if user is already logged
+        if( !mSimpleFacebook.isLogin()){
+            mSimpleFacebook.login(new OnLoginListener() {
+                @Override
+                public void onLogin() {
+                    checkUserLikes();
+                }
+
+                @Override
+                public void onNotAcceptingPermissions(Permission.Type type) {
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_facebook_title)
+                            .setMessage(R.string.dialog_facebook_nopermission)
+                            .setPositiveButton(R.string.dialog_network_error_ok,new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    logFbAndCheckPermissionsForLikes();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no,new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
+
+                @Override
+                public void onThinking() {
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                }
+
+                @Override
+                public void onFail(String s) {
+                    Log.d(Constants.TAG, s);
+                }
+            });
+        } else {
+            Permission[] permissions = new Permission[] {
+                    Permission.USER_LIKES
+            };
+
+            OnNewPermissionsListener onNewPermissionsListener = new OnNewPermissionsListener() {
+
+                @Override
+                public void onSuccess(String accessToken) {
+                    // updated access token
+                    checkUserLikes();
+                }
+
+                @Override
+                public void onNotAcceptingPermissions(Permission.Type type) {
+                    SuperActivityToast.create(HomeActivity.this, getString(R.string.dialog_facebook_nopermission), SuperToast.Duration.LONG).show();
+                }
+
+                @Override
+                public void onThinking() {
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                }
+
+                @Override
+                public void onFail(String s) {
+                }
+            };
+
+            mSimpleFacebook.requestNewPermissions(permissions, false, onNewPermissionsListener);
+        }
+    }
+
+    /**
+     * Using mSimpleFacebook session, retrieve the user list of likes and check if Midipile is inside
+     * If yes, post new badge
+     */
+    public void checkUserLikes(){
+
+        showDialog(getString(R.string.dialog_facebook_fan_verification));
+
+        new Request(
+                mSimpleFacebook.getSession(),
+                "/me/likes",
+                null,
+                HttpMethod.GET,
+                new Request.Callback() {
+                    @Override
+                    public void onCompleted(com.facebook.Response response) {
+
+                        //Create the GraphObject from the response
+                        GraphObject responseGraphObject = response.getGraphObject();
+
+                        //Create the JSON object
+                        JSONObject json = responseGraphObject.getInnerJSONObject();
+
+                        try {
+                            JSONArray dataFbArray = json.getJSONArray("data");
+
+                            for(int i =0;i<dataFbArray.length();i++) {
+
+                                String pageId = dataFbArray.getJSONObject(i).getString("id");
+
+                                if(pageId.equals(Constants.FB_MIDIPILE_PAGE)){
+                                    // posting fan badge app
+                                    postBadge("4");
+                                    return;
+                                }
+                            }
+
+                            hideDialog();
+
+                            // if user is here : he didn't have Midipile badge: so opening facebook
+                            try {
+                                int versionCode = getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+                                if (versionCode >= 3002850) {
+                                    Uri uri = Uri.parse("fb://facewebmodal/f?href=" + Constants.FB_MIDIPILE_PAGE_URL);
+                                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                                } else {
+                                    // open the Facebook app using the old method (fb://profile/id or fb://pro
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/" + Constants.FB_MIDIPILE_PAGE));
+                                    startActivity(intent);
+                                }
+                            } catch (PackageManager.NameNotFoundException e) {
+                                // Facebook is not installed. Open the browser
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.FB_MIDIPILE_PAGE_URL)));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).executeAsync();
+    }
+
+
 
 
 
@@ -1456,6 +1612,55 @@ public class HomeActivity extends FragmentActivity
         }
 
     }
+
+    /**
+     * Post new badge to the api
+     */
+    public void postBadge(String badgeId){
+        midipileService.postBadge(user.getXwsseHeader(), badgeId, new Callback<User>() {
+            @Override
+            public void success(User u, Response response) {
+
+                SuperActivityToast.create(HomeActivity.this, getString(R.string.dialog_facebook_fan_verification_success), SuperToast.Duration.LONG).show();
+
+                hideDialog();
+
+                updateUser(u, response.getHeaders());
+
+                UserFragment userFragment = (UserFragment) getSupportFragmentManager().findFragmentByTag(UserFragment.class.getName());
+
+                if (!(userFragment instanceof OnBadgesLoadedListener)) {
+                    throw new IllegalStateException(
+                            "Fragment must implement the OnBadgesLoadedListener.");
+                } else {
+                    mBadgesLoadedCallbacks = (OnBadgesLoadedListener) userFragment;
+                    mBadgesLoadedCallbacks.onBadgeLoaded(badges);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                hideDialog();
+
+                String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+
+                try {
+
+                    Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                    }.getType());
+
+                    List<String> errorsEmail = (List<String>) ((Map) map.get("errors")).get("email");
+                    Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.e(Constants.TAG, "postBadge : " + e.getMessage());
+                }
+            }
+        });
+    }
+
+
+
 
 
     public void loadWhishList(){

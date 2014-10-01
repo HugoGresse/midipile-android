@@ -28,6 +28,8 @@
     <string name="dialog_facebook_title">Connexion à Facebook</string>
     <string name="dialog_facebook_nopermission">Vous n\'avez pas accepté les permissions de l\'application Facebook Midipile</string>
     <string name="dialog_facebook_unabletogetprofil">Impossible de vous connectez avec Facebook</string>
+    <string name="dialog_facebook_fan_verification">Vérification du badge fan</string>
+    <string name="dialog_facebook_fan_verification_success">Vous avez obtenue le badge Fan !</string>
 
 
     <string name="dialog_forgetpassword_title">Mot de passe oublié.</string>
@@ -149,6 +151,7 @@
 
     <string name="user_adress_title">Mes coordonnées</string>
     <string name="user_badge_title">Mes badges</string>
+    <string name="user_badge_facebook_button">Obtenir le badge</string>
     <string name="user_parrainage_title">Votre code de parrainage</string>
     <string name="user_parrainage_filleuls">Vos filleuls :</string>
     <string name="user_parrainage_filleuls_empty">Vous n\'avez pas de filleuls pour l\'instant</string>
