@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -1516,6 +1517,22 @@ public class HomeActivity extends FragmentActivity
                             }
 
                             hideDialog();
+
+                            // if user is here : he didn't have Midipile badge: so opening facebook
+                            try {
+                                int versionCode = getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+                                if (versionCode >= 3002850) {
+                                    Uri uri = Uri.parse("fb://facewebmodal/f?href=" + Constants.FB_MIDIPILE_PAGE_URL);
+                                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                                } else {
+                                    // open the Facebook app using the old method (fb://profile/id or fb://pro
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/" + Constants.FB_MIDIPILE_PAGE));
+                                    startActivity(intent);
+                                }
+                            } catch (PackageManager.NameNotFoundException e) {
+                                // Facebook is not installed. Open the browser
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.FB_MIDIPILE_PAGE_URL)));
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
