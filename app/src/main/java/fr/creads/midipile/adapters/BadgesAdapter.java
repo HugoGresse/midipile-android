@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
+import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.objects.Badge;
 
 /**
@@ -88,6 +91,7 @@ public class BadgesAdapter extends BaseAdapter {
 
 
         ImageView image = (ImageView) convertView.findViewById(R.id.badgeIconImageView);
+        Button fbFanButton = (Button) convertView.findViewById(R.id.fbFanBadgeButton);
 
         if(mCurrentBadge.getId() <= 3){
             image.setImageDrawable( context.getResources().getDrawable(R.drawable.ic_badgeparrainage) );
@@ -98,6 +102,16 @@ public class BadgesAdapter extends BaseAdapter {
         if(mCurrentBadge.isUserBadge()){
             ((ListView)parent).setItemChecked(position, true);
             image.setColorFilter(colorFilter);
+            fbFanButton.setVisibility(View.GONE);
+        } else if(mCurrentBadge.getId().equals(4)){
+            Log.d(Constants.TAG, "set button");
+            fbFanButton.setVisibility(View.VISIBLE);
+            fbFanButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((HomeActivity)context).logFbAndCheckPermissionsForLikes();
+                }
+            });
         }
 
 

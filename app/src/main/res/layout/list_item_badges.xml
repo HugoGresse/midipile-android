@@ -51,4 +51,19 @@
         android:textColor="@color/midipiletheme_color"
         android:textSize="@dimen/badge_chance_size"
         android:layout_alignLeft="@+id/badgeDescriptionTextView" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="@string/user_badge_facebook_button"
+        android:id="@+id/fbFanBadgeButton"
+        android:layout_below="@+id/badgeChanceTextView"
+        android:layout_toEndOf="@+id/badgeIconImageView"
+        android:background="@drawable/button_green"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        android:layout_alignLeft="@+id/badgeChanceTextView" />
 </RelativeLayout>

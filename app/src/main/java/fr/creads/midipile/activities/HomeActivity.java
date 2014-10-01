@@ -911,9 +911,6 @@ public class HomeActivity extends FragmentActivity
 
             Type type = new TypeToken<User>() {}.getType();
             user = (User) new Gson().fromJson(userString, type);
-
-            logFbAndCheckPermissionsForLikes();
-
         }
 
         return user;
@@ -1440,13 +1437,11 @@ public class HomeActivity extends FragmentActivity
 
                 @Override
                 public void onException(Throwable throwable) {
-                    hideDialog();
                 }
 
                 @Override
                 public void onFail(String s) {
                     Log.d(Constants.TAG, s);
-                    hideDialog();
                 }
             });
         } else {
@@ -1486,6 +1481,10 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    /**
+     * Using mSimpleFacebook session, retrieve the user list of likes and check if Midipile is inside
+     * If yes, post new badge
+     */
     public void checkUserLikes(){
 
         Log.d(Constants.TAG, "permission ok");
@@ -1517,7 +1516,7 @@ public class HomeActivity extends FragmentActivity
                                 if(pageId.equals(Constants.FB_MIDIPILE_PAGE)){
                                     // posting fan badge app
                                     postBadge("4");
-                                    break;
+                                    return;
                                 }
                             }
                         } catch (JSONException e) {
@@ -1600,7 +1599,7 @@ public class HomeActivity extends FragmentActivity
     }
 
     /**
-     * Post new badge
+     * Post new badge to the api
      */
     public void postBadge(String badgeName){
 
