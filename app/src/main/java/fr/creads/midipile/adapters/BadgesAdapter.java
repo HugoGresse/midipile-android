@@ -92,28 +92,31 @@ public class BadgesAdapter extends BaseAdapter {
 
         ImageView image = (ImageView) convertView.findViewById(R.id.badgeIconImageView);
         Button fbFanButton = (Button) convertView.findViewById(R.id.fbFanBadgeButton);
+        fbFanButton.setVisibility(View.GONE);
 
         if(mCurrentBadge.getId() <= 3){
             image.setImageDrawable( context.getResources().getDrawable(R.drawable.ic_badgeparrainage) );
         } else if(mCurrentBadge.getId() == 4){
             image.setImageDrawable( context.getResources().getDrawable(R.drawable.ic_badgelike) );
+            if(!mCurrentBadge.isUserBadge()){
+                fbFanButton.setVisibility(View.VISIBLE);
+                fbFanButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((HomeActivity)context).logFbAndCheckPermissionsForLikes();
+                    }
+                });
+            }
         }
 
         if(mCurrentBadge.isUserBadge()){
             ((ListView)parent).setItemChecked(position, true);
             image.setColorFilter(colorFilter);
-            fbFanButton.setVisibility(View.GONE);
-        } else if(mCurrentBadge.getId().equals(4)){
-            Log.d(Constants.TAG, "set button");
-            fbFanButton.setVisibility(View.VISIBLE);
-            fbFanButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((HomeActivity)context).logFbAndCheckPermissionsForLikes();
-                }
-            });
         }
 
+        if(fbFanButton.getVisibility() == View.VISIBLE){
+            Log.d(Constants.TAG, " item button visible ?" + mCurrentBadge.getNom());
+        }
 
         TextView title = (TextView) convertView.findViewById(R.id.badgeTitleTextView);
         TextView description = (TextView) convertView.findViewById(R.id.badgeDescriptionTextView);

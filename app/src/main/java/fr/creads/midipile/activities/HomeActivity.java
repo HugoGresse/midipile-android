@@ -1399,7 +1399,6 @@ public class HomeActivity extends FragmentActivity
      * Check facebook connection, open new windows permission if neeeded and finally call getUserLikes
      */
     public void logFbAndCheckPermissionsForLikes(){
-
         // if user is already logged
         if( !mSimpleFacebook.isLogin()){
             mSimpleFacebook.login(new OnLoginListener() {
@@ -1445,8 +1444,6 @@ public class HomeActivity extends FragmentActivity
                 }
             });
         } else {
-            Log.d(Constants.TAG, "asking permissions");
-
             Permission[] permissions = new Permission[] {
                     Permission.USER_LIKES
             };
@@ -1487,7 +1484,7 @@ public class HomeActivity extends FragmentActivity
      */
     public void checkUserLikes(){
 
-        Log.d(Constants.TAG, "permission ok");
+        showDialog(getString(R.string.dialog_facebook_fan_verification));
 
         new Request(
                 mSimpleFacebook.getSession(),
@@ -1497,8 +1494,6 @@ public class HomeActivity extends FragmentActivity
                 new Request.Callback() {
                     @Override
                     public void onCompleted(com.facebook.Response response) {
-
-                        Log.d(Constants.TAG, "getting like completed");
 
                         //Create the GraphObject from the response
                         GraphObject responseGraphObject = response.getGraphObject();
@@ -1519,6 +1514,9 @@ public class HomeActivity extends FragmentActivity
                                     return;
                                 }
                             }
+
+                            hideDialog();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -1601,19 +1599,26 @@ public class HomeActivity extends FragmentActivity
     /**
      * Post new badge to the api
      */
-    public void postBadge(String badgeName){
-
-        showDialog(getString(R.string.dialog_facebook_fan_verification));
-
-        Log.d(Constants.TAG, "Posting fan badge");
-
-        midipileService.postBadge(user.getXwsseHeader(), badgeName, new Callback<User>() {
+    public void postBadge(String badgeId){
+        midipileService.postBadge(user.getXwsseHeader(), badgeId, new Callback<User>() {
             @Override
             public void success(User u, Response response) {
 
                 SuperActivityToast.create(HomeActivity.this, getString(R.string.dialog_facebook_fan_verification_success), SuperToast.Duration.LONG).show();
 
                 hideDialog();
+
+                updateUser(u, response.getHeaders());
+
+                UserFragment userFragment = (UserFragment) getSupportFragmentManager().findFragmentByTag(UserFragment.class.getName());
+
+                if (!(userFragment instanceof OnBadgesLoadedListener)) {
+                    throw new IllegalStateException(
+                            "Fragment must implement the OnBadgesLoadedListener.");
+                } else {
+                    mBadgesLoadedCallbacks = (OnBadgesLoadedListener) userFragment;
+                    mBadgesLoadedCallbacks.onBadgeLoaded(badges);
+                }
             }
 
             @Override
@@ -1622,8 +1627,6 @@ public class HomeActivity extends FragmentActivity
                 hideDialog();
 
                 String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-
-                Log.d(Constants.TAG,json);
 
                 try {
 
