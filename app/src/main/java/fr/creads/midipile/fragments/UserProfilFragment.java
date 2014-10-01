@@ -20,6 +20,7 @@ import java.util.Map;
 
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
+import fr.creads.midipile.listeners.CountryPickerListener;
 import fr.creads.midipile.objects.User;
 
 /**
@@ -46,14 +47,18 @@ public class UserProfilFragment extends Fragment {
     private EditText userAdressMoreEditText;
     private EditText userPostalcodeEditText;
     private EditText userCityEditText;
+    private EditText userCountryEditText;
     private EditText userPasswordEditText;
     private Button userSaveButton;
+
+    CountryPicker countryPicker;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         user = ((HomeActivity)getActivity()).getUser();
+        countryPicker = CountryPicker.newInstance(getString(R.string.user_placeholder_country_select));
     }
 
     @Override
@@ -72,6 +77,7 @@ public class UserProfilFragment extends Fragment {
         userAdressMoreEditText = (EditText) rootView.findViewById(R.id.userAdressMoreEditText);
         userPostalcodeEditText = (EditText) rootView.findViewById(R.id.userPostalcodeEditText);
         userCityEditText = (EditText) rootView.findViewById(R.id.userCityEditText);
+        userCountryEditText = (EditText) rootView.findViewById(R.id.userCountryEditText);
         userPasswordEditText = (EditText) rootView.findViewById(R.id.userPasswordEditText);
 
         userSaveButton = (Button) rootView.findViewById(R.id.userSaveButton);
@@ -91,6 +97,7 @@ public class UserProfilFragment extends Fragment {
         userAdressMoreEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         userPostalcodeEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         userCityEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
+        userCountryEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         userPasswordEditText.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
         userSaveButton.setTypeface(((HomeActivity)getActivity()).getLatoTypeface());
 
@@ -103,10 +110,27 @@ public class UserProfilFragment extends Fragment {
         userAdressMoreEditText.setText(user.getRue_bis());
         userPostalcodeEditText.setText(user.getCode_postal());
         userCityEditText.setText(user.getVille());
-
-
+        userCountryEditText.setText(user.getPays());
 
         setInsets(getActivity(), adressScrollView);
+
+        // country dialog
+        userCountryEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                countryPicker.show(getActivity().getSupportFragmentManager(), "COUNTRY_PICKER");
+            }
+        });
+
+        countryPicker.setListener(new CountryPickerListener() {
+
+            @Override
+            public void onSelectCountry(String name, String code) {
+                userCountryEditText.setText(code);
+                countryPicker.dismiss();
+            }
+        });
+
         userSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,9 +172,8 @@ public class UserProfilFragment extends Fragment {
         String adressMore = userAdressMoreEditText.getText().toString();
         String postcode = userPostalcodeEditText.getText().toString();
         String city = userCityEditText.getText().toString();
+        String country = userCountryEditText.getText().toString();
         String password = userPasswordEditText.getText().toString();
-
-
 
         if(firstname.isEmpty()) {
             Toast.makeText(getActivity(), "Merci de remplir votre prénom", Toast.LENGTH_LONG).show();
@@ -180,6 +203,10 @@ public class UserProfilFragment extends Fragment {
             Toast.makeText(getActivity(), "Merci d'entrer votre ville", Toast.LENGTH_LONG).show();
             return;
         }
+        if(country.isEmpty()) {
+            Toast.makeText(getActivity(), "Merci d'entrer votre pays", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         Map<String, String> data = new HashMap<String, String>();
         data.put("firstname", firstname);
@@ -190,6 +217,7 @@ public class UserProfilFragment extends Fragment {
         data.put("adressMore", adressMore);
         data.put("postcode", postcode);
         data.put("city", city);
+        data.put("country", country);
 
         if(!password.isEmpty()) {
             data.put("password", password);

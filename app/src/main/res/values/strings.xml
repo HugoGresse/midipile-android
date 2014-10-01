@@ -3,6 +3,9 @@
 
     <string name="app_name">Midipile</string>
 
+
+    <string name="hint_search">Rechercher</string>
+
     <string name="app_notification_title">Utilisez votre chance quotidienne !</string>
     <string name="app_notification_message">Nous vous avons dénichés de nouveaux produits tendances. Venez les découvrir et tenter de les remporter ! </string>
 
@@ -41,7 +44,6 @@
     <string name="toast_server_error">Une erreur est survenue</string>
     <string name="toast_server_error_winners">Une erreur est survenue lors de la récupération des derniers gagnants</string>
     <string name="toast_need_connection">Vous devez vous connecter pour accéder au parrainage</string>
-
 
     <string name="dialog_deal_participate_share_ok">Oui</string>
     <string name="dialog_deal_participate_share_cancel">Non</string>
@@ -127,6 +129,7 @@
     <string name="user_placeholder_postalcode">Code postal</string>
     <string name="user_placeholder_city">Ville</string>
     <string name="user_placeholder_country">Pays</string>
+    <string name="user_placeholder_country_select">Sélectionner votre pays</string>
     <string name="user_placeholder_newsletter">Recevoir nos offres quotidiennes</string>
     <string name="user_placeholder_cgv">Accepter les conditions générales d\'utilisation*</string>
     <string name="user_placeholder_password_forget">Mot de passe oublié ?</string>

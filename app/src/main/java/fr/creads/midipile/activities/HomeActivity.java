@@ -984,11 +984,12 @@ public class HomeActivity extends FragmentActivity
                 userData.get("adressMore"),
                 userData.get("postcode"),
                 userData.get("city"),
+                userData.get("country"),
                 userData.get("password"),
                 new Callback<User>() {
             @Override
             public void success(User u, Response response) {
-                Toast.makeText(getApplicationContext(), "Vos coordonnées ont été modifiées", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Vos informations ont été modifiées", Toast.LENGTH_LONG).show();
 
                 updateUser(u, response.getHeaders());
                 hideDialog();

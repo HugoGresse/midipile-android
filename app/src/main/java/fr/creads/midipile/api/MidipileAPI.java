@@ -99,6 +99,7 @@ public interface MidipileAPI {
             @Field("rue_bis") String rue_bis,
             @Field("code_postal") String code_postal,
             @Field("ville") String ville,
+            @Field("pays") String pays,
             @Field("password") String password,
             Callback<User> callback);
 
