@@ -441,13 +441,10 @@ public class HomeActivity extends FragmentActivity
     }
 
 
-
-
-
-
-
-
-
+    /**
+     * Load list of active deal from api.
+     * If navigationDrawer as not been created, create it and refresh user data if logged
+     */
     public void loadLastDeals(){
 
         midipileService.getLastDeals(new Callback<Deals>() {
@@ -505,16 +502,23 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+    /**
+     * Return the list of active deals if any, else empty list
+     * @return
+     */
     public ArrayList<Deal> getLastDeals(){
         if(null == deals || deals.isEmpty()){
-            Log.i("fr.creads.midipile", "getDealsEmpty");
             return new ArrayList<Deal>();
         } else {
-            Log.i("fr.creads.midipile", "gettingDeals");
             return deals;
         }
     }
 
+    /**
+     * Return a specific deal given by it's position in deal's list
+     * @param position
+     * @return
+     */
     public Deal getDeal(int position){
         if(deals.isEmpty()){
             return new Deal();
@@ -523,7 +527,10 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
-
+    /**
+     * Return the deal currently displayed
+     * @return
+     */
     public Deal getSelectedDeal(){
         if(deals.isEmpty()){
             return null;
@@ -539,6 +546,14 @@ public class HomeActivity extends FragmentActivity
         onDealsSelected(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
     }
 
+    /**
+     * Change fragment to deal detail by animating from right to left
+     *
+     * @param animEnter
+     * @param animExit
+     * @param popEnter
+     * @param popExit
+     */
     public void onDealsSelected(int animEnter, int animExit, int popEnter, int popExit) {
         Bundle args=new Bundle();
         args.putParcelable("deal", getSelectedDeal());
@@ -602,6 +617,11 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+    /**
+     * Return the Xwsse headers from within the header list given
+     * @param headers
+     * @return
+     */
     public String getResponseXwsseHeaders(List<Header> headers){
         for (Header header : headers) {
 
@@ -635,6 +655,10 @@ public class HomeActivity extends FragmentActivity
         doFacebookLogin();
     }
 
+    /**
+     * Check if user is facebook logged, if not logged him
+     * if logged, call getFacebook profil to retrieve his informations
+     */
     public void doFacebookLogin(){
         // if user is already logged
         if( !mSimpleFacebook.isLogin()){
@@ -688,6 +712,9 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    /**
+     * Retirve user facebook information and called postFacebookLoginRegister if everything is ok
+     */
     private void getFacebookProfile(){
 
         Profile.Properties properties = new Profile.Properties.Builder()
@@ -861,14 +888,26 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
-
+    /**
+     * Save user in sharedPref in json
+     * @param user
+     */
     public void setSharedUser(User user){
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
         sp.edit().putString(USER_SHAREDPREF, new Gson().toJson(user)).apply();
     }
 
+    /**
+     * Save user in HomeActivity and change fragment to saved one (redirectFrag)
+     * User xwsse header is also set and user is saved in shared pref
+     * User is Displayed in navigation drawer
+     *
+     *
+     * @param u
+     * @param headers
+     */
     private void setUser(User u, List<Header> headers){
-        Toast.makeText(getApplicationContext(), "Vous êtes connecté", Toast.LENGTH_LONG).show();
+        SuperActivityToast.create(HomeActivity.this, "Vous êtes connecté", SuperToast.Duration.LONG).show();
         user = u;
         user.setXwsseHeader(getResponseXwsseHeaders(headers));
         setSharedUser(user);
@@ -882,6 +921,10 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    /**
+     * update saved user and displayed in navigation drawer with the specified one
+     * @param u
+     */
     private void updateUser(User u){
         user = u;
         setSharedUser(user);
@@ -890,6 +933,11 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    /**
+     * Update user and set his new xwsse headers
+     * @param u
+     * @param headers
+     */
     private void updateUser(User u, List<Header> headers){
         user = u;
         user.setXwsseHeader(getResponseXwsseHeaders(headers));
@@ -899,6 +947,10 @@ public class HomeActivity extends FragmentActivity
         }
     }
 
+    /**
+     * Return the logged user if any. If no logged user, try to get it from shared preferences
+     * @return logged user
+     */
     public User getUser(){
         if(null == user) {
             // try to get user from shared pref
@@ -917,6 +969,9 @@ public class HomeActivity extends FragmentActivity
         return user;
     }
 
+    /**
+     * Open forgoted password dialog
+     */
     public void showForgetPasswordDialog(){
 
         LayoutInflater inflater=HomeActivity.this.getLayoutInflater();
@@ -944,6 +999,10 @@ public class HomeActivity extends FragmentActivity
                 .show();
     }
 
+    /**
+     * Post forget password email to the api whish send an email if user exist
+     * @param email
+     */
     public void postForgetPassword(String email){
         midipileService.postForgetPassword(email, new Callback<Map<String, String>>() {
             @Override
@@ -1038,6 +1097,9 @@ public class HomeActivity extends FragmentActivity
         });
     }
 
+    /**
+     * Lagout user by removing him from shared preferences, hidding him in menu and going to HomeFragment
+     */
     public void logoutUser(){
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
         sp.edit().remove(USER_SHAREDPREF).apply();
@@ -1048,6 +1110,10 @@ public class HomeActivity extends FragmentActivity
         changeFragment(new HomeFragment(), 1);
     }
 
+    /**
+     * Logout user whitout telling him
+     * used if unable to refresh user on activity start due to data change (email ?)
+     */
     public void logoutInvisibleUser(){
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
         sp.edit().remove(USER_SHAREDPREF).apply();
