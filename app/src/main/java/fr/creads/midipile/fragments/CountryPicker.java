@@ -259,6 +259,14 @@ public class CountryPicker extends DialogFragment implements
 	 */
 	@Override
 	public int compare(Country lhs, Country rhs) {
+
+        if (lhs.getCode().equals("FR")){
+            return -1;
+        }
+        if (rhs.getCode().equals("FR")){
+            return 1;
+        }
+
 		return lhs.getName().compareTo(rhs.getName());
 	}
 
