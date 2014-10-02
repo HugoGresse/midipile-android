@@ -1106,6 +1106,12 @@ public class HomeActivity extends FragmentActivity
         user = null;
         whishlist = null;
         mNavigationDrawerFragment.hideUser();
+
+        // remove user badges
+        for(Badge b : badges){
+            b.setUserBadge(false);
+        }
+
         Toast.makeText(getApplicationContext(), "Vous êtes déconnecté", Toast.LENGTH_LONG).show();
         changeFragment(new HomeFragment(), 1);
     }
@@ -1120,6 +1126,11 @@ public class HomeActivity extends FragmentActivity
         user = null;
         if(null != mNavigationDrawerFragment){
             mNavigationDrawerFragment.hideUser();
+        }
+
+        // remove user badges
+        for(Badge b : badges){
+            b.setUserBadge(false);
         }
 
         whishlist = null;
