@@ -111,6 +111,11 @@ public class CountryPicker extends DialogFragment implements
 				// Add the data to all countries list
 				while (keys.hasNext()) {
 					String key = (String) keys.next();
+
+                    // go to next turn of it's Metropilitan France
+                    if(key.equals("FX")){
+                        continue;
+                    }
 					Country country = new Country();
 					country.setCode(key);
 					country.setName(jsonObject.getString(key));
