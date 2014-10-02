@@ -116,6 +116,19 @@ public class MidipileUtilities {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-        view.setPadding(0, config.getActionBarHeight() + config.getStatusBarHeight(), 0, config.getPixelInsetBottom());
+        view.setPadding(0, config.getActionBarHeight() + config.getStatusBarHeight(), 0, config.getNavigationBarHeight());
+    }
+
+
+    /**
+     * Set inset for list/scroll with no tab, only actionbar
+     * @param context
+     * @param view
+     */
+    public static void setInsetsMarginWithNoTab(Activity context, View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
+        SystemBarTintManager tintManager = new SystemBarTintManager(context);
+        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+        view.setPadding(0, config.getActionBarHeight() + config.getStatusBarHeight(), 0, config.getNavigationBarHeight());
     }
 }

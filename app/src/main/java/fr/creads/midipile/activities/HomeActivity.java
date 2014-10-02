@@ -65,6 +65,7 @@ import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
 import fr.creads.midipile.broadcastreceiver.ParticipateNotificationBroadcastReceiver;
 import fr.creads.midipile.fragments.ContactFragment;
+import fr.creads.midipile.fragments.ContentFragment;
 import fr.creads.midipile.fragments.DealFragment;
 import fr.creads.midipile.fragments.DealProductFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
@@ -140,7 +141,11 @@ public class HomeActivity extends FragmentActivity
 
     private ProgressDialog mProgressDialog;
 
+    /**
+     * SimpleFacebook object which manage login and facebook request
+     */
     private SimpleFacebook mSimpleFacebook;
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -149,8 +154,14 @@ public class HomeActivity extends FragmentActivity
     private OnDealsLoadedListener mLoadedCallbacks;
     private OnBadgesLoadedListener mBadgesLoadedCallbacks;
 
+    /**
+     * Flag to know if NavigatioNDrawer as bean created or not (splash screen)
+     */
     private boolean homeFragmentAlreadyCreated = false;
 
+    /**
+     * Lato font
+     */
     private Typeface latoTypeface;
     private Typeface latoBoldTypeface;
 
@@ -289,15 +300,6 @@ public class HomeActivity extends FragmentActivity
      * @param position
      */
     private void changeFragment(Fragment frag, int position, int enter, int exit, int pop_enter, int pop_exit){
-        changeFragment(frag, position, enter, exit, pop_enter, pop_exit, true);
-    }
-
-    /**
-     * Change content fragment
-     * @param frag
-     * @param position
-     */
-    private void changeFragment(Fragment frag, int position, int enter, int exit, int pop_enter, int pop_exit, boolean addToBackStack){
         // Fragment must implement the callback.
         if (!(frag instanceof OnDealsLoadedListener)) {
             Log.e(Constants.TAG, "Fragment must implement the onDataLoadedListener.");
@@ -570,7 +572,7 @@ public class HomeActivity extends FragmentActivity
         Fragment dealFragment = new DealFragment();
         dealFragment.setArguments(args);
 
-        changeFragment(dealFragment, 1, animEnter, animExit, popEnter, popExit, false);
+        changeFragment(dealFragment, 1, animEnter, animExit, popEnter, popExit);
     }
 
 
@@ -1023,15 +1025,15 @@ public class HomeActivity extends FragmentActivity
 
             @Override
             public void failure(RetrofitError error) {
-                String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
+                String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
 
                 Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
                 }.getType());
 
                 try {
-                    List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
+                    List<String> errorsEmail = (List<String>) ((Map) map.get("errors")).get("email");
                     Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
-                } catch(Exception e){
+                } catch (Exception e) {
                     Log.e(Constants.TAG, e.getMessage());
                 }
             }
@@ -1055,55 +1057,55 @@ public class HomeActivity extends FragmentActivity
                 userData.get("country"),
                 userData.get("password"),
                 new Callback<User>() {
-            @Override
-            public void success(User u, Response response) {
-                Toast.makeText(getApplicationContext(), "Vos informations ont été modifiées", Toast.LENGTH_LONG).show();
+                    @Override
+                    public void success(User u, Response response) {
+                        Toast.makeText(getApplicationContext(), "Vos informations ont été modifiées", Toast.LENGTH_LONG).show();
 
-                updateUser(u, response.getHeaders());
-                hideDialog();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-
-                if(error.isNetworkError()){
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
-
-                    AlertDialog alertDialog = alertDialogBuilder
-                            .setTitle(R.string.dialog_register_title)
-                            .setMessage(R.string.dialog_network_error)
-                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    onUserSave(userData);
-                                }
-                            })
-                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            })
-                            .create();
-
-                    alertDialog.show();
-                } else {
-                    String json =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
-
-                    try {
-                        Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
-                        }.getType());
-
-                        List<String> errorsEmail = (List<String>) ((Map)map.get("errors")).get("email");
-                        Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
-
-                    } catch (Exception e){
-                        Log.e(Constants.TAG, e.getMessage());
+                        updateUser(u, response.getHeaders());
+                        hideDialog();
                     }
-                }
 
-                hideDialog();
-            }
-        });
+                    @Override
+                    public void failure(RetrofitError error) {
+
+
+                        if (error.isNetworkError()) {
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                            AlertDialog alertDialog = alertDialogBuilder
+                                    .setTitle(R.string.dialog_register_title)
+                                    .setMessage(R.string.dialog_network_error)
+                                    .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            onUserSave(userData);
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    })
+                                    .create();
+
+                            alertDialog.show();
+                        } else {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+
+                            try {
+                                Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                                }.getType());
+
+                                List<String> errorsEmail = (List<String>) ((Map) map.get("errors")).get("email");
+                                Toast.makeText(getApplicationContext(), Joiner.on("\n").join(errorsEmail), Toast.LENGTH_SHORT).show();
+
+                            } catch (Exception e) {
+                                Log.e(Constants.TAG, e.getMessage());
+                            }
+                        }
+
+                        hideDialog();
+                    }
+                });
     }
 
     /**
@@ -1880,5 +1882,149 @@ public class HomeActivity extends FragmentActivity
      */
     public List<Deal> getWinnersDeals(){
         return winnersDeals;
+    }
+
+
+    /**
+     * Redirect to contact fragment
+     */
+    public void goToContactFragment(){
+        changeFragment(new ContactFragment(), 9);
+    }
+
+    /**
+     * Send contact message via API
+     * @param nameString
+     * @param emailString
+     * @param messageString
+     */
+    public void sendContact(String nameString, String emailString, String messageString){
+
+        showDialog(getString(R.string.dialog_contact_title));
+
+        midipileService.postContact(emailString, nameString, messageString, new Callback<Map<String, String>>() {
+            @Override
+            public void success(Map<String, String> map, Response response) {
+
+                hideDialog();
+
+                SuperActivityToast.create(HomeActivity.this, map.get("status"), SuperToast.Duration.LONG).show();
+
+                changeFragment(new HomeFragment(), 1);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                hideDialog();
+
+                String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+
+                try {
+
+                    Map<String, Object> map = new Gson().fromJson(json, new TypeToken<Map<String, Map<String, List<String>>>>() {
+                    }.getType());
+
+                    List<String> errorsEmail = (List<String>) ((Map) map.get("errors")).get("email");
+                    SuperActivityToast.create(HomeActivity.this, Joiner.on("\n").join(errorsEmail), SuperToast.Duration.LONG).show();
+                } catch (Exception e) {
+                    Log.e(Constants.TAG, "postContact : " + e.getMessage());
+                }
+            }
+        });
+
+    }
+
+
+    /**
+     * Redirect to cgv fragment
+     */
+    public void goToContentFragment(Integer contentId, String contentName){
+        Bundle args=new Bundle();
+        args.putInt("contentId", contentId);
+        args.putString("contentName", contentName);
+
+        Fragment contentFragment = new ContentFragment();
+        contentFragment.setArguments(args);
+
+        changeFragment(contentFragment, 9);
+    }
+
+    /**
+     * Return content string from contentId
+     * @param contentId
+     * @return
+     */
+    public String getContent(Integer contentId){
+        if(contentList.get(contentId) != null){
+            return contentList.get(contentId);
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Load content if needed
+     * If data already loaded or successfully loaded: notify listener
+     *
+     * @param contentId
+     * @param onDataLoadedListener
+     */
+    public void loadContent(final Integer contentId, final OnDataLoadedListener onDataLoadedListener){
+
+        // check if this content has already been loaded
+        if(contentList.get(contentId) != null){
+            onDataLoadedListener.onDataLoaded();
+            return;
+        }
+
+        midipileService.getContent(contentId, new Callback<Map<String, String>>() {
+            @Override
+            public void success(Map<String, String> dataMap, Response response) {
+                contentList.put(contentId, dataMap.get("content"));
+
+                onDataLoadedListener.onDataLoaded();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                Log.d(Constants.TAG, "content failed");
+                if (error.isNetworkError()) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle(R.string.dialog_network_error_title)
+                            .setMessage(R.string.dialog_network_error)
+                            .setPositiveButton(R.string.dialog_network_error_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    loadContent(contentId, onDataLoadedListener);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_network_error_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                } else {
+                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+
+                    try {
+
+                        Map<String, String> errorsMap = new Gson().fromJson(json, new TypeToken<Map<String, String>>() {
+                        }.getType());
+
+                        SuperActivityToast.create(HomeActivity.this, errorsMap.get("errors"), SuperToast.Duration.LONG).show();
+                    } catch (Exception e) {
+                        Log.e(Constants.TAG, "loadContent : " + e.getMessage());
+                    }
+                }
+
+            }
+        });
+
     }
 }

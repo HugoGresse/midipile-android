@@ -6,7 +6,7 @@ package fr.creads.midipile.api;
  */
 public class Constants {
 
-    public static final String URL_API = "http://slick-toad-7190.vagrantshare.com/1";
+    public static final String URL_API = "http://speedy-baboon-1491.vagrantshare.com/1";
     public static final String URL_SITE = "http://www.midipile.com";
     public static final String API_SECRET = "9,(3~[][<'{+5#}";
     public static final String FB_MIDIPILE_PAGE = "124301070992491";
@@ -23,6 +23,13 @@ public class Constants {
     public static final String URL_USER_ME_CHANCE = "/users/me/chance";
     public static final String URL_USER_ME_DEALS = "/users/me/deals";
     public static final String URL_USER_ME_BADGE = "/users/me/badges";
+    public static final String URL_CONTACT = "/contacts";
+    public static final String URL_CONTENTS = "/contents/{id}";
+
+
+    public static final Integer ID_CONTENT_CGV = 7;
+    public static final Integer ID_CONTENT_ABOUT = 11;
+    public static final Integer ID_CONTENT_FAQ = 16;
 
     public static final String TAG = "fr.creads.midipile";
 }

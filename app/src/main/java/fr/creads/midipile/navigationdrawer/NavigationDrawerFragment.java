@@ -30,6 +30,8 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 
 import fr.creads.midipile.R;
+import fr.creads.midipile.activities.HomeActivity;
+import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.objects.User;
 
 
@@ -79,6 +81,14 @@ public class NavigationDrawerFragment extends Fragment {
     private RelativeLayout headerNavDrawerContainer;
     private TextView userNameTextView;
     private TextView userChanceTextView;
+
+    /**
+     * Footer button view
+     */
+    private TextView contactButton;
+    private TextView cgvButton;
+    private TextView aboutButton;
+
 
     public NavigationDrawerFragment() {
     }
@@ -146,6 +156,7 @@ public class NavigationDrawerFragment extends Fragment {
         // Adding button to listview at footer
         mDrawerListView.addFooterView(footerView);
 
+        setFooterButtonListeners(footerView);
 
         mDrawerListView.setAdapter(new NavigationDrawerAdapter(getActionBar().getThemedContext(), mDrawerItems));
 
@@ -353,10 +364,52 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Hide user header
+     */
     public void hideUser(){
         headerNavDrawerContainer.setVisibility(View.GONE);
         headerUserDisplayed = false;
+    }
+
+    private void setFooterButtonListeners(View rootView){
+
+        contactButton = (TextView) footerView.findViewById(R.id.navfooter_contact);
+        cgvButton = (TextView) footerView.findViewById(R.id.navfooter_cgu);
+        aboutButton = (TextView) footerView.findViewById(R.id.navfooter_about);
+
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity)getActivity()).goToContactFragment();
+
+                if (mDrawerLayout != null) {
+                    mDrawerLayout.closeDrawer(mFragmentContainerView);
+                }
+            }
+        });
+
+        cgvButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity) getActivity()).goToContentFragment(Constants.ID_CONTENT_CGV, "CGV");
+
+                if (mDrawerLayout != null) {
+                    mDrawerLayout.closeDrawer(mFragmentContainerView);
+                }
+            }
+        });
+
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity) getActivity()).goToContentFragment(Constants.ID_CONTENT_FAQ, "FAQ");
+
+                if (mDrawerLayout != null) {
+                    mDrawerLayout.closeDrawer(mFragmentContainerView);
+                }
+            }
+        });
     }
 
 }

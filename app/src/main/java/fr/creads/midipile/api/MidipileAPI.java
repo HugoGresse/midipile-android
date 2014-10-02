@@ -50,6 +50,11 @@ public interface MidipileAPI {
             @Query("length") int length,
             Callback<List<Deal>> callback);
 
+    @GET(Constants.URL_CONTENTS)
+    public void getContent(
+            @Path("id") int id,
+            Callback<Map<String, String>> callback);
+
 
 
 
@@ -122,6 +127,12 @@ public interface MidipileAPI {
             @Field("badges") String badge,
             Callback<User> callback);
 
-
+    @FormUrlEncoded
+    @POST(Constants.URL_CONTACT)
+    public void postContact(
+            @Field("email") String email,
+            @Field("name") String name,
+            @Field("message") String message,
+            Callback<Map<String, String>> callback);
 
 }
