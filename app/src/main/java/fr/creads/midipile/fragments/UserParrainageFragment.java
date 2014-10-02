@@ -2,9 +2,13 @@ package fr.creads.midipile.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.creads.midipile.R;
@@ -57,21 +62,19 @@ public class UserParrainageFragment extends Fragment {
 
         parrainageCodeTextView.setText(userParrainageCode);
 
+        final String shareMessage = getResources().getString(R.string.user_parrainage_share) +
+                " " + userParrainageCode + " " +  Constants.URL_SITE + "/?p=" + userParrainageCode;
 
         shareCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                shareIt(
+                        getActivity(),
+                        shareMessage,
+                        getResources().getString(R.string.user_parrainage_share_title),
+                        userParrainageCode);
 
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(
-                        android.content.Intent.EXTRA_TEXT,
-                        getResources().getString(R.string.user_parrainage_share) + " " + userParrainageCode + " " +  Constants.URL_SITE);
-
-                startActivity(Intent.createChooser(
-                        sharingIntent,
-                        getResources().getString(R.string.user_parrainage_share_title)));
             }
         });
 
@@ -84,6 +87,42 @@ public class UserParrainageFragment extends Fragment {
         }
 
         filleulsTextView.setText(filleulsString);
+    }
+
+    /**
+     * Open share dialog and change facebook share test to just url
+     * @param activity
+     * @param message
+     * @param title
+     */
+    private void shareIt(Activity activity, String message, String title, String parrainageCode){
+        List<Intent> targetedShareIntents = new ArrayList<Intent>();
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+
+        PackageManager pm = activity.getPackageManager();
+        List<ResolveInfo> activityList = pm.queryIntentActivities(sharingIntent, 0);
+        for(final ResolveInfo app : activityList) {
+
+            String packageName = app.activityInfo.packageName;
+            Intent targetedShareIntent = new Intent(android.content.Intent.ACTION_SEND);
+            targetedShareIntent.setType("text/plain");
+            if(TextUtils.equals(packageName, "com.facebook.katana")){
+                targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT, Constants.URL_SITE + "/?p=" + parrainageCode);
+            } else {
+                targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+            }
+
+            targetedShareIntent.setPackage(packageName);
+            targetedShareIntents.add(targetedShareIntent);
+
+        }
+
+        Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), title);
+
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+        startActivity(chooserIntent);
+
     }
 
     public static void setInsets(Activity context, View view) {
