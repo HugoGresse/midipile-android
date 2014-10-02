@@ -123,6 +123,7 @@ public class User implements Parcelable {
             mUser.ville = source.readString();
             mUser.newsletter = source.readString();
             mUser.code_postal = source.readString();
+            mUser.pays = source.readString();
             mUser.mobile = source.readString();
             mUser.chance = source.readString();
             mUser.fid = source.readString();
@@ -207,6 +208,9 @@ public class User implements Parcelable {
     }
 
     public String getPays() {
+        if(null == pays){
+            return "";
+        }
         return pays;
     }
 

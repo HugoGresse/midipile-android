@@ -1263,7 +1263,10 @@ public class HomeActivity extends FragmentActivity
             }
 
             // check adress filled and enough chance
-            if(user.getRue().isEmpty() || user.getCode_postal().isEmpty() || user.getVille().isEmpty() ){
+            if(user.getRue().isEmpty() ||
+                    user.getCode_postal().isEmpty() ||
+                    user.getVille().isEmpty() ||
+                    user.getPays().isEmpty()){
 
 
                 OnClickWrapper onClickNoAdressWrapper = new OnClickWrapper("noAdressParticipation", new SuperToast.OnClickListener() {
