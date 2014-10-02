@@ -124,11 +124,11 @@
     <string name="user_placeholder_email">Adresse email</string>
     <string name="user_placeholder_password">Mot de passe</string>
     <string name="user_placeholder_phone">Téléphone</string>
-    <string name="user_placeholder_adress">Adresse de livraison</string>
+    <string name="user_placeholder_adress">Adresse de livraison *</string>
     <string name="user_placeholder_adress_more">Complément d\'adresse</string>
-    <string name="user_placeholder_postalcode">Code postal</string>
-    <string name="user_placeholder_city">Ville</string>
-    <string name="user_placeholder_country">Pays</string>
+    <string name="user_placeholder_postalcode">Code postal *</string>
+    <string name="user_placeholder_city">Ville *</string>
+    <string name="user_placeholder_country">Pays *</string>
     <string name="user_placeholder_country_select">Sélectionner votre pays</string>
     <string name="user_placeholder_newsletter">Recevoir nos offres quotidiennes</string>
     <string name="user_placeholder_cgv">Accepter les conditions générales d\'utilisation*</string>
