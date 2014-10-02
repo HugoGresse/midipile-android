@@ -17,8 +17,8 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Paramètres</string>
 
-    <string name="dialog_network_error_title">Impossible de charger les données.</string>
-    <string name="dialog_network_error">Vérifiez votre connexion au réseau.</string>
+    <string name="dialog_network_error_title">Connexion interrompue</string>
+    <string name="dialog_network_error">Vérifiez votre connexion Internet.</string>
     <string name="dialog_network_error_ok">Réessayer</string>
     <string name="dialog_network_error_no">Annuler</string>
 
@@ -48,6 +48,8 @@
     <string name="dialog_deal_participate_share_ok">Oui</string>
     <string name="dialog_deal_participate_share_cancel">Non</string>
 
+    <string name="dialog_contact_title">Envoi de votre message</string>
+
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
@@ -69,7 +71,7 @@
     <string name="nav_header_chance">chance(s)</string>
     <string name="nav_footer_copyright">Midipile ® Copyright 2014 - Tous droits réservés</string>
     <string name="nav_footer_contact">Contact</string>
-    <string name="nav_footer_cgu">- CGU -</string>
+    <string name="nav_footer_cgu">- CGV -</string>
     <string name="nav_footer_about">A propos</string>
 
 

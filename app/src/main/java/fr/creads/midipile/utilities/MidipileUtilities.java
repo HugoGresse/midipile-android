@@ -1,11 +1,17 @@
 package fr.creads.midipile.utilities;
 
+import android.app.Activity;
 import android.os.Build;
+import android.view.View;
+
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
+
+import fr.creads.midipile.R;
 
 /**
  * Author : Hugo Gresse
@@ -89,5 +95,27 @@ public class MidipileUtilities {
         // http://stackoverflow.com/a/2853253/950427
         // Finally, combine the values we have found by using the UUID class to create a unique identifier
         return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
+    }
+
+    public static String formatWebViewContent(Activity activity, String content){
+        String color = String.format("#%06X",
+                (0xFFFFFF & activity.getResources().getColor(R.color.midipiletheme_color)));
+        return "<html><head><style type=\"text/css\"> " +
+                "img { max-width : 100% !important; height : auto !important; } " +
+                "a { color : " + color + " ; }" +
+                "</style>" + content ;
+
+    }
+
+    /**
+     * Set inset for list/scroll with no tab, only actionbar
+     * @param context
+     * @param view
+     */
+    public static void setInsetsWithNoTab(Activity context, View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
+        SystemBarTintManager tintManager = new SystemBarTintManager(context);
+        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+        view.setPadding(0, config.getActionBarHeight() + config.getStatusBarHeight(), 0, config.getPixelInsetBottom());
     }
 }

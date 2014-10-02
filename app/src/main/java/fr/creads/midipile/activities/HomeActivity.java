@@ -55,6 +55,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +64,7 @@ import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
 import fr.creads.midipile.broadcastreceiver.ParticipateNotificationBroadcastReceiver;
+import fr.creads.midipile.fragments.ContactFragment;
 import fr.creads.midipile.fragments.DealFragment;
 import fr.creads.midipile.fragments.DealProductFragment;
 import fr.creads.midipile.fragments.DealsDayFragment;
@@ -109,9 +111,16 @@ public class HomeActivity extends FragmentActivity
 
     private ArrayList<Deal> deals;
     private int dealPosition;
+
+    /**
+     * Redirect to this Fragment after login
+     */
     private Fragment redirectFrag;
 
     private List<Badge> badges;
+
+    private Map<Integer, String> contentList = new HashMap<Integer, String>();
+
 
     /**
      * The user connnected to the app
