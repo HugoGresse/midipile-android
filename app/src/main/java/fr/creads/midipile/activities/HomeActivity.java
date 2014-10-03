@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -109,6 +110,13 @@ public class HomeActivity extends FragmentActivity
     private static final int ONEDAY_NOTIFICATION_ALARM = 1;
     private static final int FIVEDAY_NOTIFICATION_ALARM = 2;
 
+    private static final String PREF_HAVE_PARTICIPATED = "HAVEPARTICIPATED";
+
+    /**
+     * Indicate if Activity is displayed but no recreated
+     */
+    private boolean mFromSavedInstanceState;
+
     private MidipileAPI midipileService;
 
     private ArrayList<Deal> deals;
@@ -172,6 +180,9 @@ public class HomeActivity extends FragmentActivity
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getActionBar().hide();
 
+        if (savedInstanceState != null) {
+            mFromSavedInstanceState = true;
+        }
 
         mSimpleFacebook = SimpleFacebook.getInstance(this);
 
@@ -287,6 +298,38 @@ public class HomeActivity extends FragmentActivity
         // display user in nav drawer
         if(null != user){
             mNavigationDrawerFragment.displayUser(user);
+        }
+
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
+        Boolean mUserHaveParticipated = sp.getBoolean(PREF_HAVE_PARTICIPATED, false);
+
+        Log.d(Constants.TAG, mUserHaveParticipated.toString());
+        // Open dialog to rate the app
+        if(!mFromSavedInstanceState && mUserHaveParticipated){
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+            AlertDialog alertDialog = alertDialogBuilder
+                    .setTitle(R.string.dialog_rating_title)
+                    .setMessage(R.string.dialog_rating_text)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton(R.string.dialog_rating_notyet, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .create();
+
+            alertDialog.show();
+
+
+
         }
 
     }
@@ -1327,7 +1370,6 @@ public class HomeActivity extends FragmentActivity
      */
     public void postParticipation(Deal deal){
 
-
         showDialog("Participation en cours");
 
         midipileService.postPlayDeal(user.getXwsseHeader(), deal.getId(), new Callback<Map<String, String>>() {
@@ -1396,6 +1438,9 @@ public class HomeActivity extends FragmentActivity
                 // set alarm few days after the participation
                 startNotificationAlarmManager();
 
+                // save sharedPreference
+                setParticipatingInPreferences();
+
             }
 
             @Override
@@ -1431,6 +1476,16 @@ public class HomeActivity extends FragmentActivity
             }
         });
 
+    }
+
+    /**
+     * Set user participated
+     */
+    private void setParticipatingInPreferences(){
+
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(HomeActivity.this);
+        sp.edit().putBoolean(PREF_HAVE_PARTICIPATED, true).apply();
     }
 
     /**
