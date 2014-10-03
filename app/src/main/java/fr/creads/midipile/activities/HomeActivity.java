@@ -64,6 +64,7 @@ import fr.creads.midipile.R;
 import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.api.MidipileAPI;
 import fr.creads.midipile.broadcastreceiver.ParticipateNotificationBroadcastReceiver;
+import fr.creads.midipile.fragments.AboutFragment;
 import fr.creads.midipile.fragments.ContactFragment;
 import fr.creads.midipile.fragments.ContentFragment;
 import fr.creads.midipile.fragments.DealFragment;
@@ -334,6 +335,13 @@ public class HomeActivity extends FragmentActivity
                     // set UserFrag position
                     UserFragment tempFrag = (UserFragment) manager.findFragmentByTag(fragmentTag);
                     tempFrag.setPosition(frag.getArguments().getInt(UserParrainageFragment.PARRAINAGE_ARGS));
+                } else if(frag instanceof ContentFragment){
+                    // Change contentFragment content
+                    ContentFragment tempFrag = (ContentFragment) manager.findFragmentByTag(fragmentTag);
+                    tempFrag.setNewContent(
+                            frag.getArguments().getInt(ContentFragment.ARGS_CONTENTID),
+                            frag.getArguments().getString(ContentFragment.ARGS_CONTENTNAME)
+                            );
                 }
             }
         } catch(IllegalStateException exception){
@@ -1937,12 +1945,12 @@ public class HomeActivity extends FragmentActivity
 
 
     /**
-     * Redirect to cgv fragment
+     * Redirect to content fragment with bundles
      */
     public void goToContentFragment(Integer contentId, String contentName){
         Bundle args=new Bundle();
-        args.putInt("contentId", contentId);
-        args.putString("contentName", contentName);
+        args.putInt(ContentFragment.ARGS_CONTENTID, contentId);
+        args.putString(ContentFragment.ARGS_CONTENTNAME, contentName);
 
         Fragment contentFragment = new ContentFragment();
         contentFragment.setArguments(args);
@@ -2010,6 +2018,9 @@ public class HomeActivity extends FragmentActivity
 
                     alertDialog.show();
                 } else {
+
+                    SuperActivityToast.create(HomeActivity.this, getString(R.string.toast_server_error), SuperToast.Duration.LONG).show();
+
                     String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
 
                     try {
@@ -2026,5 +2037,13 @@ public class HomeActivity extends FragmentActivity
             }
         });
 
+    }
+
+
+    /**
+     * Redirect to about fragment
+     */
+    public void goToAboutFragment(){
+        changeFragment(new AboutFragment(), 10);
     }
 }

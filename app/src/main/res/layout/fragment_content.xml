@@ -4,14 +4,20 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
-    <WebView
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/contentWebView"
         android:fitsSystemWindows="true"
         android:clipToPadding="false"
-        android:paddingTop="48dp"
-        android:paddingBottom="48dp" />
+        android:id="@+id/webviewContainerRelativeLayout">
+
+        <WebView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/contentWebView"
+            android:paddingTop="48dp"
+            android:paddingBottom="48dp" />
+    </RelativeLayout>
 
     <ProgressBar
         android:layout_width="wrap_content"

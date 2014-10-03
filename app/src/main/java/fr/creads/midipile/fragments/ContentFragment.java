@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import fr.creads.midipile.R;
@@ -24,12 +25,16 @@ import fr.creads.midipile.utilities.MidipileUtilities;
  */
 public class ContentFragment extends Fragment implements OnDataLoadedListener {
 
+    public static final String ARGS_CONTENTID = "contentId";
+    public static final String ARGS_CONTENTNAME = "contentName";
+
     private String SCREEN_NAME;
 
     private Integer contentId;
     private String contentName;
 
     private TextView title;
+    private RelativeLayout webviewContainerRelativeLayout;
     private WebView contentWebView;
     private ProgressBar progressBar;
 
@@ -41,6 +46,8 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
 
         contentId = getArguments().getInt("contentId");
         SCREEN_NAME = getArguments().getString("contentName");
+
+        Log.d(Constants.TAG, SCREEN_NAME);
 
         if(contentId == 0){
             throw new NullPointerException();
@@ -56,6 +63,7 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
         View rootView = inflater.inflate(R.layout.fragment_content, container, false);
 
 
+        webviewContainerRelativeLayout = (RelativeLayout) rootView.findViewById(R.id.webviewContainerRelativeLayout);
         contentWebView = (WebView) rootView.findViewById(R.id.contentWebView);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
@@ -66,10 +74,12 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
         super.onViewCreated(view, savedInstanceState);
 
         if(webViewContent != null){
-            progressBar.setVisibility(View.GONE);
             contentWebView.loadDataWithBaseURL(null, webViewContent, "text/html", "UTF-8", null);
+            progressBar.setVisibility(View.GONE);
+            contentWebView.setVisibility(View.VISIBLE);
         }
 
+        MidipileUtilities.setInsetsWithNoTab(getActivity(), webviewContainerRelativeLayout);
     }
 
     @Override
@@ -80,8 +90,24 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
         webViewContent = MidipileUtilities.formatWebViewContent(getActivity(), content);
 
         if(contentWebView != null){
-            progressBar.setVisibility(View.GONE);
             contentWebView.loadDataWithBaseURL(null, webViewContent, "text/html", "UTF-8", null);
+            progressBar.setVisibility(View.GONE);
+            contentWebView.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * Load new content 
+     * @param contentId
+     * @param contentName
+     */
+    public void setNewContent(Integer contentId, String contentName){
+        progressBar.setVisibility(View.VISIBLE);
+        contentWebView.setVisibility(View.GONE);
+
+        this.contentId = contentId;
+        this.SCREEN_NAME = contentName;
+
+        ((HomeActivity)getActivity()).loadContent(contentId, this);
     }
 }

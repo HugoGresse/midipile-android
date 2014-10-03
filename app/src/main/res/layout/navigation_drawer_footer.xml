@@ -26,34 +26,53 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nav_footer_contact"
-            android:id="@+id/navfooter_contact"
-            android:textSize="12sp" />
+            android:id="@+id/footerContainer1"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nav_footer_cgu"
-            android:id="@+id/navfooter_cgu"
-            android:textSize="12sp"
-            android:layout_alignBaseline="@+id/navfooter_contact"
-            android:layout_toEndOf="@+id/navfooter_contact"
-            android:layout_toRightOf="@+id/navfooter_contact"
-            android:paddingStart="5dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_footer_contact"
+                android:id="@+id/navfooter_contact"
+                android:textSize="12sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_footer_mentions_legales"
+                android:id="@+id/navfooter_mentions_legales"
+                android:textSize="12sp"
+                android:paddingStart="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nav_footer_about"
-            android:id="@+id/navfooter_about"
-            android:textSize="12sp"
-            android:layout_alignBaseline="@+id/navfooter_contact"
-            android:layout_toEndOf="@id/navfooter_cgu"
-            android:layout_toRightOf="@+id/navfooter_cgu"
-            android:paddingStart="5dp" />
+            android:layout_below="@+id/footerContainer1"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_footer_faq"
+                android:id="@+id/navfooter_faq"
+                android:textSize="12sp"
+                android:paddingStart="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_footer_about"
+                android:id="@+id/navfooter_about"
+                android:textSize="12sp"
+                android:paddingStart="5dp" />
+        </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

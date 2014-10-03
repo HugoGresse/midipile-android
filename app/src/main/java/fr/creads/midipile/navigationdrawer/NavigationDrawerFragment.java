@@ -86,8 +86,9 @@ public class NavigationDrawerFragment extends Fragment {
      * Footer button view
      */
     private TextView contactButton;
-    private TextView cgvButton;
+    private TextView mlButton;
     private TextView aboutButton;
+    private TextView faqButton;
 
 
     public NavigationDrawerFragment() {
@@ -375,7 +376,8 @@ public class NavigationDrawerFragment extends Fragment {
     private void setFooterButtonListeners(View rootView){
 
         contactButton = (TextView) footerView.findViewById(R.id.navfooter_contact);
-        cgvButton = (TextView) footerView.findViewById(R.id.navfooter_cgu);
+        mlButton = (TextView) footerView.findViewById(R.id.navfooter_mentions_legales);
+        faqButton = (TextView) footerView.findViewById(R.id.navfooter_faq);
         aboutButton = (TextView) footerView.findViewById(R.id.navfooter_about);
 
         contactButton.setOnClickListener(new View.OnClickListener() {
@@ -389,10 +391,10 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        cgvButton.setOnClickListener(new View.OnClickListener() {
+        mlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HomeActivity) getActivity()).goToContentFragment(Constants.ID_CONTENT_CGV, "CGV");
+                ((HomeActivity) getActivity()).goToContentFragment(Constants.ID_CONTENT_MENTIONSLEGALES, "Mentions Légales");
 
                 if (mDrawerLayout != null) {
                     mDrawerLayout.closeDrawer(mFragmentContainerView);
@@ -400,10 +402,20 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        aboutButton.setOnClickListener(new View.OnClickListener() {
+        faqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((HomeActivity) getActivity()).goToContentFragment(Constants.ID_CONTENT_FAQ, "FAQ");
+
+                if (mDrawerLayout != null) {
+                    mDrawerLayout.closeDrawer(mFragmentContainerView);
+                }
+            }
+        });
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity) getActivity()).goToAboutFragment();
 
                 if (mDrawerLayout != null) {
                     mDrawerLayout.closeDrawer(mFragmentContainerView);
