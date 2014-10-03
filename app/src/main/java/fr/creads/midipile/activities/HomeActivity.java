@@ -1997,7 +1997,6 @@ public class HomeActivity extends FragmentActivity
             @Override
             public void failure(RetrofitError error) {
 
-                Log.d(Constants.TAG, "content failed");
                 if (error.isNetworkError()) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
 

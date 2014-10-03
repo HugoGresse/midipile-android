@@ -2,7 +2,6 @@ package fr.creads.midipile.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
-import fr.creads.midipile.api.Constants;
 import fr.creads.midipile.listeners.OnDataLoadedListener;
 import fr.creads.midipile.utilities.MidipileUtilities;
 
@@ -28,7 +27,7 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
     public static final String ARGS_CONTENTID = "contentId";
     public static final String ARGS_CONTENTNAME = "contentName";
 
-    private String SCREEN_NAME;
+    private String SCREEN_NAME = "Content na";
 
     private Integer contentId;
     private String contentName;
@@ -40,6 +39,12 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
 
     private String webViewContent;
 
+
+    @Override
+    public void onResume (){
+        super.onResume();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -47,12 +52,9 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
         contentId = getArguments().getInt("contentId");
         SCREEN_NAME = getArguments().getString("contentName");
 
-        Log.d(Constants.TAG, SCREEN_NAME);
-
         if(contentId == 0){
             throw new NullPointerException();
         }
-
 
         ((HomeActivity)getActivity()).loadContent(contentId, this);
     }
@@ -74,9 +76,7 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
         super.onViewCreated(view, savedInstanceState);
 
         if(webViewContent != null){
-            contentWebView.loadDataWithBaseURL(null, webViewContent, "text/html", "UTF-8", null);
-            progressBar.setVisibility(View.GONE);
-            contentWebView.setVisibility(View.VISIBLE);
+            displayContent();
         }
 
         MidipileUtilities.setInsetsWithNoTab(getActivity(), webviewContainerRelativeLayout);
@@ -84,20 +84,25 @@ public class ContentFragment extends Fragment implements OnDataLoadedListener {
 
     @Override
     public void onDataLoaded() {
-        Log.d(Constants.TAG, "onDataLoadedContent");
         String content = ((HomeActivity)getActivity()).getContent(contentId);
 
         webViewContent = MidipileUtilities.formatWebViewContent(getActivity(), content);
 
         if(contentWebView != null){
-            contentWebView.loadDataWithBaseURL(null, webViewContent, "text/html", "UTF-8", null);
-            progressBar.setVisibility(View.GONE);
-            contentWebView.setVisibility(View.VISIBLE);
+            displayContent();
         }
     }
 
+    private void displayContent(){
+        contentWebView.loadDataWithBaseURL(null, webViewContent, "text/html", "UTF-8", null);
+        progressBar.setVisibility(View.GONE);
+        contentWebView.setVisibility(View.VISIBLE);
+
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
+    }
+
     /**
-     * Load new content 
+     * Load new content
      * @param contentId
      * @param contentName
      */

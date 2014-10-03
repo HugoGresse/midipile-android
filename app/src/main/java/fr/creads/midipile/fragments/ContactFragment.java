@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
 
+import fr.creads.midipile.MidipileApplication;
 import fr.creads.midipile.R;
 import fr.creads.midipile.activities.HomeActivity;
 import fr.creads.midipile.utilities.MidipileUtilities;
@@ -33,6 +34,11 @@ public class ContactFragment extends Fragment{
     private EditText message;
     private Button sendButton;
 
+    @Override
+    public void onResume (){
+        super.onResume();
+        ((MidipileApplication)getActivity().getApplication()).sendScreenTracking(SCREEN_NAME);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
