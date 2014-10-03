@@ -51,8 +51,7 @@
                     android:background="@drawable/edittext_round"
                     android:textSize="@dimen/user_form_edit_sp"
                     android:textStyle="normal"
-                    android:textColorHint="@color/user_text_color_hint"
-                    android:text="h.gresse@creads.org" />
+                    android:textColorHint="@color/user_text_color_hint"/>
 
                 <EditText
                     android:layout_width="fill_parent"
@@ -68,8 +67,7 @@
                     android:layout_marginBottom="5dp"
                     android:textStyle="normal"
                     android:textColorLink="@color/user_text_color"
-                    android:textColorHint="@color/user_text_color_hint"
-                    android:text="azerty" />
+                    android:textColorHint="@color/user_text_color_hint"/>
 
                 <Button
                     style="?android:attr/buttonStyleSmall"

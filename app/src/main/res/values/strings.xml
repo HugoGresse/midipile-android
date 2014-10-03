@@ -54,8 +54,8 @@
     <string name="dialog_contact_title">Envoi de votre message</string>
 
     <string name="dialog_rating_title">Notez l\'application ?</string>
-    <string name="dialog_rating_text">Voulez-vous noter l'application Midipile sur le Play Store ? </string>
-    <string name="dialog_rating_notyet">Pas pour l'instant</string>
+    <string name="dialog_rating_text">Voulez-vous noter l\'application Midipile sur le Play Store ? </string>
+    <string name="dialog_rating_notyet">Pas pour l\'instant</string>
 
 
     <!-- Nav Drawer Menu Items -->
