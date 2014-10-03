@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/aboutScrollView"
+    android:background="@color/white"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp" >
+
+        <TextView
+            android:id="@+id/about_created"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/about_logo"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/about_title"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/about_project"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/about_created"
+            android:layout_marginTop="30dp"
+            android:text="@string/about_creators"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/about_project_creator1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@+id/about_project"
+            android:text="@string/about_creator1"
+            android:linksClickable="true"
+            android:autoLink="web"
+            android:textColorLink="@color/midipiletheme_color" />
+        <TextView
+            android:id="@+id/about_project_creator2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@+id/about_project_creator1"
+            android:layout_marginBottom="30dp"
+            android:text="@string/about_creator2"
+            android:linksClickable="true"
+            android:autoLink="web"
+            android:textColorLink="@color/midipiletheme_color" />
+
+
+        <TextView
+            android:id="@+id/about_library"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/about_project_creator2"
+            android:text="@string/about_lib"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/about_libraries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/about_library"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@string/about_lib"
+            android:textColorLink="@color/midipiletheme_color" />
+
+        <ImageView
+            android:id="@+id/logo_creads"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_below="@id/about_libraries"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/creads" />
+
+    </RelativeLayout>
+</ScrollView>

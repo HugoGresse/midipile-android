@@ -116,7 +116,7 @@ public class MidipileUtilities {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-        view.setPadding(0, config.getActionBarHeight() + config.getStatusBarHeight(), 0, config.getNavigationBarHeight());
+        view.setPadding(0, config.getActionBarHeight() + config.getStatusBarHeight(), config.getPixelInsetRight(), config.getNavigationBarHeight());
     }
 
 
@@ -129,6 +129,6 @@ public class MidipileUtilities {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         SystemBarTintManager tintManager = new SystemBarTintManager(context);
         SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-        view.setPadding(0, config.getActionBarHeight() + config.getStatusBarHeight(), 0, config.getNavigationBarHeight());
+        view.setPadding(0, config.getActionBarHeight() + config.getStatusBarHeight(), config.getPixelInsetRight(), config.getNavigationBarHeight());
     }
 }

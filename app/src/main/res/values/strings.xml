@@ -186,4 +186,20 @@
     <string name="contact_title">Contactez-nous</string>
 
 
+    <string name="about_title">À propos de Midipile</string>
+    <string name="about_creators">Réalisation</string>
+    <string name="about_creator1">Creads http://www.creads.fr</string>
+    <string name="about_creator2">Hugo Gresse http://xjet.fr</string>
+    <string name="about_lib">Librairies utilisées</string>
+    <string-array name="about_libraries">
+        <item>Retrofit https://github.com/square/retrofit</item>
+        <item>SuperToasts https://github.com/JohnPersano/Supertoasts/</item>
+        <item>Universal Image Loader https://github.com/nostra13/Android-Universal-Image-Loader</item>
+        <item>Android Async HTTP http://loopj.com/android-async-http/</item>
+        <item>System Bar Tint https://github.com/jgilfelt/SystemBarTint</item>
+        <item>SimpleFacebook https://github.com/sromku/android-simple-facebook</item>
+        <item>Gson https://code.google.com/p/google-gson/</item>
+        <item>Guava http://code.google.com/p/guava-libraries/</item>
+        <item>Facebook SDK https://github.com/facebook/facebook-android-sdk</item>
+    </string-array>
 </resources>
